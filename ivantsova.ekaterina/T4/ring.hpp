@@ -14,7 +14,7 @@ namespace ivantsova {
           throw std::invalid_argument("Radiuses must be positive");
         }
         if (inRadius_ >= outRadius_) {
-          throw std::invalid_argument("Inner radius must be less than outer");         
+          throw std::invalid_argument("Inner radius must be less than outer");    
         }
       }
 
