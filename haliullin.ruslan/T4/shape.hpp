@@ -11,15 +11,14 @@ namespace haliullin
   public:
     virtual ~Shape() = default;
 
-    virtual double getArea() const;
-    virtual rectangle_t getFrameRect() const;
+    virtual double getArea() const = 0;
+    virtual rectangle_t getFrameRect() const = 0;
 
-    virtual void move(const point_t & newPos);
-    virtual void move(double dx, double dy);
+    virtual void move(const point_t & pt) = 0;
+    virtual void move(double dx, double dy) = 0;
 
-    virtual void scale(double k);
+    virtual void scale(double k) = 0;
   };
 }
-
 
 #endif
