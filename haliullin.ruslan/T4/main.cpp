@@ -20,11 +20,7 @@ int main()
     shapes.push_back(std::make_shared< Rectangle >(7.0, 2.8, point_t(1.0, 2.0)));
     names.push_back("Rectangle");
 
-    shapes.push_back(std::make_shared< Triangle >(
-      point_t(0.0, 0.0),
-      point_t(4.0, 0.0),
-      point_t(2.0, 3.0)
-    ));
+    shapes.push_back(std::make_shared< Triangle >(point_t(0.0, 0.0), point_t(4.0, 0.0), point_t(2.0, 3.0)));
     names.push_back("Triangle");
 
     shapes.push_back(std::make_shared< Diamond >(6.0, 4.0, point_t(5.0, 5.0)));
@@ -59,21 +55,28 @@ int main()
   std::cin >> x >> y;
   if (!std::cin)
   {
-    std::cerr << "Error: invalid point coordinates" << "\n";
-    return 1;
+    if (std::cin.eof())
+    {
+      return 0;
+    }
+    else
+    {
+      std::cerr << "Invalid point coordinates" << "\n";
+      return 1;
+    }
   }
 
   std::cout << "Enter scale coefficient: ";
   std::cin >> k;
   if (!std::cin)
   {
-    std::cerr << "Error: invalid coefficient" << "\n";
+    std::cerr << "Invalid coefficient" << "\n";
     return 1;
   }
 
   if (k <= 0.0)
   {
-    std::cerr << "Error: scale coefficient must be positive" << "\n";
+    std::cerr << "Scale coefficient must be positive" << "\n";
     return 1;
   }
 
