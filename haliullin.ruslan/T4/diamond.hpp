@@ -1,15 +1,15 @@
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+#ifndef DIAMOND_HPP
+#define DIAMOND_HPP
 
 #include "shape.hpp"
 
 namespace haliullin
 {
-  class Rectangle : public Shape
+  class Diamond : public Shape
   {
   public:
-    Rectangle(double w, double h, const point_t & p);
-    ~Rectangle() override = default;
+    Diamond(double d1, double d2, const point_t & p);
+    ~Diamond() override = default;
 
     double getArea() const override;
     rectangle_t getFrameRect() const override;
@@ -20,8 +20,8 @@ namespace haliullin
     void scale(double k) override;
 
   private:
-    double width;
-    double height;
+    double gor_d;
+    double vert_d;
     point_t pos;
   };
 }

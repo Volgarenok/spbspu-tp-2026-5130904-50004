@@ -13,7 +13,7 @@ namespace haliullin
 
     rectangle_t() = default;
 
-    rectangle_t(double w, double h, const point_t & p):
+    rectangle_t(double w, double h, const point_t & p) :
       width(w), height(h), pos(p)
     {}
   };

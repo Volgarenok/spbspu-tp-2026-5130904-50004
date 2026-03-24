@@ -10,7 +10,7 @@ namespace haliullin
 
     point_t() = default;
 
-    point_t(double xx, double yy):
+    point_t(double xx, double yy) :
       x(xx), y(yy)
     {}
   };

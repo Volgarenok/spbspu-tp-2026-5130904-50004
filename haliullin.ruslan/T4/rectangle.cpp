@@ -3,7 +3,7 @@
 
 namespace haliullin
 {
-  Rectangle::Rectangle(double w, double h, const point_t & p):
+  Rectangle::Rectangle(double w, double h, const point_t & p) :
     width(w), height(h), pos(p)
   {
     if (width <= 0.0 || height <= 0.0)
@@ -19,7 +19,7 @@ namespace haliullin
 
   rectangle_t Rectangle::getFrameRect() const
   {
-    return rectangle_t(width, height, pos);
+    return {width, height, pos};
   }
 
   void Rectangle::move(const point_t & pt)
