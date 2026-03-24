@@ -27,4 +27,20 @@ namespace haliullin
     << frame.width << ", height = " << frame.height << "\n";
   }
 
+  void displayAllFigures(const std::vector< std::weak_ptr< Shape > > & figures, const std::vector< std::string > & names)
+  {
+    double total = 0.0;
+    std::cout << std::fixed << std::setprecision(2);
+    for (size_t i = 0; i < figures.size(); ++i)
+    {
+      auto shape = figures[i].lock();
+      if (shape)
+      {
+        displayFigure(figures[i], names[i], i + 1);
+        total += shape->getArea();
+      }
+    }
+    std::cout << "Total area = " << total << "\n";
+  }
+
 }
