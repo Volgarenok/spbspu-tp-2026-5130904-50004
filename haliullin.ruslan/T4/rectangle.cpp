@@ -1,11 +1,12 @@
 #include "rectangle.hpp"
+#include <stdexcept>
 
 namespace haliullin
 {
   Rectangle::Rectangle(double w, double h, const point_t & p):
     width(w), height(h), pos(p)
   {
-    if (width <= 0 || height <= 0)
+    if (width <= 0.0 || height <= 0.0)
     {
       throw std::invalid_argument("Sizes must be positive");
     }
@@ -34,9 +35,9 @@ namespace haliullin
 
   void Rectangle::scale(double k)
   {
-    if (k <= 0)
+    if (k <= 0.0)
     {
-      throw std::invalid_argument("scale coefficient must be positive");
+      throw std::invalid_argument("Scale coefficient must be positive");
     }
     width *= k;
     height *= k;
