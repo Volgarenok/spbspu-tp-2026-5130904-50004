@@ -1,6 +1,103 @@
+#include "shape.hpp"
+#include "rectangle.hpp"
+#include "triangle.hpp"
+#include "diamond.hpp"
+#include "functions.hpp"
+
+#include <string>
+#include <vector>
 #include <iostream>
+
+using namespace haliullin;
 
 int main()
 {
+  std::vector< std::shared_ptr< Shape > > shapes;
+  std::vector< std::string > names;
 
+  try
+  {
+    shapes.push_back(std::make_shared< Rectangle >(7.0, 2.8, point_t(1.0, 2.0)));
+    names.push_back("Rectangle");
+
+    shapes.push_back(std::make_shared< Triangle >(
+      point_t(0.0, 0.0),
+      point_t(4.0, 0.0),
+      point_t(2.0, 3.0)
+    ));
+    names.push_back("Triangle");
+
+    shapes.push_back(std::make_shared< Diamond >(6.0, 4.0, point_t(5.0, 5.0)));
+    names.push_back("Diamond");
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: failed to create shapes: " << e.what() << "\n";
+    return 1;
+  }
+
+  std::vector< std::weak_ptr< Shape > > wshapes;
+  for (const auto & shape : shapes)
+  {
+    wshapes.push_back(shape);
+  }
+
+  std::cout << "Before" << "\n";
+  try
+  {
+    displayAllFigures(wshapes, names);
+    displayTotalFrame(getTotalFrame(wshapes));
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: failed to display figures: " << e.what() << "\n";
+    return 1;
+  }
+
+  double x, y, k;
+  std::cout << "Enter scale point (x y): ";
+  std::cin >> x >> y;
+  if (!std::cin)
+  {
+    std::cerr << "Error: invalid point coordinates" << "\n";
+    return 1;
+  }
+
+  std::cout << "Enter scale coefficient: ";
+  std::cin >> k;
+  if (!std::cin)
+  {
+    std::cerr << "Error: invalid coefficient" << "\n";
+    return 1;
+  }
+
+  if (k <= 0.0)
+  {
+    std::cerr << "Error: scale coefficient must be positive" << "\n";
+    return 1;
+  }
+
+  try
+  {
+    scaleFigures(wshapes, point_t(x, y), k);
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: failed to scale figures: " << e.what() << "\n";
+    return 1;
+  }
+
+  std::cout << "After" << "\n";
+  try
+  {
+    displayAllFigures(wshapes, names);
+    displayTotalFrame(getTotalFrame(wshapes));
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: failed to display figures: " << e.what() << "\n";
+    return 1;
+  }
+
+  return 0;
 }
