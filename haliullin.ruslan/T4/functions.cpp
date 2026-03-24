@@ -97,4 +97,22 @@ namespace haliullin
     std::cout << "width = " << frame.width << ", height = " << frame.height << "\n";
   }
 
+  void scaleFigures(std::vector< std::weak_ptr< Shape > > & Figures, const point_t & scaleCenter, double coef)
+  {
+    for (const auto & wptr : Figures)
+    {
+      auto shape = wptr.lock();
+      if (!shape)
+      {
+        continue;
+      }
+      rectangle_t frameBefore = shape->getFrameRect();
+      point_t anchor = getRightBottomFrame(frameBefore);
+      shape->move(scaleCenter.x - anchor.x, scaleCenter.y - anchor.y);
+      shape->scale(coef);
+      rectangle_t frameAfter = shape->getFrameRect();
+      point_t anchorAfter = getRightBottomFrame(frameAfter);
+      shape->move(anchor.x - anchorAfter.x, anchor.y - anchorAfter.y);
+    }
+  }
 }
