@@ -28,7 +28,7 @@ int main()
   }
   catch (const std::exception & e)
   {
-    std::cerr << "Error: failed to create shapes: " << e.what() << "\n";
+    std::cerr << "Failed to create shapes: " << e.what() << "\n";
     return 1;
   }
 
@@ -46,7 +46,7 @@ int main()
   }
   catch (const std::exception & e)
   {
-    std::cerr << "Error: failed to display figures: " << e.what() << "\n";
+    std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
   }
 
@@ -86,7 +86,7 @@ int main()
   }
   catch (const std::exception & e)
   {
-    std::cerr << "Error: failed to scale figures: " << e.what() << "\n";
+    std::cerr << "Failed to scale figures: " << e.what() << "\n";
     return 1;
   }
 
@@ -98,7 +98,7 @@ int main()
   }
   catch (const std::exception & e)
   {
-    std::cerr << "Error: failed to display figures: " << e.what() << "\n";
+    std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
   }
 
