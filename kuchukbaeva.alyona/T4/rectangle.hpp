@@ -15,9 +15,9 @@ namespace kuchukbaeva {
     void scale(double cef) override;
 
   private:
+    point_t pos_;
     double width_;
     double height_;
-    point_t pos_;
   };
 
 }
