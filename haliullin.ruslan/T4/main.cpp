@@ -28,7 +28,7 @@ int main()
   }
   catch (const std::exception & e)
   {
-    std::cerr << "Failed to create shapes: " << e.what() << "\n";
+    std::cerr << "Failed to create figures: " << e.what() << "\n";
     return 1;
   }
 
