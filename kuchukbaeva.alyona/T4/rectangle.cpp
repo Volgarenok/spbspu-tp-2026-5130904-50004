@@ -1,10 +1,10 @@
 #include "rectangle.hpp"
 #include <stdexcept>
 
-kuchukbaeva::Rectangle::Rectangle(double width, double height, const point_t& pos):
+kuchukbaeva::Rectangle::Rectangle(point_t pos, double width, double height):
+  pos_(pos),
   width_(width),
-  height_(height),
-  pos_(pos)
+  height_(height)
 {
   if (width_ < 0.0 || height_ < 0.0) {
     throw std::invalid_argument("Rectangle dimensions must be positive");
@@ -21,7 +21,7 @@ kuchukbaeva::rectangle_t kuchukbaeva::Rectangle::getFrameRect() const
   return {width_, height_, pos_};
 }
 
-void kuchukbaeva::Rectangle::move(const point_t& pos)
+void kuchukbaeva::Rectangle::move(point_t pos)
 {
   pos_ = pos;
 }

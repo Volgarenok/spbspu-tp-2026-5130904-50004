@@ -6,11 +6,11 @@ namespace kuchukbaeva {
 
   class Rectangle : public Shape {
   public:
-    Rectangle(double width, double height, const point_t& pos);
+    Rectangle(point_t pos, double width, double height);
 
     double getArea() const override;
     rectangle_t getFrameRect() const override;
-    void move(const point_t& pos) override;
+    void move(const point_t pos) override;
     void move(double dx, double dy) override;
     void scale(double cef) override;
 
