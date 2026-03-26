@@ -8,7 +8,7 @@ namespace haliullin
   class Rectangle : public Shape
   {
   public:
-    Rectangle(double w, double h, const point_t & p);
+    Rectangle(double width, double height, const point_t & pos);
     ~Rectangle() override = default;
 
     double getArea() const override;
@@ -20,9 +20,9 @@ namespace haliullin
     void scale(double k) override;
 
   private:
-    double width;
-    double height;
-    point_t pos;
+    double width_;
+    double height_;
+    point_t pos_;
   };
 }
 

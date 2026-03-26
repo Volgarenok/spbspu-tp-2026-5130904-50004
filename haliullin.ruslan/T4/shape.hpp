@@ -1,8 +1,7 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
-#include "point_t.hpp"
-#include "rectangle_t.hpp"
+#include "basic.hpp"
 
 namespace haliullin
 {

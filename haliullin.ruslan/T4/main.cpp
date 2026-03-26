@@ -38,7 +38,7 @@ int main()
     wshapes.push_back(shape);
   }
 
-  std::cout << "Before" << "\n";
+  std::cout << "BEFORE:" << "\n\n";
   try
   {
     displayAllFigures(wshapes, names);
@@ -49,6 +49,7 @@ int main()
     std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
   }
+  std::cout << "\n";
 
   double x, y, k;
   std::cout << "Enter scale point (x y): ";
@@ -79,6 +80,7 @@ int main()
     std::cerr << "Scale coefficient must be positive" << "\n";
     return 1;
   }
+  std::cout << "\n";
 
   try
   {
@@ -90,7 +92,7 @@ int main()
     return 1;
   }
 
-  std::cout << "After" << "\n";
+  std::cout << "AFTER:" << "\n\n";
   try
   {
     displayAllFigures(wshapes, names);

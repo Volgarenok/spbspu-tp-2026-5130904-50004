@@ -8,7 +8,7 @@ namespace haliullin
   class Triangle : public Shape
   {
   public:
-    Triangle(const point_t & a, const point_t & b, const point_t & c);
+    Triangle(const point_t & p1, const point_t & p2, const point_t & p3);
     ~Triangle() override = default;
 
     double getArea() const override;
@@ -20,10 +20,10 @@ namespace haliullin
     void scale(double k) override;
 
   private:
-    point_t p1;
-    point_t p2;
-    point_t p3;
-    point_t pos;
+    point_t p1_;
+    point_t p2_;
+    point_t p3_;
+    point_t pos_;
   };
 }
 

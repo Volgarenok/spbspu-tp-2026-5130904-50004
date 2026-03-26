@@ -8,7 +8,7 @@ namespace haliullin
   class Diamond : public Shape
   {
   public:
-    Diamond(double d1, double d2, const point_t & p);
+    Diamond(double d1, double d2, const point_t & pos);
     ~Diamond() override = default;
 
     double getArea() const override;
@@ -20,9 +20,9 @@ namespace haliullin
     void scale(double k) override;
 
   private:
-    double gor_d;
-    double vert_d;
-    point_t pos;
+    double d1_;
+    double d2_;
+    point_t pos_;
   };
 }
 

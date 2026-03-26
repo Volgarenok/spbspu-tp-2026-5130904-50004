@@ -1,45 +1,44 @@
 #include "rectangle.hpp"
 #include <stdexcept>
 
-namespace haliullin
+haliullin::Rectangle::Rectangle(double width, double height, const point_t & pos):
+  width_(width),
+  height_(height),
+  pos_(pos)
 {
-  Rectangle::Rectangle(double w, double h, const point_t & p) :
-    width(w), height(h), pos(p)
+  if (width_ <= 0.0 || height_ <= 0.0)
   {
-    if (width <= 0.0 || height <= 0.0)
-    {
-      throw std::invalid_argument("Sizes must be positive");
-    }
+    throw std::invalid_argument("Sizes must be positive");
   }
+}
 
-  double Rectangle::getArea() const
-  {
-    return width * height;
-  }
+double haliullin::Rectangle::getArea() const
+{
+  return width_ * height_;
+}
 
-  rectangle_t Rectangle::getFrameRect() const
-  {
-    return {width, height, pos};
-  }
+haliullin::rectangle_t haliullin::Rectangle::getFrameRect() const
+{
+  return rectangle_t(width_, height_, pos_);
+}
 
-  void Rectangle::move(const point_t & pt)
-  {
-    pos = pt;
-  }
+void haliullin::Rectangle::move(const point_t & pt)
+{
+  pos_ = pt;
+}
 
-  void Rectangle::move(double dx, double dy)
-  {
-    pos.x += dx;
-    pos.y += dy;
-  }
+void haliullin::Rectangle::move(double dx, double dy)
+{
+  pos_.x_ += dx;
+  pos_.y_ += dy;
+}
 
-  void Rectangle::scale(double k)
+void haliullin::Rectangle::scale(double k)
+{
+  if (k <= 0.0)
   {
-    if (k <= 0.0)
-    {
-      throw std::invalid_argument("Scale coefficient must be positive");
-    }
-    width *= k;
-    height *= k;
+    throw std::invalid_argument("Scale coefficient must be positive");
   }
+  width_ *= k;
+  height_ *= k;
 }
