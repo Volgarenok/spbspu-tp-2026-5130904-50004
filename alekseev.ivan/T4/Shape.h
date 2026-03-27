@@ -22,7 +22,6 @@ struct iShape {
 
 struct Rectangle: iShape {
   Rectangle(double width, double height, point_t pos);
-  virtual ~Rectangle() = default;
 
   virtual double getArea() const;
   virtual rectangle_t getFrameRect() const;
@@ -36,7 +35,6 @@ struct Rectangle: iShape {
 
 struct Circle: iShape {
   Circle(double radius, point_t center);
-  virtual ~Circle() = default;
 
   virtual double getArea() const;
   virtual rectangle_t getFrameRect() const;
