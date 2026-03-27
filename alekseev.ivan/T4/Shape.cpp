@@ -1,5 +1,10 @@
 #include "Shape.h"
 
+Rectangle::Rectangle(double width, double height, point_t pos):
+  rect_(rectangle_t{width, height, pos})
+{
+}
+
 double Rectangle::getArea() const
 {
   return rect_.height_ * rect_.width_;
