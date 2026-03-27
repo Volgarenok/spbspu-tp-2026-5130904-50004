@@ -1,6 +1,8 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#include <cstddef>
+
 namespace alekseev {
   const double PI = 3.14159265358979323846;
 
@@ -51,7 +53,7 @@ namespace alekseev {
   };
 
   struct Polygon: iShape {
-    Polygon(point_t * points);
+    Polygon(point_t * points, size_t count);
     virtual ~Polygon();
 
     virtual double getArea() const;
@@ -62,7 +64,8 @@ namespace alekseev {
 
     private:
       point_t * points_;
-      point_t center_;
+      size_t count_;
+      point_t center_{};
   };
 }
 

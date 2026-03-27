@@ -63,3 +63,81 @@ void alekseev::Circle::scale(double k)
 {
   radius_ *= k;
 }
+
+alekseev::Polygon::Polygon(point_t * points, size_t count)
+{
+  points_ = new point_t[count];
+  count_ = count;
+  double sumS = 0;
+  double sumCx = 0;
+  double sumCy = 0;
+  for (size_t i = 0; i < count; ++i) {
+    points_[i] = points[i];
+    size_t j = i < count - 1 ? i : 0;
+    double k = points[i].x_ * points[j].y_ - points[i].y_ * points[j].x_;
+    sumS += k;
+    sumCx += (points[i].x_ + points[j].x_) * k;
+    sumCy += (points[i].y_ + points[j].y_) * k;
+  }
+  sumS *= 3;
+  center_ = point_t{sumCx / sumS, sumCy / sumS};
+}
+
+double alekseev::Polygon::getArea() const
+{
+  double area = 0;
+  for (size_t i = 0; i < count_; ++i) {
+    size_t j = i < count_ - 1 ? i : 0;
+    area += points_[i].x_ * points_[j].y_ - points_[i].y_ * points_[j].x_;
+  }
+  return area / 2.0;
+}
+
+alekseev::rectangle_t alekseev::Polygon::getFrameRect() const
+{
+  double ax = points_[0].x_, ay = points_[0].y_;
+  double bx = points_[0].x_, by = points_[0].y_;
+  for (size_t i = 1; i < count_; ++i) {
+    if (points_[i].x_ < ax) {
+      ax = points_[i].x_;
+    }
+    if (points_[i].y_ < ay) {
+      ay = points_[i].y_;
+    }
+    if (points_[i].x_ > bx) {
+      bx = points_[i].x_;
+    }
+    if (points_[i].y_ > by) {
+      by = points_[i].y_;
+    }
+  }
+  point_t p = point_t{(ax + bx) / 2, (ay + by) / 2};
+  return rectangle_t{bx - ax, by - ay, p};
+}
+
+void alekseev::Polygon::move(point_t new_center)
+{
+  double dx = new_center.x_ - center_.x_;
+  double dy = new_center.y_ - center_.y_;
+  move(dx, dy);
+}
+
+void alekseev::Polygon::move(double x, double y)
+{
+  for (size_t i = 0; i < count_; ++i) {
+    points_[i].x_ += x;
+    points_[i].y_ += y;
+  }
+  center_.x_ += x;
+  center_.y_ += y;
+}
+
+void alekseev::Polygon::scale(double k)
+{
+  double xc = center_.x_;
+  double yc = center_.y_;
+  for (size_t i = 0; i < count_; ++i) {
+    points_[i].x_ = ((points_[i].x_ * k) - xc) / (k - 1);
+    points_[i].y_ = ((points_[i].y_ * k) - yc) / (k - 1);
+  }
+}
