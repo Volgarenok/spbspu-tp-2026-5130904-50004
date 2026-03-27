@@ -2,6 +2,8 @@
 #define SHAPE_H
 
 namespace alekseev {
+  const double PI = 3.14159265358979323846;
+
   struct point_t {
     double x_, y_;
   };
