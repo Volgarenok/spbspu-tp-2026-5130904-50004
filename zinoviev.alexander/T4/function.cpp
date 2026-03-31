@@ -87,3 +87,27 @@ void zinoviev::printTotalFrame(const rectangle_t& frame)
 	std::cout << "Total framerect: center (" << frame.pos.x << "; " << frame.pos.y << ")" \
   	<< "width = " << frame.width << ", height = " << frame.height << "\n";
 }
+
+void zinoviev::scaleAllFigures(std::vector< std::weak_ptr< Shape > >& shapes, const point_t& point_scale, double k)
+{
+	for (size_t i = 0; i < shapes.size(); ++i)
+  {
+  	auto shape = shapes[i].lock();
+
+		if (shape)
+    {
+    	rectangle_t old_frame = shape->getFrameRect();
+      point_t point_on_frame = old_frame.pos;
+
+      shape->move(point_scale);
+      point_t new_point_frame = shape->getFrameRect().pos;
+
+      double diff_x = point_on_frame.x - new_point_frame.x;
+      double diff_y = point_on_frame.y - new_point_frame.y;
+
+      shape->scale(k);
+
+      shape->move(diff_x * k, diff_y * k);
+		}
+	}
+}
