@@ -3,21 +3,21 @@
 zinoviev::rectangle_t zinoviev::getAllFrameRect(const std::vector< std::weak_ptr< Shape > >& shapes)
 {
   if (shapes.empty())
-	  return rectangle_t{};
+    return rectangle_t{};
 
   double x_min = std::numeric_limits<double>::max();
-	double y_min = std::numeric_limits<double>::max();
-	double x_max = std::numeric_limits<double>::lowest();
-	double y_max = std::numeric_limits<double>::lowest();
+  double y_min = std::numeric_limits<double>::max();
+  double x_max = std::numeric_limits<double>::lowest();
+  double y_max = std::numeric_limits<double>::lowest();
 
-	bool found = false;
-	for (size_t i = 0; i < shapes.size(); ++i)
+  bool found = false;
+  for (size_t i = 0; i < shapes.size(); ++i)
   {
-		auto shape = shapes[i].lock();
+    auto shape = shapes[i].lock();
 
-		if (shape)
+    if (shape)
     {
-			found = true;
+      found = true;
 
       rectangle_t frame = shape->getFrameRect();
 
@@ -26,77 +26,77 @@ zinoviev::rectangle_t zinoviev::getAllFrameRect(const std::vector< std::weak_ptr
 
       double left = frame.pos.x - half_W;
       double right = frame.pos.x + half_W;
- function.cpp     double bottom = frame.pos.y - half_H;
+      double bottom = frame.pos.y - half_H;
       double top = frame.pos.y + half_H;
 
       if (left < x_min)
-      	x_min = left;
+        x_min = left;
 
-			if (right > x_max)
-      	x_max = right;
+      if (right > x_max)
+        x_max = right;
 
       if (bottom < y_min)
-      	y_min = bottom;
+        y_min = bottom;
 
-			if (top > y_max)
-      	y_max = top;
+      if (top > y_max)
+        y_max = top;
     }
-	}
+  }
 
-	if (!found)
+  if (!found)
     return rectangle_t{};
 
-	double width = x_max - x_min;
-	double height = y_max - y_min;
-	point_t center = { 0.5 * (x_max + x_min), 0.5 * (y_max + y_min) };
+  double width = x_max - x_min;
+  double height = y_max - y_min;
+  point_t center = { 0.5 * (x_max + x_min), 0.5 * (y_max + y_min) };
 
-	return rectangle_t(center, width, height);
+  return rectangle_t(center, width, height);
 }
 
 void zinoviev::printFigure(const std::weak_ptr< Shape >& figure, const std::string& name, size_t id)
 {
   auto shape = figure.lock();
   if (!shape)
-  	throw std::runtime_error("Weak reference bad");
+    throw std::runtime_error("Weak reference bad");
 
-	rectangle_t frame = shape->getFrameRect();
+  rectangle_t frame = shape->getFrameRect();
   std::cout << id << "." << name << "\n";
   std::cout << "area = " << shape->getArea() << "\n";
   std::cout << "Frame: (" << frame.pos.x << "; " << frame.pos.y << "), width = " << frame.width \
-  	<< ", height = " << frame.height << "\n";
+    << ", height = " << frame.height << "\n";
 }
 
 void zinoviev::printAllFigures(const std::vector< std::weak_ptr< Shape > > & figures, const std::vector< std::string > & names)
 {
-	double total = 0.0;
+  double total = 0.0;
 
-	for (size_t i = 0; i < figures.size(); ++i)
+  for (size_t i = 0; i < figures.size(); ++i)
   {
-  	auto shape = figures[i].lock();
+    auto shape = figures[i].lock();
     if (shape)
     {
-    	printFigure(figures[i], names[i], i + 1);
+      printFigure(figures[i], names[i], i + 1);
       total += shape->getArea();
     }
-	}
+  }
   std::cout << "Total area = " << total << "\n";
 }
 
 void zinoviev::printTotalFrame(const rectangle_t& frame)
 {
-	std::cout << "Total framerect: center (" << frame.pos.x << "; " << frame.pos.y << ")" \
-  	<< "width = " << frame.width << ", height = " << frame.height << "\n";
+  std::cout << "Total framerect: center (" << frame.pos.x << "; " << frame.pos.y << ")" \
+    << "width = " << frame.width << ", height = " << frame.height << "\n";
 }
 
 void zinoviev::scaleAllFigures(std::vector< std::weak_ptr< Shape > >& shapes, const point_t& point_scale, double k)
 {
-	for (size_t i = 0; i < shapes.size(); ++i)
+  for (size_t i = 0; i < shapes.size(); ++i)
   {
-  	auto shape = shapes[i].lock();
+    auto shape = shapes[i].lock();
 
-		if (shape)
+    if (shape)
     {
-    	rectangle_t old_frame = shape->getFrameRect();
+      rectangle_t old_frame = shape->getFrameRect();
       point_t point_on_frame = old_frame.pos;
 
       shape->move(point_scale);
@@ -108,6 +108,6 @@ void zinoviev::scaleAllFigures(std::vector< std::weak_ptr< Shape > >& shapes, co
       shape->scale(k);
 
       shape->move(diff_x * k, diff_y * k);
-		}
-	}
+    }
+  }
 }

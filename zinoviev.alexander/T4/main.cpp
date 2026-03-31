@@ -11,10 +11,10 @@
 
 int main()
 {
-	using namespace zinoviev;
+  using namespace zinoviev;
   try
   {
-		std::vector< std::shared_ptr< Shape > > shapes;
+    std::vector< std::shared_ptr< Shape > > shapes;
     std::vector< std::string > names;
 
     shapes.push_back(std::make_shared< Rectangle >(point_t{ 0, 0 }, 4, 2));
@@ -29,9 +29,9 @@ int main()
 
     std::vector< std::weak_ptr< Shape > > weakShapes;
     for (const auto& s : shapes)
-    	weakShapes.push_back(s);
+      weakShapes.push_back(s);
 
-		std::cout << "BEFORE SCALING:\n";
+    std::cout << "BEFORE SCALING:\n";
     printAllFigures(weakShapes, names);
     rectangle_t totalFrame = getAllFrameRect(weakShapes);
     printTotalFrame(totalFrame);
@@ -42,14 +42,14 @@ int main()
     std::cout << "Enter scaling point (x;y): ";
     if (!(std::cin >> scaleCenter.x >> scaleCenter.y))
     {
-    	std::cerr << "Error: invalid point\n";
+      std::cerr << "Error: invalid point\n";
       return 1;
     }
 
     std::cout << "Enter scaling factor (k > 0): ";
     if (!(std::cin >> k) || k <= 0)
     {
-    	std::cerr << "Error: factor must be positive\n";
+      std::cerr << "Error: factor must be positive\n";
       return 1;
     }
 
@@ -59,10 +59,10 @@ int main()
     printAllFigures(weakShapes, names);
     totalFrame = getAllFrameRect(weakShapes);
     printTotalFrame(totalFrame);
-	}
+  }
   catch (const std::exception& e)
   {
-  	std::cerr << "Error: " << e.what() << std::endl;
+    std::cerr << "Error: " << e.what() << std::endl;
     return 1;
   }
 }
