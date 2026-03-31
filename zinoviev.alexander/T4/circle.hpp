@@ -11,12 +11,11 @@ namespace zinoviev
 		point_t center_;
 		double radius_;
 
-	public:
+	 public:
 
 		Circle() :
 			radius_(1.0)
-		{
-		}
+		{}
 
 		Circle(point_t pt, double r) :
 			center_(pt),
@@ -25,7 +24,6 @@ namespace zinoviev
 			if (radius_ <= 0.0)
 				throw std::invalid_argument("Radius must be positive");
 		}
-
 
 		double getArea() const override;
 		rectangle_t getFrameRect() const override;

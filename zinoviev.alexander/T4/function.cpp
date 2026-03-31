@@ -26,7 +26,7 @@ zinoviev::rectangle_t zinoviev::getAllFrameRect(const std::vector< std::weak_ptr
 
       double left = frame.pos.x - half_W;
       double right = frame.pos.x + half_W;
-      double bottom = frame.pos.y - half_H;
+ function.cpp     double bottom = frame.pos.y - half_H;
       double top = frame.pos.y + half_H;
 
       if (left < x_min)

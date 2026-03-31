@@ -12,14 +12,12 @@ namespace zinoviev
 		point_t() :
 			x(0.0),
 			y(0.0)
-		{
-		}
+		{}
 
 		point_t(double a, double b) :
 			x(a),
 			y(b)
-		{
-		}
+		{}
 	};
 }
 #endif

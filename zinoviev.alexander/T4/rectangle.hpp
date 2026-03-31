@@ -12,13 +12,12 @@ namespace zinoviev
 		double width_;
 		double height_;
 
-	public:
+	 public:
 
 		Rectangle() :
 			width_(1.0),
 			height_(1.0)
-		{
-		}
+		{}
 
 		Rectangle(point_t pt, double width, double height) :
 			center_(pt),
@@ -28,7 +27,6 @@ namespace zinoviev
 			if (width_ <= 0.0 || height_ <= 0.0)
 				throw std::invalid_argument("Width and Height must be positive");
 		}
-
 
 		double getArea() const override;
 		rectangle_t getFrameRect() const override;
