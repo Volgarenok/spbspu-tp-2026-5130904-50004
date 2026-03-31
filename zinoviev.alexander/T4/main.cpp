@@ -39,26 +39,21 @@ int main()
     point_t scaleCenter;
     double k;
 
-    std::cout << "Enter scaling point (x;y): ";
-    if (!(std::cin >> scaleCenter.x >> scaleCenter.y))
+    if (std::cin >> scaleCenter.x >> scaleCenter.y >> k)
     {
-      std::cerr << "Error: invalid point\n";
-      return 1;
+      if (k <= 0)
+      {
+        std::cerr << "Error: factor must be positive\n";
+        return 1;
+      }
+
+      scaleAllFigures(weakShapes, scaleCenter, k);
+
+      std::cout << "AFTER SCALING:\n";
+      printAllFigures(weakShapes, names);
+      totalFrame = getAllFrameRect(weakShapes);
+      printTotalFrame(totalFrame);
     }
-
-    std::cout << "Enter scaling factor (k > 0): ";
-    if (!(std::cin >> k) || k <= 0)
-    {
-      std::cerr << "Error: factor must be positive\n";
-      return 1;
-    }
-
-    scaleAllFigures(weakShapes, scaleCenter, k);
-
-    std::cout << "AFTER SCALING:\n";
-    printAllFigures(weakShapes, names);
-    totalFrame = getAllFrameRect(weakShapes);
-    printTotalFrame(totalFrame);
   }
   catch (const std::exception& e)
   {
