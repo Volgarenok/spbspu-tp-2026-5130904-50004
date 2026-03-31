@@ -52,3 +52,38 @@ zinoviev::rectangle_t zinoviev::getAllFrameRect(const std::vector< std::weak_ptr
 
 	return rectangle_t(center, width, height);
 }
+
+void zinoviev::printFigure(const std::weak_ptr< Shape >& figure, const std::string& name, size_t id)
+{
+  auto shape = figure.lock();
+  if (!shape)
+  	throw std::runtime_error("Weak reference bad");
+
+	rectangle_t frame = shape->getFrameRect();
+  std::cout << id << "." << name << "\n";
+  std::cout << "area = " << shape->getArea() << "\n";
+  std::cout << "Frame: (" << frame.pos.x << "; " << frame.pos.y << "), width = " << frame.width \
+  	<< ", height = " << frame.height << "\n";
+}
+
+void zinoviev::printAllFigures(const std::vector< std::weak_ptr< Shape > > & figures, const std::vector< std::string > & names)
+{
+	double total = 0.0;
+
+	for (size_t i = 0; i < figures.size(); ++i)
+  {
+  	auto shape = figures[i].lock();
+    if (shape)
+    {
+    	printFigure(figures[i], names[i], i + 1);
+      total += shape->getArea();
+    }
+	}
+  std::cout << "Total area = " << total << "\n";
+}
+
+void zinoviev::printTotalFrame(const rectangle_t& frame)
+{
+	std::cout << "Total framerect: center (" << frame.pos.x << "; " << frame.pos.y << ")" \
+  	<< "width = " << frame.width << ", height = " << frame.height << "\n";
+}
