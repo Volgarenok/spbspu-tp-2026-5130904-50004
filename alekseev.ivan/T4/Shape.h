@@ -28,11 +28,11 @@ namespace alekseev {
   struct Rectangle: iShape {
     Rectangle(double width, double height, point_t pos);
 
-    virtual double getArea() const;
-    virtual rectangle_t getFrameRect() const;
-    virtual void move(point_t new_center);
-    virtual void move(double x, double y);
-    virtual void scale(double k);
+    double getArea() const override;
+    rectangle_t getFrameRect() const override;
+    void move(point_t new_center) override;
+    void move(double x, double y) override;
+    void scale(double k) override;
 
     private:
       rectangle_t rect_;
@@ -41,11 +41,11 @@ namespace alekseev {
   struct Circle: iShape {
     Circle(double radius, point_t center);
 
-    virtual double getArea() const;
-    virtual rectangle_t getFrameRect() const;
-    virtual void move(point_t new_center);
-    virtual void move(double x, double y);
-    virtual void scale(double k);
+    double getArea() const override;
+    rectangle_t getFrameRect() const override;
+    void move(point_t new_center) override;
+    void move(double x, double y) override;
+    void scale(double k) override;
 
     private:
       double radius_;
@@ -54,13 +54,13 @@ namespace alekseev {
 
   struct Polygon: iShape {
     Polygon(point_t * points, size_t count);
-    virtual ~Polygon();
+    ~Polygon() override;
 
-    virtual double getArea() const;
-    virtual rectangle_t getFrameRect() const;
-    virtual void move(point_t new_center);
-    virtual void move(double x, double y);
-    virtual void scale(double k);
+    double getArea() const override;
+    rectangle_t getFrameRect() const override;
+    void move(point_t new_center) override;
+    void move(double x, double y) override;
+    void scale(double k) override;
 
     private:
       point_t * points_;
