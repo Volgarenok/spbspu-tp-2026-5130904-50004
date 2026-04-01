@@ -1,7 +1,16 @@
 #include "Shape.h"
 
-#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream"
-#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ostream"
+std::ostream& alekseev::operator<<(std::ostream& out, const alekseev::point_t& p)
+{
+  out << "(" << p.x_ << ", " << p.y_ << ")";
+  return out;
+}
+
+std::ostream& alekseev::operator<<(std::ostream& out, const alekseev::rectangle_t& r)
+{
+  out << r.width_ << " " << r.height_ << " " << r.pos_;
+  return out;
+}
 
 alekseev::Rectangle::Rectangle(double width, double height, point_t pos):
   rect_(rectangle_t{width, height, pos})
@@ -97,7 +106,6 @@ alekseev::Polygon::Polygon(point_t * points, size_t count)
     area /= 2.0;
     center_ = point_t{sumCx / (6.0 * area), sumCy / (6.0 * area)};
   }
-  std::cout << "center: " << center_.x_ << ", " << center_.y_ << "\n";
 }
 
 alekseev::Polygon::~Polygon()
