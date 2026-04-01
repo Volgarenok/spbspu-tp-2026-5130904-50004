@@ -65,7 +65,7 @@ namespace alekseev {
     private:
       point_t * points_;
       size_t count_;
-      point_t center_{};
+      point_t center_;
   };
 }
 
