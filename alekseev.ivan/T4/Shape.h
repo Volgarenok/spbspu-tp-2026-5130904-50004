@@ -6,6 +6,12 @@
 namespace alekseev {
   const double PI = 3.14159265358979323846;
 
+  enum Shapes {
+    RECTANGLE,
+    CIRCLE,
+    POLYGON
+  };
+
   struct point_t {
     double x_, y_;
   };
@@ -61,6 +67,11 @@ namespace alekseev {
     void move(point_t new_center) override;
     void move(double x, double y) override;
     void scale(double k) override;
+
+    point_t * get_points() const
+    {
+      return points_;
+    }
 
     private:
       point_t * points_;
