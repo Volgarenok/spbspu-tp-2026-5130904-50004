@@ -83,6 +83,11 @@ alekseev::Polygon::Polygon(point_t * points, size_t count)
   center_ = point_t{sumCx / sumS, sumCy / sumS};
 }
 
+alekseev::Polygon::~Polygon()
+{
+  delete[] points_;
+}
+
 double alekseev::Polygon::getArea() const
 {
   double area = 0;
@@ -134,6 +139,9 @@ void alekseev::Polygon::move(double x, double y)
 
 void alekseev::Polygon::scale(double k)
 {
+  if (k == 1) {
+    return;
+  }
   double xc = center_.x_;
   double yc = center_.y_;
   for (size_t i = 0; i < count_; ++i) {
