@@ -2,6 +2,7 @@
 #define SHAPE_H
 
 #include <cstddef>
+#include <iostream>
 
 namespace alekseev {
   const double PI = 3.14159265358979323846;
@@ -14,11 +15,13 @@ namespace alekseev {
 
   struct point_t {
     double x_, y_;
+    friend std::ostream& operator<<(std::ostream& out, const point_t& p);
   };
 
   struct rectangle_t {
     double width_, height_;
     point_t pos_;
+    friend std::ostream& operator<<(std::ostream& out, const rectangle_t& r);
   };
 
   struct iShape {
