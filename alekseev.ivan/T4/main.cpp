@@ -1,6 +1,7 @@
 #include "Shape.h"
 #include <memory>
 #include <iostream>
+#include <iomanip>
 
 namespace alekseev {
   void scale_pivot(std::weak_ptr< iShape > shape, point_t pivot, double k);
@@ -69,7 +70,7 @@ std::ostream & alekseev::print_shapes(std::ostream & out,
   for (size_t i = 0; i < N; ++i) {
     double area = shapes[i]->getArea();
     alekseev::rectangle_t rect = shapes[i]->getFrameRect();
-    out << "S: " << area << " ";
+    out << "S: " << std::setw(10) << area << " ";
     out << "R: " << rect << "\n";
     sum_area += area;
 
@@ -83,9 +84,8 @@ std::ostream & alekseev::print_shapes(std::ostream & out,
     max_y = is_initialized ? (y1 > max_y ? y1 : max_y) : y1;
     is_initialized = true;
   }
-  out << "\n";
-  out << sum_area << " ";
+  out << "\tS: " << std::setw(10) << sum_area << " ";
   point_t center{(max_x + min_x) / 2.0, (max_y + min_y) / 2.0};
-  out << rectangle_t{max_x - min_x, max_y - min_y, center} << "\n";
+  out << "R: " << rectangle_t{max_x - min_x, max_y - min_y, center} << "\n";
   return out;
 }
