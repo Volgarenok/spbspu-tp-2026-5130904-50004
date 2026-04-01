@@ -144,7 +144,7 @@ void alekseev::Polygon::scale(double k)
   }
   double xc = center_.x_;
   double yc = center_.y_;
-  double l = k ? (1 - k) / k : -1;
+  double l = k ? k - 1 : -1;
   for (size_t i = 0; i < count_; ++i) {
     points_[i].x_ = (1 + l) * points_[i].x_ - l * xc;
     points_[i].y_ = (1 + l) * points_[i].y_ - l * yc;
