@@ -1,5 +1,8 @@
 #include "Shape.h"
 
+#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream"
+#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ostream"
+
 alekseev::Rectangle::Rectangle(double width, double height, point_t pos):
   rect_(rectangle_t{width, height, pos})
 {
@@ -68,19 +71,33 @@ alekseev::Polygon::Polygon(point_t * points, size_t count)
 {
   points_ = new point_t[count];
   count_ = count;
-  double sumS = 0;
+  double area = 0;
   double sumCx = 0;
   double sumCy = 0;
   for (size_t i = 0; i < count; ++i) {
     points_[i] = points[i];
-    size_t j = i < count - 1 ? i : 0;
+    size_t j = i < count - 1 ? i + 1 : 0;
     double k = points[i].x_ * points[j].y_ - points[i].y_ * points[j].x_;
-    sumS += k;
+    area += k;
     sumCx += (points[i].x_ + points[j].x_) * k;
     sumCy += (points[i].y_ + points[j].y_) * k;
   }
-  sumS *= 3;
-  center_ = point_t{sumCx / sumS, sumCy / sumS};
+
+  if (!area) {
+    sumCx = 0;
+    sumCy = 0;
+    for (size_t i = 0; i < count; ++i) {
+      sumCx += points[i].x_;
+      sumCy += points[i].y_;
+    }
+    sumCx /= count;
+    sumCy /= count;
+    center_ = point_t{sumCx, sumCy};
+  } else {
+    area /= 2.0;
+    center_ = point_t{sumCx / (6.0 * area), sumCy / (6.0 * area)};
+  }
+  std::cout << "center: " << center_.x_ << ", " << center_.y_ << "\n";
 }
 
 alekseev::Polygon::~Polygon()
@@ -144,9 +161,8 @@ void alekseev::Polygon::scale(double k)
   }
   double xc = center_.x_;
   double yc = center_.y_;
-  double l = k ? k - 1 : -1;
   for (size_t i = 0; i < count_; ++i) {
-    points_[i].x_ = (1 + l) * points_[i].x_ - l * xc;
-    points_[i].y_ = (1 + l) * points_[i].y_ - l * yc;
+    points_[i].x_ = k * points_[i].x_ - (k - 1) * xc;
+    points_[i].y_ = k * points_[i].y_ - (k - 1) * yc;
   }
 }
