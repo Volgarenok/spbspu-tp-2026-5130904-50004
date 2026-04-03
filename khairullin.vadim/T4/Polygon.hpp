@@ -1,6 +1,7 @@
-#define POLYGON_HPP
 #ifndef POLYGON_HPP
-#inlcude "Shape.hpp"
+#define POLYGON_HPP
+#include "Shape.hpp"
+#include <vector>
 
 struct Polygon: Shape
 {

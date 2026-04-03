@@ -15,12 +15,7 @@ double Rectangle::getArea()
 
 rectangle_t Rectangle::getFrameRect()
 {
-  return rectangle_t(pos, width, length);
-}
-
-rectangle_t Rectangle::frame(Rectangle * r)
-{
-  return rectangle_t(r->pos, r->width, r->length);
+  return rectangle_t{pos, width, length};
 }
 
 void Rectangle::move(point_t p)

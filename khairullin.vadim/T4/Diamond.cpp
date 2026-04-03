@@ -13,7 +13,7 @@ double Diamond::getArea()
 
 rectangle_t Diamond::getFrameRect()
 {
-  return rectangle_t(pos, horDiag, vertDiag);
+  return rectangle_t{pos, horDiag, vertDiag};
 }
 
 void Diamond::move(point_t p)

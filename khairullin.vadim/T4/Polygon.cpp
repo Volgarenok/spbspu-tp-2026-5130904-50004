@@ -1,4 +1,5 @@
 #include "Polygon.hpp"
+#include <vector>
 
 Polygon::Polygon(std::vector<point_t> p):
 points(p)
@@ -19,6 +20,7 @@ points(p)
 
 double Polygon::getArea()
 {
+  size_t n = points.size();
   double area = 0;
   for (size_t i = 0; i < n - 1; i++)
   {
@@ -31,6 +33,7 @@ double Polygon::getArea()
 
 rectangle_t Polygon::getFrameRect()
 {
+  size_t n = points.size();
   double x_min = points[0].x;
   double x_max = x_min;
   double y_min = points[0].y;
@@ -54,11 +57,12 @@ rectangle_t Polygon::getFrameRect()
       y_max = points[i].y;
     }
   }
-  return rectangle_t(pos, x_max - x_min, y_max - y_min);
+  return rectangle_t{pos, x_max - x_min, y_max - y_min};
 }
 
 void Polygon::move(point_t p)
 {
+  size_t n = points.size();
   double x = p.x - pos.x;
   double y = p.y - pos.y;
   for (size_t i = 0; i < n; i++)
@@ -71,7 +75,7 @@ void Polygon::move(point_t p)
 
 void Polygon::scale(double k)
 {
-  for (size_t i = 0; i < n; i++)
+  for (size_t i = 0; i < points.size(); i++)
   {
     points[i].x = pos.x + k * (points[i].x - pos.x);
     points[i].y = pos.y + k * (points[i].y - pos.y);

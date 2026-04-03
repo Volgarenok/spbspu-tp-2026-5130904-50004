@@ -1,5 +1,5 @@
-#define POINT_HPP
 #ifndef POINT_HPP
+#define POINT_HPP
 
 struct point_t
 {

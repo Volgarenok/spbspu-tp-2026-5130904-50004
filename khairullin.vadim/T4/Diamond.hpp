@@ -1,5 +1,5 @@
-#define DIAMOND_HPP
 #ifndef DIAMOND_HPP
+#define DIAMOND_HPP
 #include "Shape.hpp"
 
 struct Diamond: Shape

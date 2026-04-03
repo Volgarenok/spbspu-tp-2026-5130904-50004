@@ -1,5 +1,7 @@
-#define SHAPE_HPP
 #ifndef SHAPE_HPP
+#define SHAPE_HPP
+
+#include "Point.hpp"
 #include "Rec_t.hpp"
 
 struct Shape

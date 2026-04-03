@@ -1,5 +1,5 @@
-#define RECTANGLE_HPP
 #ifndef RECTANGLE_HPP
+#define RECTANGLE_HPP
 #include "Shape.hpp"
 
 struct Rectangle: Shape
