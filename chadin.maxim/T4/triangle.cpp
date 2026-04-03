@@ -32,3 +32,34 @@ namespace chadin {
   {
     return {(a_.x + b_.x + c_.x) / 3.0, (a_.y + b_.y + c_.y) / 3.0};
   }
+
+  void Triangle::move(point_t new_pos)
+  {
+    const point_t center = getCenter();
+    move(new_pos.x - center.x, new_pos.y - center.y);
+  }
+
+  void Triangle::move(double dx, double dy)
+  {
+    a_.x += dx;
+    a_.y += dy;
+    b_.x += dx;
+    b_.y += dy;
+    c_.x += dx;
+    c_.y += dy;
+  }
+
+  void Triangle::scale(double coefficient)
+  {
+    if (coefficient <= 0.0) {
+      throw std::invalid_argument("Invalid scale coefficient");
+    }
+    const point_t center = getCenter();
+    a_.x = center.x + (a_.x - center.x) * coefficient;
+    a_.y = center.y + (a_.y - center.y) * coefficient;
+    b_.x = center.x + (b_.x - center.x) * coefficient;
+    b_.y = center.y + (b_.y - center.y) * coefficient;
+    c_.x = center.x + (c_.x - center.x) * coefficient;
+    c_.y = center.y + (c_.y - center.y) * coefficient;
+  }
+}
