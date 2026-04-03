@@ -32,3 +32,40 @@ namespace chadin {
       throw std::invalid_argument("Vertices do not form a self-intersecting quadrilateral");
     }
   }
+
+  point_t Complexquad::getCenter() const
+  {
+    point_t center;
+    if (getIntersection(a_, b_, c_, d_, center)) {
+      return center;
+    }
+    if (getIntersection(b_, c_, d_, a_, center)) {
+      return center;
+    }
+    return {0.0, 0.0};
+  }
+
+  double Complexquad::getArea() const
+  {
+    const point_t p = getCenter();
+    double area1 = 0.0;
+    double area2 = 0.0;
+    point_t temp;
+    if (getIntersection(a_, b_, c_, d_, temp)) {
+      area1 = 0.5 * std::abs(a_.x * (p.y - d_.y) + p.x * (d_.y - a_.y) + d_.x * (a_.y - p.y));
+      area2 = 0.5 * std::abs(b_.x * (c_.y - p.y) + c_.x * (p.y - b_.y) + p.x * (b_.y - c_.y));
+    } else {
+      area1 = 0.5 * std::abs(p.x * (c_.y - d_.y) + c_.x * (d_.y - p.y) + d_.x * (p.y - c_.y));
+      area2 = 0.5 * std::abs(p.x * (a_.y - b_.y) + a_.x * (b_.y - p.y) + b_.x * (p.y - a_.y));
+    }
+    return area1 + area2;
+  }
+
+  rectangle_t Complexquad::getFrameRect() const
+  {
+    const double min_x = std::min({a_.x, b_.x, c_.x, d_.x});
+    const double max_x = std::max({a_.x, b_.x, c_.x, d_.x});
+    const double min_y = std::min({a_.y, b_.y, c_.y, d_.y});
+    const double max_y = std::max({a_.y, b_.y, c_.y, d_.y});
+    return {max_x - min_x, max_y - min_y, {(min_x + max_x) / 2.0, (min_y + max_y) / 2.0}};
+  }
