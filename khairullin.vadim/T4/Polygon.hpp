@@ -2,7 +2,7 @@
 #define POLYGON_HPP
 #include "Shape.hpp"
 #include <vector>
-
+#include <cstddef>
 struct Polygon: Shape
 {
   std::vector<point_t> points;
