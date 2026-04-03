@@ -11,3 +11,34 @@ namespace chadin {
       throw std::invalid_argument("Invalid rectangle dimensions");
     }
   }
+
+  double Rectangle::getArea() const
+  {
+    return width_ * height_;
+  }
+
+  rectangle_t Rectangle::getFrameRect() const
+  {
+    return {width_, height_, pos_};
+  }
+
+  void Rectangle::move(point_t new_pos)
+  {
+    pos_ = new_pos;
+  }
+
+  void Rectangle::move(double dx, double dy)
+  {
+    pos_.x += dx;
+    pos_.y += dy;
+  }
+
+  void Rectangle::scale(double coefficient)
+  {
+    if (coefficient <= 0.0) {
+      throw std::invalid_argument("Invalid scale coefficient");
+    }
+    width_ *= coefficient;
+    height_ *= coefficient;
+  }
+}
