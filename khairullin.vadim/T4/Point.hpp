@@ -4,4 +4,6 @@
 struct point_t
 {
   double x, y;
-}
+};
+
+#endif
