@@ -37,8 +37,17 @@ int main()
 
   chadin::point_t scale_center;
   double factor = 0.0;
-  if (!(std::cin >> scale_center.x >> scale_center.y >> factor) || factor <= 0.0) {
-    std::cerr << "Invalid scaling input\n";
+
+  if (!(std::cin >> scale_center.x >> scale_center.y >> factor)) {
+    if (std::cin.eof()) {
+      return 0;
+    }
+    std::cerr << "Invalid input\n";
+    return 1;
+  }
+
+  if (factor <= 0.0) {
+    std::cerr << "Invalid scaling factor\n";
     return 1;
   }
 
