@@ -55,3 +55,28 @@ namespace {
     }
   }
 }
+
+int main()
+{
+  std::vector<std::shared_ptr<chadin::Shape>> shapes;
+  shapes.push_back(std::make_shared<chadin::Rectangle>(10.0, 5.0, chadin::point_t{0.0, 0.0}));
+  shapes.push_back(std::make_shared<chadin::Triangle>(chadin::point_t{0.0, 0.0}, chadin::point_t{3.0, 0.0}, chadin::point_t{0.0, 4.0}));
+  shapes.push_back(std::make_shared<chadin::Complexquad>(chadin::point_t{0.0, 0.0}, chadin::point_t{10.0, 10.0}, chadin::point_t{0.0, 10.0}, chadin::point_t{10.0, 0.0}));
+
+  printShapesInfo(shapes);
+
+  chadin::point_t center;
+  double coef = 0.0;
+  if (!(std::cin >> center.x >> center.y >> coef) || coef <= 0.0) {
+    std::cerr << "Invalid scaling parameters\n";
+    return 1;
+  }
+
+  for (const auto& shape: shapes) {
+    scaleShape(shape, center, coef);
+  }
+
+  printShapesInfo(shapes);
+
+  return 0;
+}
