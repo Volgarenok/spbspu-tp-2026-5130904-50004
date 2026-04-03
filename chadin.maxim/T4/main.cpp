@@ -28,3 +28,30 @@ namespace {
     }
     return {max_x - min_x, max_y - min_y, {(min_x + max_x) / 2.0, (min_y + max_y) / 2.0}};
   }
+
+  void printShapesInfo(const std::vector<std::shared_ptr<chadin::Shape>>& shapes)
+  {
+    double total_area = 0.0;
+    for (const auto& shape: shapes) {
+      const double area = shape->getArea();
+      total_area += area;
+      const chadin::rectangle_t rect = shape->getFrameRect();
+      std::cout << area << "\n" << rect.width << " " << rect.height << " " << rect.pos.x << " " << rect.pos.y << "\n";
+    }
+    std::cout << total_area << "\n";
+    const chadin::rectangle_t total_rect = getTotalFrameRect(shapes);
+    std::cout << total_rect.width << " " << total_rect.height << " " << total_rect.pos.x << " " << total_rect.pos.y << "\n";
+  }
+
+  void scaleShape(std::weak_ptr<chadin::Shape> weak_shape, chadin::point_t scale_center, double coef)
+  {
+    if (const auto shape = weak_shape.lock()) {
+      const chadin::point_t bb_before = shape->getFrameRect().pos;
+      shape->scale(coef);
+      const chadin::point_t bb_after = shape->getFrameRect().pos;
+      const double dx = (scale_center.x + (bb_before.x - scale_center.x) * coef) - bb_after.x;
+      const double dy = (scale_center.y + (bb_before.y - scale_center.y) * coef) - bb_after.y;
+      shape->move(dx, dy);
+    }
+  }
+}
