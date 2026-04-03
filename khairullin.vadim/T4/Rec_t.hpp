@@ -1,5 +1,6 @@
-#define REC_T
-#ifndef REC_T
+#define REC_T_HPP
+#ifndef REC_T_HPP
+#include "Point.hpp"
 
 struct rectangle_t
 {
