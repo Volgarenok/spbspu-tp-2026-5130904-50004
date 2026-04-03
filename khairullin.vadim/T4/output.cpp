@@ -23,7 +23,6 @@ void output(std::vector<std::weak_ptr<Shape>> & shapes)
     }
   }
   std::cout << sum_area << "\n";
-
   auto temp_sh = shapes[0].lock();
   if (!temp_sh)
   {
@@ -51,5 +50,5 @@ void output(std::vector<std::weak_ptr<Shape>> & shapes)
   double res_width = x_max - x_min;
   double res_height = y_max - y_min;
   frame = rectangle_t{point_t{res_width / 2, res_height / 2}, res_width, res_height};
-  std::cout << frame.pos.x << " " << frame.pos.y << " " << frame.width << " " << frame.height << "\n";  
+  std::cout << frame.pos.x << " " << frame.pos.y << " " << frame.width << " " << frame.height << "\n";
 }
