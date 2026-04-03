@@ -26,7 +26,7 @@ int main()
   double vertDiag = 4;
   double horDiag = 2;
 
-  std::vector< khairullin::point_t > points = {khairullin::point_t{-3, 0}, khairullin::point_t{-2, -4}, 
+  std::vector< khairullin::point_t > points = {khairullin::point_t{-3, 0}, khairullin::point_t{-2, -4},
     khairullin::point_t{-7, -3}, khairullin::point_t{-7, 2}, khairullin::point_t{-5, 2}};
   std::vector< std::shared_ptr< khairullin::Shape > > shapes;
   std::shared_ptr< khairullin::Shape > square = nullptr;
@@ -49,7 +49,7 @@ int main()
 
   std::vector< std::weak_ptr< khairullin::Shape > > weak_shapes(shapes.begin(), shapes.end());
   try
-  { 
+  {
     output(weak_shapes);
   }
   catch (const std::logic_error & error)
@@ -71,8 +71,8 @@ int main()
     output(new_weak_shapes);
   }
   catch (const std::logic_error & error)
-  { 
-    std::cerr << error.what() << "\n"; 
+  {
+    std::cerr << error.what() << "\n";
     return 1;
   }
 }
