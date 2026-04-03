@@ -1,9 +1,11 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
-struct point_t
+namespace khairullin
 {
-  double x, y;
-};
-
+  struct point_t
+  {
+    double x, y;
+  };
+}
 #endif

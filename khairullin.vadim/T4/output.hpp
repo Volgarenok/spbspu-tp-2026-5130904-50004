@@ -5,7 +5,8 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-
-void output(std::vector<std::weak_ptr<Shape>> & shapes);
-
+namespace khairullin
+{
+  void output(std::vector< std::weak_ptr< khairullin::Shape > > & shapes);
+}
 #endif

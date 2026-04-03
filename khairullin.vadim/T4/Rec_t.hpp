@@ -2,11 +2,12 @@
 #define REC_T_HPP
 
 #include "Point.hpp"
-
-struct rectangle_t
+namespace khairullin
 {
-  point_t pos;
-  double width, height;
-};
-
+  struct rectangle_t
+  {
+    point_t pos;
+    double width, height;
+  };
+}
 #endif

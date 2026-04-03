@@ -1,6 +1,6 @@
 #include "output.hpp"
 
-void output(std::vector<std::weak_ptr<Shape>> & shapes)
+void khairullin::output(std::vector< std::weak_ptr< khairullin::Shape > > & shapes)
 {
   double sum_area = 0;
   const size_t N = shapes.size();
@@ -26,7 +26,7 @@ void output(std::vector<std::weak_ptr<Shape>> & shapes)
   auto temp_sh = shapes[0].lock();
   if (!temp_sh)
   {
-    throw std::logic_error("The shape is empty");
+     throw std::logic_error("The shape is empty");
   }
   rectangle_t frame = temp_sh->getFrameRect();
   double x_min = frame.pos.x - frame.width / 2;
@@ -49,6 +49,6 @@ void output(std::vector<std::weak_ptr<Shape>> & shapes)
   }
   double res_width = x_max - x_min;
   double res_height = y_max - y_min;
-  frame = rectangle_t{point_t{res_width / 2, res_height / 2}, res_width, res_height};
+  frame = khairullin::rectangle_t{khairullin::point_t{res_width / 2, res_height / 2}, res_width, res_height};
   std::cout << frame.pos.x << " " << frame.pos.y << " " << frame.width << " " << frame.height << "\n";
 }

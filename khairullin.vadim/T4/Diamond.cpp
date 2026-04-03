@@ -1,27 +1,27 @@
 #include "Diamond.hpp"
 
-Diamond::Diamond(point_t p, double a, double b):
+khairullin::Diamond::Diamond(point_t p, double a, double b):
 vertDiag(a),
 horDiag(b)
 {
   pos = p;
 }
-double Diamond::getArea()
+double khairullin::Diamond::getArea()
 {
   return vertDiag * horDiag;
 }
 
-rectangle_t Diamond::getFrameRect()
+khairullin::rectangle_t khairullin::Diamond::getFrameRect()
 {
   return rectangle_t{pos, horDiag, vertDiag};
 }
 
-void Diamond::move(point_t p)
+void khairullin::Diamond::move(point_t p)
 {
   pos = p;
 }
 
-void Diamond::scale(double k)
+void khairullin::Diamond::scale(double k)
 {
   vertDiag *= k;
   horDiag *= k;

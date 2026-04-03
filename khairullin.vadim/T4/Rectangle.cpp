@@ -1,6 +1,6 @@
 #include "Rectangle.hpp"
 
-Rectangle::Rectangle(point_t p, double a, double b):
+khairullin::Rectangle::Rectangle(point_t p, double a, double b):
 Shape(),
 width(a),
 length(b)
@@ -8,22 +8,22 @@ length(b)
   pos = p;
 }
 
-double Rectangle::getArea()
+double khairullin::Rectangle::getArea()
 {
   return width * length;
 }
 
-rectangle_t Rectangle::getFrameRect()
+khairullin::rectangle_t khairullin::Rectangle::getFrameRect()
 {
-  return rectangle_t{pos, width, length};
+  return khairullin::rectangle_t{pos, width, length};
 }
 
-void Rectangle::move(point_t p)
+void khairullin::Rectangle::move(point_t p)
 {
   pos = p;
 }
 
-void Rectangle::scale(double k)
+void khairullin::Rectangle::scale(double k)
 {
   width *= k;
   length *= k;

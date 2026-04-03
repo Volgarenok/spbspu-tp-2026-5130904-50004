@@ -1,7 +1,7 @@
 #include "Polygon.hpp"
 #include <vector>
 
-Polygon::Polygon(std::vector<point_t> p):
+khairullin::Polygon::Polygon(std::vector<point_t> p):
 points(p)
 {
   size_t n = p.size();
@@ -18,7 +18,7 @@ points(p)
   pos.y = y;
 }
 
-double Polygon::getArea()
+double khairullin::Polygon::getArea()
 {
   size_t n = points.size();
   double area = 0;
@@ -31,7 +31,7 @@ double Polygon::getArea()
   return area;
 }
 
-rectangle_t Polygon::getFrameRect()
+khairullin::rectangle_t khairullin::Polygon::getFrameRect()
 {
   size_t n = points.size();
   double x_min = points[0].x;
@@ -57,10 +57,10 @@ rectangle_t Polygon::getFrameRect()
       y_max = points[i].y;
     }
   }
-  return rectangle_t{pos, x_max - x_min, y_max - y_min};
+  return khairullin::rectangle_t{pos, x_max - x_min, y_max - y_min};
 }
 
-void Polygon::move(point_t p)
+void khairullin::Polygon::move(point_t p)
 {
   size_t n = points.size();
   double x = p.x - pos.x;
@@ -73,7 +73,7 @@ void Polygon::move(point_t p)
   pos = p;
 }
 
-void Polygon::scale(double k)
+void khairullin::Polygon::scale(double k)
 {
   for (size_t i = 0; i < points.size(); i++)
   {
