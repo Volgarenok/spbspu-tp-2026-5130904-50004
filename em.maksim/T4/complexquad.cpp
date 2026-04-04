@@ -1,25 +1,8 @@
 #include "complexquad.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
-#include <algorithm>
-
-rectangle_t Complexquad::getFrameRect() const
-{
-  double min_x = std::numeric_limits<double>::max();
-  double max_x = std::numeric_limits<double>::lowest();
-  double min_y = std::numeric_limits<double>::max();
-  double max_y = std::numeric_limits<double>::lowest();
-
-  for (const auto& v : vertices_) {
-    if (v.x_ < min_x) min_x = v.x_;
-    if (v.x_ > max_x) max_x = v.x_;
-    if (v.y_ < min_y) min_y = v.y_;
-    if (v.y_ > max_y) max_y = v.y_;
-  }
-
-  return {max_x - min_x, max_y - min_y, center_};
-}
 
 namespace em {
 
@@ -45,8 +28,6 @@ point_t Complexquad::findIntersection(point_t p1, point_t p2, point_t p3, point_
   return {x, y};
 }
 
-}
-
 void Complexquad::recalcCenter()
 {
   center_ = findIntersection(vertices_[0], vertices_[2], vertices_[1], vertices_[3]);
@@ -68,4 +49,56 @@ double Complexquad::getArea() const
   }
 
   return std::abs(sum) / 2.0;
+}
+
+rectangle_t Complexquad::getFrameRect() const
+{
+  double min_x = std::numeric_limits<double>::max();
+  double max_x = std::numeric_limits<double>::lowest();
+  double min_y = std::numeric_limits<double>::max();
+  double max_y = std::numeric_limits<double>::lowest();
+
+  for (const auto& v : vertices_) {
+    if (v.x_ < min_x) {
+      min_x = v.x_;
+    }
+    if (v.x_ > max_x) {
+      max_x = v.x_;
+    }
+    if (v.y_ < min_y) {
+      min_y = v.y_;
+    }
+    if (v.y_ > max_y) {
+      max_y = v.y_;
+    }
+  }
+
+  return {max_x - min_x, max_y - min_y, center_};
+}
+
+void Complexquad::move(point_t dest)
+{
+  double dx = dest.x_ - center_.x_;
+  double dy = dest.y_ - center_.y_;
+  move(dx, dy);
+}
+
+void Complexquad::move(double dx, double dy)
+{
+  center_.x_ += dx;
+  center_.y_ += dy;
+  for (auto& v : vertices_) {
+    v.x_ += dx;
+    v.y_ += dy;
+  }
+}
+
+void Complexquad::scale(double factor)
+{
+  for (auto& v : vertices_) {
+    v.x_ = center_.x_ + factor * (v.x_ - center_.x_);
+    v.y_ = center_.y_ + factor * (v.y_ - center_.y_);
+  }
+}
+
 }

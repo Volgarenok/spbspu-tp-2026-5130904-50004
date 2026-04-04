@@ -1,5 +1,6 @@
 #include "rectangle.hpp"
 
+#include <cmath>
 #include <stdexcept>
 
 namespace em {

@@ -63,3 +63,47 @@ void scaleAroundPoint(std::weak_ptr<Shape> shape_weak, point_t ref_point, double
 }
 
 }
+
+int main()
+{
+  std::vector<std::shared_ptr<em::Shape>> shapes;
+
+  try {
+    shapes.emplace_back(std::make_shared<em::Rectangle>(em::point_t{0.0, 0.0}, 10.0, 5.0));
+    shapes.emplace_back(std::make_shared<em::Rectangle>(em::point_t{15.0, 5.0}, 4.0, 8.0));
+    shapes.emplace_back(std::make_shared<em::Complexquad>(std::array<em::point_t, 4>{
+      em::point_t{20.0, 10.0},
+      em::point_t{25.0, 5.0},
+      em::point_t{30.0, 10.0},
+      em::point_t{25.0, 15.0}
+    }));
+  } catch (const std::invalid_argument& e) {
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
+  }
+
+  std::cout << "=== BEFORE SCALING ===\n";
+  em::printStats(shapes);
+
+  em::point_t ref_point;
+  double factor = 0.0;
+
+  std::cin >> ref_point.x_ >> ref_point.y_ >> factor;
+  if (std::cin.fail()) {
+    std::cerr << "Error: invalid input format.\n";
+    return 1;
+  }
+  if (factor <= 0.0) {
+    std::cerr << "Error: scale factor must be positive.\n";
+    return 1;
+  }
+
+  for (const auto& shape_ptr : shapes) {
+    em::scaleAroundPoint(shape_ptr, ref_point, factor);
+  }
+
+  std::cout << "\n=== AFTER SCALING ===\n";
+  em::printStats(shapes);
+
+  return 0;
+}
