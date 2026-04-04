@@ -88,11 +88,10 @@ int main()
   em::point_t ref_point;
   double factor = 0.0;
 
-  std::cin >> ref_point.x_ >> ref_point.y_ >> factor;
-  if (std::cin.fail()) {
-    std::cerr << "Error: invalid input format.\n";
-    return 1;
+  if (!(std::cin >> ref_point.x_ >> ref_point.y_ >> factor)) {
+    return 0;
   }
+  
   if (factor <= 0.0) {
     std::cerr << "Error: scale factor must be positive.\n";
     return 1;
