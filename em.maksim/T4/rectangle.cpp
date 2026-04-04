@@ -22,6 +22,23 @@ double Rectangle::getArea() const
 rectangle_t Rectangle::getFrameRect() const
 {
   return {width_, height_, center_};
-
 }
+
+void Rectangle::move(point_t dest)
+{
+  center_ = dest;
+}
+
+void Rectangle::move(double dx, double dy)
+{
+  center_.x_ += dx;
+  center_.y_ += dy;
+}
+
+void Rectangle::scale(double factor)
+{
+  width_ *= factor;
+  height_ *= factor;
+}
+
 }
