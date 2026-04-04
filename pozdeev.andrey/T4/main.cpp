@@ -22,4 +22,21 @@ int main()
   double pointX = 0.0;
   double pointY = 0.0;
   double scaleFactor = 0.0;
+
+  if (!(std::cin >> pointX >> pointY >> scaleFactor) || scaleFactor <= 0.0)
+  {
+    std::cerr << "Error: invalid input or non-positive scale factor.\n";
+    return 1;
+  }
+
+  pozdeev::point_t scalePoint(pointX, pointY);
+  for (auto& shape : shapes)
+  {
+    pozdeev::scaleRelativeToPoint(shape, scalePoint, scaleFactor);
+  }
+
+  std::cout << "After scaling:\n";
+  pozdeev::printShapesInfo(shapes);
+
+  return 0;
 }
