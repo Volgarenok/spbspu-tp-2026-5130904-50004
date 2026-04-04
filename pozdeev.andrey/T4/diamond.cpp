@@ -20,4 +20,21 @@ rectangle_t Diamond::getFrameRect() const
   return rect;
 }
 
+void Diamond::move(double dx, double dy)
+{
+  center_.x_ += dx;
+  center_.y_ += dy;
+}
+
+void Diamond::move(const point_t& point)
+{
+  center_ = point;
+}
+
+void Diamond::scale(double coefficient)
+{
+  diagX_ *= coefficient;
+  diagY_ *= coefficient;
+}
+
 }
