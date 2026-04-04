@@ -84,5 +84,17 @@ int main()
     return 1;
   }
 
+  std::cout << "\nAFTER:\n\n";
+  try
+  {
+    displayAll(wshps, nms);
+    displayTotalFrame(getTotalFrame(wshps));
+  }
+  catch (const std::exception& err)
+  {
+    std::cerr << "Failed to display figures: " << err.what() << "\n";
+    return 1;
+  }
+
   return 0;
 }
