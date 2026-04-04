@@ -67,7 +67,7 @@ void printAll(const std::vector<std::shared_ptr<Shape>>& storage) {
               << ", center=(" << ov.pos.x << ", " << ov.pos.y << ")\n";
 }
 
-} 
+}
 
 int main() {
     using namespace akhrameev;
