@@ -39,7 +39,7 @@ int main()
     ));
 
     std::vector<std::weak_ptr<Shape>> weak_shapes;
-    for (size_t i = 0; i < shared_shapes; ++i) {
+    for (size_t i = 0; i < shared_shapes.size(); ++i) {
       weak_shapes.push_back(shared_shapes[i]);
     }
 
