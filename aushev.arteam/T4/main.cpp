@@ -49,6 +49,7 @@ int main()
     std::cerr << "Failed to display figures: " << err.what() << "\n";
     return 1;
   }
+  std::cout << "\n";
 
   return 0;
 }
