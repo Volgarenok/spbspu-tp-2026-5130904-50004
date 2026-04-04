@@ -1,6 +1,25 @@
 #include "complexquad.hpp"
 
 #include <cmath>
+#include <limits>
+#include <algorithm>
+
+rectangle_t Complexquad::getFrameRect() const
+{
+  double min_x = std::numeric_limits<double>::max();
+  double max_x = std::numeric_limits<double>::lowest();
+  double min_y = std::numeric_limits<double>::max();
+  double max_y = std::numeric_limits<double>::lowest();
+
+  for (const auto& v : vertices_) {
+    if (v.x_ < min_x) min_x = v.x_;
+    if (v.x_ > max_x) max_x = v.x_;
+    if (v.y_ < min_y) min_y = v.y_;
+    if (v.y_ > max_y) max_y = v.y_;
+  }
+
+  return {max_x - min_x, max_y - min_y, center_};
+}
 
 namespace em {
 
