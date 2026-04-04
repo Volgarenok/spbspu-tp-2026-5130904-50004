@@ -18,14 +18,25 @@ int main()
   std::cout << "Initial state:\n";
   pozdeev::printShapesInfo(shapes);
 
-  std::cout << "Enter scale point (x y) and coefficient: ";
   double pointX = 0.0;
   double pointY = 0.0;
   double scaleFactor = 0.0;
 
-  if (!(std::cin >> pointX >> pointY >> scaleFactor) || scaleFactor <= 0.0)
+  std::cin >> pointX >> pointY >> scaleFactor;
+
+  if (!std::cin)
   {
-    std::cerr << "Error: invalid input or non-positive scale factor.\n";
+    if (std::cin.eof())
+    {
+      return 0;
+    }
+    std::cerr << "Error: invalid input.\n";
+    return 1;
+  }
+
+  if (scaleFactor <= 0.0)
+  {
+    std::cerr << "Error: non-positive scale factor.\n";
     return 1;
   }
 
