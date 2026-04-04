@@ -12,8 +12,10 @@ public:
     void move(double dx, double dy) override;
     void scale(double factor) override;
 private:
-    point_t small_center_, large_center_;
-    double r_small_, r_large_;
+    point_t small_center_;
+    double r_small_;
+    point_t large_center_;
+    double r_large_;
 };
 }
 #endif
