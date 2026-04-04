@@ -35,7 +35,7 @@ int main()
     std::vector<point_t> poly_pts = {{0.0, 0.0}, {4.0, 0.0}, {2.0, 4.0}};
     shared_shapes.push_back(std::make_shared<Polygon>(poly_pts));
     shared_shapes.push_back(std::make_shared<Complexquad>(
-      point_t{0.0, 0.0}, point_t{4.0, 4.0}, point_t{0.0, 4.0}, point_t{4.0, 0.0}
+      point_t{0.0, 0.0}, point_t{4.0, 0.0}, point_t{4.0, 4.0}, point_t{0.0, 4.0}
     ));
 
     std::vector<std::weak_ptr<Shape>> weak_shapes;
@@ -48,8 +48,7 @@ int main()
 
     double x = 0.0, y = 0.0, k = 0.0;
     if (!(std::cin >> x >> y >> k)) {
-      std::cerr << "Input reading error" << "\n";
-      return 1;
+      return 0;
     }
 
     scaleRel(weak_shapes, {x, y}, k);
