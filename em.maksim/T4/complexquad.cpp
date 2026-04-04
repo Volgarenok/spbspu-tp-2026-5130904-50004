@@ -27,3 +27,14 @@ point_t Complexquad::findIntersection(point_t p1, point_t p2, point_t p3, point_
 }
 
 }
+
+void Complexquad::recalcCenter()
+{
+  center_ = findIntersection(vertices_[0], vertices_[2], vertices_[1], vertices_[3]);
+}
+
+Complexquad::Complexquad(std::array<point_t, 4> vertices)
+  : vertices_{vertices}
+{
+  recalcCenter();
+}
