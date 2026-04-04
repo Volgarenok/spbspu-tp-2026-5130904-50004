@@ -20,4 +20,21 @@ rectangle_t Triangle::getFrameRect() const
   return rect;
 }
 
+void Triangle::move(double dx, double dy)
+{
+  centroid_.x_ += dx;
+  centroid_.y_ += dy;
+}
+
+void Triangle::move(const point_t& point)
+{
+  centroid_ = point;
+}
+
+void Triangle::scale(double coefficient)
+{
+  base_ *= coefficient;
+  height_ *= coefficient;
+}
+
 }
