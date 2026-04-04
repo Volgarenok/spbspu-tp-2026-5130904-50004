@@ -100,12 +100,16 @@ int main()
     return 2;
   }
 
+  printState(shapes, "BEFORE SCALING");
+
   double x = 0.0;
   double y = 0.0;
   double coeff = 0.0;
 
-  std::cout << "Enter scaling point (X Y) and scale coefficient: ";
   if (!(std::cin >> x >> y >> coeff)) {
+    if (std::cin.eof()) {
+      return 0;
+    }
     std::cerr << "Input error: Invalid data format.\n";
     return 1;
   }
@@ -114,8 +118,6 @@ int main()
     std::cerr << "Input error: Scale coefficient must be positive.\n";
     return 1;
   }
-
-  printState(shapes, "BEFORE SCALING");
 
   try {
     for (auto &shape : shapes) {
