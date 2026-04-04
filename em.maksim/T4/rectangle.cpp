@@ -14,4 +14,14 @@ Rectangle::Rectangle(point_t center, double width, double height)
   height_ = height;
 }
 
+double Rectangle::getArea() const
+{
+  return width_ * height_;
+}
+
+rectangle_t Rectangle::getFrameRect() const
+{
+  return {width_, height_, center_};
+
+}
 }
