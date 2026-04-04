@@ -31,3 +31,14 @@ rectangle_t Rectangle::getFrameRect() const
 {
   return { width_, height_, center_ };
 }
+
+void Rectangle::move(const point_t& dest)
+{
+  center_ = dest;
+}
+
+void Rectangle::move(double dx, double dy)
+{
+  center_.x += dx;
+  center_.y += dy;
+}
