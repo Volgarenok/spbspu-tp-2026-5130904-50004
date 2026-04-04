@@ -15,5 +15,5 @@ private:
     point_t small_center_, large_center_;
     double r_small_, r_large_;
 };
-} 
-#endif 
+}
+#endif

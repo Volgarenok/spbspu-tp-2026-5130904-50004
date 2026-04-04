@@ -30,4 +30,4 @@ void Rubber::scale(double factor) {
     large_center_.x = small_center_.x + (large_center_.x - small_center_.x) * factor;
     large_center_.y = small_center_.y + (large_center_.y - small_center_.y) * factor;
 }
-} 
+}

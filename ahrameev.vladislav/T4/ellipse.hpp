@@ -14,5 +14,5 @@ public:
 private:
     double rx_; double ry_; point_t center_;
 };
-} 
-#endif 
+}
+#endif

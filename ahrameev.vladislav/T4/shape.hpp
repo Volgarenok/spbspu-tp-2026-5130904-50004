@@ -24,6 +24,6 @@ public:
     virtual void scale(double factor) = 0;
 };
 
-} 
+}
 
-#endif 
+#endif
