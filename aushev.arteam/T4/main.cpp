@@ -51,5 +51,22 @@ int main()
   }
   std::cout << "\n";
 
+  double x, y, k;
+  std::cout << "Enter scale point (x y): ";
+  std::cin >> x >> y;
+  if (!std::cin)
+  {
+    std::cerr << "Invalid point coordinates\n";
+    return 1;
+  }
+
+  std::cout << "Enter scale coefficient: ";
+  std::cin >> k;
+  if (!std::cin)
+  {
+    std::cerr << "Invalid coefficient\n";
+    return 1;
+  }
+
   return 0;
 }
