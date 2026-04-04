@@ -38,3 +38,15 @@ Complexquad::Complexquad(std::array<point_t, 4> vertices)
 {
   recalcCenter();
 }
+
+double Complexquad::getArea() const
+{
+  double sum = 0.0;
+  for (size_t i = 0; i < 4; ++i) {
+    size_t j = (i + 1) % 4;
+    sum += vertices_[i].x_ * vertices_[j].y_;
+    sum -= vertices_[j].x_ * vertices_[i].y_;
+  }
+
+  return std::abs(sum) / 2.0;
+}
