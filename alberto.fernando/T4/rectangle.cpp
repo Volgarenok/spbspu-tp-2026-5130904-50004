@@ -42,3 +42,14 @@ void Rectangle::move(double dx, double dy)
   center_.x += dx;
   center_.y += dy;
 }
+
+void Rectangle::scale(double factor)
+{
+  if (factor <= 0.0) {
+    throw std::invalid_argument("Rectangle::scale: factor must be positive");
+  }
+  width_ *= factor;
+  height_ *= factor;
+}
+
+}
