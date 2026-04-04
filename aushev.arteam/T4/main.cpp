@@ -68,5 +68,21 @@ int main()
     return 1;
   }
 
+  if (k <= 0.0)
+  {
+    std::cerr << "Scale coefficient must be positive\n";
+    return 1;
+  }
+
+  try
+  {
+    scaleFigures(wshps, point_t(x, y), k);
+  }
+  catch (const std::exception& err)
+  {
+    std::cerr << "Failed to scale figures: " << err.what() << "\n";
+    return 1;
+  }
+
   return 0;
 }
