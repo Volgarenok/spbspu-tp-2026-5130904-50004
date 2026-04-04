@@ -83,3 +83,29 @@ void printSummary(const std::vector<std::shared_ptr<Shape>>& shapes,
 }
 
 }
+
+int main()
+{
+  using namespace alberto;
+
+  std::vector<std::shared_ptr<Shape>> shapes;
+  std::vector<std::string> names;
+  shapes.push_back(std::make_shared<Rectangle>(point_t{0.0, 0.0}, 6.0, 4.0));
+  names.push_back("Rectangle(center=(0,0) w=6 h=4)");
+  shapes.push_back(std::make_shared<Rectangle>(point_t{-1.0, -1.0}, point_t{3.0, 2.0}));
+  names.push_back("Rectangle(corners (-1,-1)-(3,2))");
+  shapes.push_back(std::make_shared<Square>(point_t{2.0, 3.0}, 5.0));
+  names.push_back("Square(center=(2,3) side=5)");
+  shapes.push_back(std::make_shared<Xquare>(point_t{0.0, 0.0}, 3.0));
+  names.push_back("Xquare(center=(0,0) halfDiag=3)");
+
+  std::cout << "\n=== Before scaling ===\n";
+  printSummary(shapes, names);
+
+  if (!scaleRelativeTo(shapes)) {
+    return 1;
+  }
+  printSummary(shapes, names);
+
+  return 0;
+}
