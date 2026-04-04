@@ -22,3 +22,12 @@ Rectangle::Rectangle(const point_t& bottomLeft, const point_t& topRight)
   }
 }
 
+double Rectangle::getArea() const
+{
+  return width_ * height_;
+}
+
+rectangle_t Rectangle::getFrameRect() const
+{
+  return { width_, height_, center_ };
+}
