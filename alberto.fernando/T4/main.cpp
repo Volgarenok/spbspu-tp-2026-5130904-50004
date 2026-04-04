@@ -67,3 +67,19 @@ rectangle_t overallFrame(const std::vector<std::shared_ptr<Shape>>& shapes)
   point_t c = { (minX + maxX) / 2.0, (minY + maxY) / 2.0 };
   return { w, h, c };
 }
+void printSummary(const std::vector<std::shared_ptr<Shape>>& shapes,
+                  const std::vector<std::string>& names)
+{
+  double total = 0.0;
+  for (size_t i = 0; i < shapes.size(); ++i) {
+    printShapeInfo(shapes[i], names[i]);
+    total += shapes[i]->getArea();
+  }
+  std::cout << "Total area: " << total << "\n";
+
+  rectangle_t overall = overallFrame(shapes);
+  std::cout << "Overall frame: pos=(" << overall.pos.x << "," << overall.pos.y << ")"
+            << " w=" << overall.width << " h=" << overall.height << "\n";
+}
+
+}
