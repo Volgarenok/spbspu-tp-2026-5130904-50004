@@ -43,6 +43,17 @@ rectangle_t getOverallFrameRect(const std::vector<std::weak_ptr<Shape>>& shapes)
     return {max_x - min_x, max_y - min_y, {(min_x + max_x) / 2.0, (min_y + max_y) / 2.0}};
 }
 
+void scaleAllRelativeToPoint(std::vector<std::weak_ptr<Shape>>& shapes, point_t pivot, double factor) {
+    for (auto& wp : shapes) {
+        if (auto sp = wp.lock()) {
+            point_t old = sp->getFrameRect().pos;
+            sp->move(pivot.x - old.x, pivot.y - old.y);
+            sp->scale(factor);
+            sp->move(old.x - pivot.x, old.y - pivot.y);
+        }
+    }
+}
+
 void printAll(const std::vector<std::shared_ptr<Shape>>& storage) {
     std::vector<std::weak_ptr<Shape>> weak_refs;
     for (const auto& sp : storage) weak_refs.push_back(sp);
@@ -67,7 +78,18 @@ int main() {
     shapes.emplace_back(std::make_shared<Rubber>(
         point_t{-5.0, -5.0}, 2.0, point_t{-2.0, -2.0}, 6.0));
 
+    const point_t pivot{0.0, 0.0};
+    const double factor = 1.5;
+
     std::cout << "BEFORE SCALING\n";
+    printAll(shapes);
+
+    std::vector<std::weak_ptr<Shape>> weak_shapes;
+    for (const auto& sp : shapes) weak_shapes.push_back(sp);
+    scaleAllRelativeToPoint(weak_shapes, pivot, factor);
+
+    std::cout << "\nAFTER SCALING (pivot: (" << pivot.x << ", " << pivot.y
+              << "), factor: " << factor << ")\n";
     printAll(shapes);
 
     return 0;
