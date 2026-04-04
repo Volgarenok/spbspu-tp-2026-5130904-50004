@@ -34,3 +34,15 @@ bool scaleRelativeTo(const std::vector<std::shared_ptr<alberto::Shape>>& shapes)
   std::cout << "\n=== After scaling (point=(" << px << "," << py << ") factor=" << factor << ") ===\n";
   return true;
 }
+
+void printShapeInfo(const std::shared_ptr<Shape>& s, const std::string& name)
+{
+  rectangle_t fr = s->getFrameRect();
+  std::cout << name
+            << "  area=" << s->getArea()
+            << "  frame=["
+            << "pos=(" << fr.pos.x << "," << fr.pos.y << ")"
+            << " w=" << fr.width
+            << " h=" << fr.height
+            << "]\n";
+}
