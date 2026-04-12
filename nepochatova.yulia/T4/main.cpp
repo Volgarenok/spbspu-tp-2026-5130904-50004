@@ -22,7 +22,7 @@ int main() {
     std::cout << "Before scaling: " << std::endl;
     printAllFigures(weakShapes);
 
-    rectangle_t overallFrame = getOverallFrame(shapes);
+    rectangle_t overallFrame = getOverallFrame(weakShapes);
     std::cout << "Total frame: center (" << overallFrame.pos.x << "; "
         << overallFrame.pos.y << "), width = " << overallFrame.width
         << ", height = " << overallFrame.height << std::endl << std::endl;
@@ -47,7 +47,7 @@ int main() {
     std::cout << std::endl << "After scaling: " << std::endl;
     printAllFigures(weakShapes);
 
-    overallFrame = getOverallFrame(shapes);
+    overallFrame = getOverallFrame(weakShapes);
     std::cout << "Total frame: center (" << overallFrame.pos.x << "; "
         << overallFrame.pos.y << "), width = " << overallFrame.width
         << ", height = " << overallFrame.height << std::endl;
