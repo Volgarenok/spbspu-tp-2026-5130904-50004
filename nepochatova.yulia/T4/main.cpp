@@ -29,8 +29,7 @@ int main() {
 
     double px, py, k;
     if (!(std::cin >> px >> py >> k)) {
-      std::cerr << "Error: invalid input format" << std::endl;
-      return 1;
+      return 0;
     }
 
     if (k <= 0.0) {
