@@ -21,8 +21,22 @@ namespace aydogan
 
   struct rectangle_t
   {
+    double width_;
+    double height_;
+    point_t pos_;
+
+    rectangle_t():
+      width_(0.0),
+      height_(0.0),
+      pos_()
+    {}
+
+    rectangle_t(double width, double height, const point_t& pos):
+      width_(width),
+      height_(height),
+      pos_(pos)
+    {}
   };
 }
 
 #endif
-
