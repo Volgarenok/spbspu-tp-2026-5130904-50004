@@ -132,3 +132,48 @@ void aydogan::printAllInfo(
   out << "common frame width = " << commonFrame.width_ << "\n";
   out << "common frame height = " << commonFrame.height_ << "\n";
 }
+
+void aydogan::scaleShapeRelativeToPoint(
+  const WeakShape& weakShape,
+  const point_t& point,
+  double coefficient
+)
+{
+  ShapePtr shape = weakShape.lock();
+  if (!shape)
+  {
+    throw std::invalid_argument("Expired shape pointer");
+  }
+  if (coefficient <= 0.0)
+  {
+    throw std::invalid_argument("Invalid scale coefficient");
+  }
+
+  point_t oldAnchor = shape->getFrameRect().pos_;
+
+  point_t targetAnchor(
+    point.x_ + (oldAnchor.x_ - point.x_) * coefficient,
+    point.y_ + (oldAnchor.y_ - point.y_) * coefficient
+  );
+
+  shape->scale(coefficient);
+
+  point_t newAnchor = shape->getFrameRect().pos_;
+
+  shape->move(
+    targetAnchor.x_ - newAnchor.x_,
+    targetAnchor.y_ - newAnchor.y_
+  );
+}
+
+void aydogan::scaleAllShapes(
+  const ShapeArray& shapes,
+  const point_t& point,
+  double coefficient
+)
+{
+  for (const ShapePtr& shape: shapes)
+  {
+    scaleShapeRelativeToPoint(WeakShape(shape), point, coefficient);
+  }
+}
