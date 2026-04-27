@@ -1,8 +1,6 @@
 #include "functions.hpp"
-
 #include <iomanip>
 #include <limits>
-#include <ostream>
 #include <stdexcept>
 
 namespace
@@ -83,11 +81,7 @@ aydogan::rectangle_t aydogan::getCommonFrame(const ShapeArray& shapes)
   );
 }
 
-void aydogan::printShapeInfo(
-  const WeakShape& weakShape,
-  const std::string& name,
-  std::ostream& out
-)
+void aydogan::printShapeInfo(const WeakShape& weakShape, const std::string& name, std::ostream& out)
 {
   ShapePtr shape = weakShape.lock();
   if (!shape)

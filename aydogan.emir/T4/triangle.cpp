@@ -31,17 +31,13 @@ namespace
   }
 }
 
-aydogan::Triangle::Triangle(
-  const point_t& first,
-  const point_t& second,
-  const point_t& third
-):
+aydogan::Triangle::Triangle(const point_t& first, const point_t& second, const point_t& third):
   first_(first),
   second_(second),
   third_(third),
   center_(getCenter(first, second, third))
 {
-  if (std::abs(getSignedArea(first_, second_, third_)) < 0.000001)
+  if (std::abs(getSignedArea(first_, second_, third_)) == 0.0)
   {
     throw std::invalid_argument("Invalid triangle points");
   }
@@ -59,11 +55,11 @@ aydogan::rectangle_t aydogan::Triangle::getFrameRect() const
   double minY = std::min(std::min(first_.y_, second_.y_), third_.y_);
   double maxY = std::max(std::max(first_.y_, second_.y_), third_.y_);
 
-  return rectangle_t(
-    maxX - minX,
-    maxY - minY,
-    point_t((minX + maxX) / 2.0, (minY + maxY) / 2.0)
-  );
+  double width = maxX - minX;
+  double height = maxY - minY;
+  point_t pos((minX + maxX) / 2.0, (minY + maxY) / 2.0);
+
+  return rectangle_t(width, height, pos);
 }
 
 void aydogan::Triangle::move(const point_t& point)
