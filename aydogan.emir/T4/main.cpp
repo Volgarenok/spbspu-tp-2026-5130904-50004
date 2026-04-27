@@ -54,5 +54,21 @@ int main()
     return 1;
   }
 
+  try
+  {
+    std::cout << "before scaling:\n";
+    printAllInfo(shapes, names, std::cout);
+
+    scaleAllShapes(shapes, point_t(x, y), coefficient);
+
+    std::cout << "\nafter scaling:\n";
+    printAllInfo(shapes, names, std::cout);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << "runtime error: " << e.what() << "\n";
+    return 1;
+  }
+
   return 0;
 }
