@@ -2,6 +2,7 @@
 #define SHAPE_HPP
 
 #include "base_types.hpp"
+#include <memory>
 
 namespace aydogan
 {
@@ -16,6 +17,9 @@ namespace aydogan
     virtual void move(double dx, double dy) = 0;
     virtual void scale(double coefficient) = 0;
   };
+
+  using ShapePtr = std::shared_ptr< Shape >;
+  using WeakShape = std::weak_ptr< Shape >;
 }
 
 #endif
