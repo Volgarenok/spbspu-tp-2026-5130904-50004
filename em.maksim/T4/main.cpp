@@ -1,5 +1,6 @@
 #include "complexquad.hpp"
 #include "rectangle.hpp"
+#include "square.hpp"
 #include "shape.hpp"
 
 #include <iostream>
@@ -71,6 +72,7 @@ int main()
   try {
     shapes.emplace_back(std::make_shared<em::Rectangle>(em::point_t{0.0, 0.0}, 10.0, 5.0));
     shapes.emplace_back(std::make_shared<em::Rectangle>(em::point_t{15.0, 5.0}, 4.0, 8.0));
+    shapes.emplace_back(std::make_shared<em::Square>(em::point_t{10.0, 10.0}, 6.0));
     shapes.emplace_back(std::make_shared<em::Complexquad>(std::array<em::point_t, 4>{
       em::point_t{20.0, 10.0},
       em::point_t{25.0, 5.0},
