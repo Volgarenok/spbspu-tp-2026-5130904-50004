@@ -1,8 +1,23 @@
-//
-// Created by User on 20-05-2026.
-//
-
 #include "Polygon.h"
+
+std::istream & alekseev::operator>>(std::istream & is, Point p)
+{
+  if (!is) {
+    return is;
+  }
+  is >> expected{"("} >> p.x >> expected{";"};
+  is >> p.y >> expected{")"};
+  return is;
+}
+
+std::ostream & alekseev::operator<<(std::ostream & os, const Point & p)
+{
+  if (!os) {
+    return os;
+  }
+  os << "(" << p.x << ";" << p.y << ")";
+  return os;
+}
 
 std::istream & alekseev::operator>>(std::istream & is, expected e)
 {
