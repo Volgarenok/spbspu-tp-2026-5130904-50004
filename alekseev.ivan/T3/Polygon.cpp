@@ -1,8 +1,26 @@
 #include "Polygon.h"
 #include <sstream>
-#include<string>
+#include <string>
+#include <iterator>
+#include <numeric>
+#include <cmath>
+#include <functional>
+#include <algorithm>
 
-#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iterator"
+alekseev::Point alekseev::Point::operator+(const Point & other) const
+{
+  return {x + other.x, y + other.y};
+}
+
+alekseev::Point alekseev::Point::operator-(const Point & other) const
+{
+  return {x - other.x, y - other.y};
+}
+
+bool alekseev::less_angle(const Point & a, const Point & b, double xc, double yc)
+{
+  return std::atan2(a.y - yc, a.x - xc) < std::atan2(b.y - yc, b.x - xc);
+}
 
 std::istream & alekseev::operator>>(std::istream & is, Point p)
 {
@@ -21,6 +39,27 @@ std::ostream & alekseev::operator<<(std::ostream & os, const Point & p)
   }
   os << "(" << p.x << ";" << p.y << ")";
   return os;
+}
+
+double alekseev::Polygon::area()
+{
+  using namespace std::placeholders;
+  Point pc = std::accumulate(points.begin(), points.end(), Point{0, 0});
+  double xc = pc.x / static_cast< double >(count());
+  double yc = pc.y / static_cast< double >(count());
+  std::sort(points.begin(), points.end(), std::bind(less_angle, _1, _2, xc, yc));
+  int area = 0;
+  for (size_t i = 0; i < count(); ++i) {
+    size_t j = (i + 1) % count();
+    area += points[i].x * points[j].y;
+    area -= points[j].x * points[i].y;
+  }
+  return abs(area) / 2.0;
+}
+
+size_t alekseev::Polygon::count() const
+{
+  return points.size();
 }
 
 std::istream & alekseev::operator>>(std::istream & is, Polygon & p)

@@ -1,4 +1,4 @@
-#include <functional>
+
 #include "Polygon.h"
 
 namespace alekseev {

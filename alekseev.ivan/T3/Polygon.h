@@ -7,13 +7,20 @@
 namespace alekseev {
   struct Point {
     int x, y;
+
+    Point operator+(const Point & other) const;
+    Point operator-(const Point & other) const;
   };
 
+  bool less_angle(const Point & a, const Point & b, double xc, double yc);
   std::istream & operator>>(std::istream & is, Point p);
   std::ostream & operator<<(std::ostream & os, const Point & p);
 
   struct Polygon {
     std::vector< Point > points;
+
+    double area();
+    size_t count() const;
   };
 
   std::istream & operator>>(std::istream & is, Polygon & p);
