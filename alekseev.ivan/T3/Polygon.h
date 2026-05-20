@@ -17,7 +17,6 @@ namespace alekseev {
   };
 
   std::istream & operator>>(std::istream & is, Polygon & p);
-  std::ostream & operator<<(std::ostream & os, const Polygon & p);
 
   struct expected {
     std::string source;
