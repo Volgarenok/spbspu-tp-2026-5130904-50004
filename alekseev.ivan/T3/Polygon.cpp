@@ -41,25 +41,40 @@ std::ostream & alekseev::operator<<(std::ostream & os, const Point & p)
   return os;
 }
 
-double alekseev::Polygon::area()
+alekseev::Polygon::Polygon(const std::vector< Point > & points):
+  points_(points)
 {
   using namespace std::placeholders;
-  Point pc = std::accumulate(points.begin(), points.end(), Point{0, 0});
+  Point pc = std::accumulate(points_.begin(), points_.end(), Point{0, 0});
   double xc = pc.x / static_cast< double >(count());
   double yc = pc.y / static_cast< double >(count());
-  std::sort(points.begin(), points.end(), std::bind(less_angle, _1, _2, xc, yc));
+  std::sort(points_.begin(), points_.end(), std::bind(less_angle, _1, _2, xc, yc));
+}
+
+double alekseev::Polygon::area() const
+{
   int area = 0;
   for (size_t i = 0; i < count(); ++i) {
     size_t j = (i + 1) % count();
-    area += points[i].x * points[j].y;
-    area -= points[j].x * points[i].y;
+    area += points_[i].x * points_[j].y;
+    area -= points_[j].x * points_[i].y;
   }
   return abs(area) / 2.0;
 }
 
 size_t alekseev::Polygon::count() const
 {
-  return points.size();
+  return points_.size();
+}
+
+double alekseev::Polygon::operator+(const Polygon & other) const
+{
+  return area() + other.area();
+}
+
+double alekseev::operator+(double a, const Polygon & b)
+{
+  return a + b.area();
 }
 
 std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
@@ -80,9 +95,13 @@ std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
     return is;
   }
   std::istream_iterator< Point > begin(iss), end{};
-  std::copy(begin, end, std::back_inserter(p.points));
-  if (p.points.size() != n || iss.fail()) {
+  std::vector < Point > res;;
+  std::copy(begin, end, std::back_inserter(res));
+  if (res.size() != n || iss.fail()) {
     is.setstate(std::ios::failbit);
+  }
+  if (is) {
+    p = Polygon(res);
   }
   return is;
 }

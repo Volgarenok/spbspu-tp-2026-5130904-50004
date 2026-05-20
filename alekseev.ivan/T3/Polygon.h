@@ -2,6 +2,7 @@
 #define POLYGON_H
 
 #include <iostream>
+#include <utility>
 #include <vector>
 
 namespace alekseev {
@@ -17,12 +18,15 @@ namespace alekseev {
   std::ostream & operator<<(std::ostream & os, const Point & p);
 
   struct Polygon {
-    std::vector< Point > points;
+    std::vector< Point > points_;
+    explicit Polygon(const std::vector< Point > & points);
 
-    double area();
+    double area() const;
     size_t count() const;
+    double operator+(const Polygon & other) const;
   };
 
+  double operator+(double a, const Polygon & b);
   std::istream & operator>>(std::istream & is, Polygon & p);
 
   struct expected {
