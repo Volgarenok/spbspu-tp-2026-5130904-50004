@@ -61,11 +61,6 @@ alekseev::Polygon::Polygon():
 alekseev::Polygon::Polygon(const std::vector< Point > & points):
   points_(points)
 {
-  using namespace std::placeholders;
-  Point pc = std::accumulate(points_.begin(), points_.end(), Point{0, 0});
-  double xc = pc.x / static_cast< double >(size());
-  double yc = pc.y / static_cast< double >(size());
-  std::sort(points_.begin(), points_.end(), std::bind(less_angle, _1, _2, xc, yc));
 }
 
 alekseev::Polygon::Polygon(const std::vector< std::string > & args)
