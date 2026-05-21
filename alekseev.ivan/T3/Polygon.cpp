@@ -51,23 +51,23 @@ alekseev::Polygon::Polygon(const std::vector< Point > & points):
 {
   using namespace std::placeholders;
   Point pc = std::accumulate(points_.begin(), points_.end(), Point{0, 0});
-  double xc = pc.x / static_cast< double >(count());
-  double yc = pc.y / static_cast< double >(count());
+  double xc = pc.x / static_cast< double >(size());
+  double yc = pc.y / static_cast< double >(size());
   std::sort(points_.begin(), points_.end(), std::bind(less_angle, _1, _2, xc, yc));
 }
 
 double alekseev::Polygon::area() const
 {
   int area = 0;
-  for (size_t i = 0; i < count(); ++i) {
-    size_t j = (i + 1) % count();
+  for (size_t i = 0; i < size(); ++i) {
+    size_t j = (i + 1) % size();
     area += points_[i].x * points_[j].y;
     area -= points_[j].x * points_[i].y;
   }
   return abs(area) / 2.0;
 }
 
-size_t alekseev::Polygon::count() const
+size_t alekseev::Polygon::size() const
 {
   return points_.size();
 }

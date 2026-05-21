@@ -23,7 +23,7 @@ namespace alekseev {
     explicit Polygon(const std::vector< Point > & points);
 
     double area() const;
-    size_t count() const;
+    size_t size() const;
     double operator+(const Polygon & other) const;
   };
 
