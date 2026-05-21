@@ -61,6 +61,9 @@ alekseev::Polygon::Polygon():
 alekseev::Polygon::Polygon(const std::vector< Point > & points):
   points_(points)
 {
+  if (points.size() < 3) {
+    throw std::invalid_argument("Wrong number of points");
+  }
 }
 
 alekseev::Polygon::Polygon(const std::vector< std::string > & args)
@@ -142,7 +145,7 @@ std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
   std::istringstream iss(line);
   size_t n = 0;
   iss >> n;
-  if (n <= 0 || iss.fail()) {
+  if (n < 3 || iss.fail()) {
     is.setstate(std::ios::failbit);
     return is;
   }
@@ -164,7 +167,7 @@ alekseev::Polygon alekseev::from_string(const std::string & line)
   std::istringstream iss(line);
   size_t n = 0;
   iss >> n;
-  if (n <= 0 || iss.fail()) {
+  if (n < 3 || iss.fail()) {
     return res;
   }
   std::vector< Point > points;

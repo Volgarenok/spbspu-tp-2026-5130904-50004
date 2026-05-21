@@ -85,13 +85,16 @@ double alekseev::area(const data_t & data, const args_t & args)
     return std::accumulate(temp.begin(), temp.end(), 0.0);
   } else if (args[0] == "MEAN") {
     if (data.empty()) {
-      return 0.0;
+      throw std::invalid_argument("Empty data");
     }
     double area = std::accumulate(data.begin(), data.end(), 0.0);
     return area / static_cast< double >(data.size());
   } else {
     try {
       size_t n = std::stoull(args[0]);
+      if (n < 3) {
+        throw std::invalid_argument("Wrong number of arguments");
+      }
       data_t temp;
       std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [n](const Polygon & x) {
         return x.size() == n;
@@ -161,7 +164,7 @@ size_t alekseev::count(const data_t & data, const args_t & args)
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (data.empty()) {
-    throw std::invalid_argument("Empty data");
+    return 0;
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     bool odd = args[0] == "ODD";
@@ -171,7 +174,7 @@ size_t alekseev::count(const data_t & data, const args_t & args)
   } else {
     try {
       size_t n = std::stoull(args[0]);
-      if (n == 0) {
+      if (n < 3) {
         throw std::invalid_argument("Invalid vertex count");
       }
       return std::count_if(data.begin(), data.end(), [n](const Polygon & x) {
