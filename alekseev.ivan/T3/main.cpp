@@ -67,10 +67,10 @@ double alekseev::area(const data_t & data, const args_t & args)
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
-    int odd = args[0] == "ODD";
+    bool odd = args[0] == "ODD";
     std::vector< Polygon > temp;
     std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [odd](const Polygon & x) {
-      return x.size() % 2 == odd;
+      return (x.size() % 2 == 1) == odd;
     });
     return std::accumulate(temp.begin(), temp.end(), 0.0);
   } else if (args[0] == "MEAN") {
@@ -135,9 +135,9 @@ double alekseev::count(const data_t & data, const args_t & args)
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
-    int odd = args[0] == "ODD";
+    bool odd = args[0] == "ODD";
     return std::count_if(data.begin(), data.end(), [odd](const Polygon & x) {
-      return x.size() % 2 == odd;
+      return (x.size() % 2 == 1) == odd;
     });
   } else {
     try {
