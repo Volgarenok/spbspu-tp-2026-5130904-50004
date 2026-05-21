@@ -85,7 +85,7 @@ double alekseev::area(const data_t & data, const args_t & args)
     return std::accumulate(temp.begin(), temp.end(), 0.0);
   } else if (args[0] == "MEAN") {
     if (data.empty()) {
-      throw std::invalid_argument("Empty data");
+      return 0.0;
     }
     double area = std::accumulate(data.begin(), data.end(), 0.0);
     return area / static_cast< double >(data.size());
@@ -105,7 +105,7 @@ double alekseev::area(const data_t & data, const args_t & args)
 
 double alekseev::extremum_area(const data_t & data, const args_t & args, bool max)
 {
-  if (!args.empty()) {
+  if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (data.empty()) {
@@ -131,7 +131,7 @@ double alekseev::min_area(const data_t & data, const args_t & args)
 
 size_t alekseev::extremum_size(const data_t & data, const args_t & args, bool max)
 {
-  if (!args.empty()) {
+  if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (data.empty()) {
@@ -168,6 +168,9 @@ size_t alekseev::count(const data_t & data, const args_t & args)
   } else {
     try {
       size_t n = std::stoull(args[0]);
+      if (n == 0) {
+        throw std::invalid_argument("Invalid vertex count");
+      }
       return std::count_if(data.begin(), data.end(), [n](const Polygon & x) {
         return x.size() == n;
       });
@@ -211,18 +214,18 @@ void alekseev::Exec::operator()(const std::string & name, const data_t & data, c
   std::cout << std::fixed << std::setprecision(1);
   if (args.empty()) {
     if (name == "RECTS") {
-      std::cout << rects(data, args);
+      std::cout << rects(data, args) << "\n";
       return;
     }
   } else {
     if (name == "MAX" && args[0] == "AREA") {
-      std::cout << max_area(data, args);
+      std::cout << max_area(data, args) << "\n";
       return;
     } else if (name == "MIN" && args[0] == "AREA") {
       std::cout << min_area(data, args);
       return;
     } else {
-      std::cout << n_cmds.at(name)(data, args);
+      std::cout << n_cmds.at(name)(data, args) << "\n";
       return;
     }
   }

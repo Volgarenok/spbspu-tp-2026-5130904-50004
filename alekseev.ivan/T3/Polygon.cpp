@@ -107,6 +107,9 @@ bool alekseev::Polygon::is_inner(const Point & p) const
     Point b = points_[j];
     bool intersect = ((a.y < p.y) != (b.y < p.y));
     if (intersect) {
+      if (b.y == a.y) {
+        continue;
+      }
       double x_intersect = static_cast< double >(b.x - a.x) * (p.y - a.y) / static_cast< double >(b.
         y - a.y) + a.x;
       if (p.x < x_intersect) {
