@@ -77,8 +77,8 @@ double alekseev::area(const data_t & data, const args_t & args)
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
-    bool odd = args[0] == "ODD";
-    std::vector< Polygon > temp;
+    bool odd = (args[0] == "ODD");
+    std::vector< Polygon > temp(data.size());
     std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [odd](const Polygon & x) {
       return (x.size() % 2 == 1) == odd;
     });
@@ -164,7 +164,7 @@ size_t alekseev::count(const data_t & data, const args_t & args)
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (data.empty()) {
-    return 0;
+    throw std::invalid_argument("Invalid vertex count");
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     bool odd = args[0] == "ODD";
