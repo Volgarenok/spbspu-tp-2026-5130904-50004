@@ -40,9 +40,10 @@ int main(int argc, char * argv[])
     data.push_back(alekseev::from_string(line));
   }
   ifs.close();
-  std::remove_if(data.begin(), data.end(), [](const alekseev::Polygon & p) {
+  auto rem_it = std::remove_if(data.begin(), data.end(), [](const alekseev::Polygon & p) {
     return p.size() == 0;
   });
+  data.erase(rem_it, data.end());
   std::string command;
   std::cout << std::fixed << std::setprecision(2);
   while (std::getline(std::cin, command)) {
@@ -65,17 +66,17 @@ double alekseev::area(const data_t & data, const args_t & args)
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
-  if (data.empty()) {
-    throw std::invalid_argument("Empty data");
-  }
   if (args[0] == "EVEN" || args[0] == "ODD") {
-    int odd = args[1] == "ODD";
+    int odd = args[0] == "ODD";
     std::vector< Polygon > temp;
     std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [odd](const Polygon & x) {
       return x.size() % 2 == odd;
     });
     return std::accumulate(temp.begin(), temp.end(), 0.0);
   } else if (args[0] == "MEAN") {
+    if (data.empty()) {
+      throw std::invalid_argument("Empty data");
+    }
     double area = std::accumulate(data.begin(), data.end(), 0.0);
     return area / data.size();
   } else {
@@ -133,11 +134,8 @@ double alekseev::count(const data_t & data, const args_t & args)
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
-  if (data.empty()) {
-    throw std::invalid_argument("Empty data");
-  }
   if (args[0] == "EVEN" || args[0] == "ODD") {
-    int odd = args[1] == "ODD";
+    int odd = args[0] == "ODD";
     return std::count_if(data.begin(), data.end(), [odd](const Polygon & x) {
       return x.size() % 2 == odd;
     });

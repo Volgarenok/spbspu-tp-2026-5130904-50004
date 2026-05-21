@@ -137,7 +137,7 @@ std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
   std::string line;
   std::getline(is, line);
   std::istringstream iss(line);
-  int n = 0;
+  size_t n = 0;
   iss >> n;
   if (n <= 0 || iss.fail()) {
     is.setstate(std::ios::failbit);
@@ -159,7 +159,7 @@ alekseev::Polygon alekseev::from_string(const std::string & line)
 {
   Polygon res;
   std::istringstream iss(line);
-  int n = 0;
+  size_t n = 0;
   iss >> n;
   if (n <= 0 || iss.fail()) {
     return res;
