@@ -12,6 +12,24 @@ namespace alekseev {
   using data_t = std::vector< Polygon >;
   using args_t = std::vector< std::string >;
   using const_command = std::function< double (const data_t &, const args_t &) >;
+  using double_command = std::function< double (const data_t &, const args_t &) >;
+  using size_t_command = std::function< size_t (const data_t &, const args_t &) >;
+
+  double area_even_odd(const data_t & data, const args_t & args);
+  double area_mean(const data_t & data, const args_t & args);
+  double area_n(const data_t & data, const args_t & args);
+  double extremum_area(const data_t & data, const args_t & args);
+  size_t extremum_size(const data_t & data, const args_t & args);
+  double max_area(const data_t & data, const args_t & args);
+  double min_area(const data_t & data, const args_t & args);
+  double max_size(const data_t & data, const args_t & args);
+  double min_size(const data_t & data, const args_t & args);
+  size_t count(const data_t & data, const args_t & args);
+  struct Exec {
+    std::map< std::string, double_command > d_cmds;
+    std::map< std::string, size_t_command > n_cmds;
+    Exec();
+  };
 
   double area(const data_t & data, const args_t & args);
   double extremum(const data_t & data, const args_t & args, bool max);
