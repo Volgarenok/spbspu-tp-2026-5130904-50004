@@ -15,7 +15,7 @@ namespace alekseev {
 
   bool less_angle(const Point & a, const Point & b, double xc, double yc);
   Point point_from_string(const std::string & s);
-  std::istream & operator>>(std::istream & is, Point p);
+  std::istream & operator>>(std::istream & is, Point & p);
   std::ostream & operator<<(std::ostream & os, const Point & p);
 
   struct Polygon {

@@ -34,7 +34,7 @@ alekseev::Point alekseev::point_from_string(const std::string & s)
   return p;
 }
 
-std::istream & alekseev::operator>>(std::istream & is, Point p)
+std::istream & alekseev::operator>>(std::istream & is, Point & p)
 {
   if (!is) {
     return is;
