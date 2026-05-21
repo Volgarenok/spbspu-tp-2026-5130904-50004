@@ -4,6 +4,9 @@
 #include <numeric>
 #include <fstream>
 #include <iterator>
+#include <map>
+#include <sstream>
+#include <iomanip>
 
 namespace alekseev {
   using data_t = std::vector< Polygon >;
@@ -17,6 +20,7 @@ namespace alekseev {
   double count(const data_t & data, const args_t & args);
   double rects(const data_t & data, const args_t & args);
   double intersections(const data_t & data, const args_t & args);
+  std::map< std::string, const_command > cmds;
 }
 
 int main(int argc, char * argv[])
@@ -39,6 +43,21 @@ int main(int argc, char * argv[])
   std::remove_if(data.begin(), data.end(), [](const alekseev::Polygon & p) {
     return p.size() == 0;
   });
+  std::string command;
+  std::cout << std::fixed << std::setprecision(2);
+  while (std::getline(std::cin, command)) {
+    std::istringstream iss(command);
+    std::string name;
+    iss >> name;
+    std::istream_iterator< std::string > b(iss), e{};
+    alekseev::args_t args;
+    std::copy(b, e, std::back_inserter(args));
+    try {
+      std::cout << alekseev::cmds.at(name)(data, args) << "\n";
+    } catch (...) {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
 }
 
 double alekseev::area(const data_t & data, const args_t & args)
