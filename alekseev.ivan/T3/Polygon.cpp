@@ -41,6 +41,11 @@ std::ostream & alekseev::operator<<(std::ostream & os, const Point & p)
   return os;
 }
 
+alekseev::Polygon::Polygon():
+  points_(std::vector< Point >())
+{
+}
+
 alekseev::Polygon::Polygon(const std::vector< Point > & points):
   points_(points)
 {
@@ -84,18 +89,15 @@ std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
   }
   std::string line;
   std::getline(is, line);
-  while (line.empty()) {
-    std::getline(is, line);
-  }
   std::istringstream iss(line);
   int n = 0;
   iss >> n;
-  if (n <= 0) {
+  if (n <= 0 || iss.fail()) {
     is.setstate(std::ios::failbit);
     return is;
   }
   std::istream_iterator< Point > begin(iss), end{};
-  std::vector < Point > res;;
+  std::vector< Point > res;
   std::copy(begin, end, std::back_inserter(res));
   if (res.size() != n || iss.fail()) {
     is.setstate(std::ios::failbit);
@@ -104,6 +106,24 @@ std::istream & alekseev::operator>>(std::istream & is, Polygon & p)
     p = Polygon(res);
   }
   return is;
+}
+
+alekseev::Polygon alekseev::from_string(const std::string & line)
+{
+  Polygon res;
+  std::istringstream iss(line);
+  int n = 0;
+  iss >> n;
+  if (n <= 0 || iss.fail()) {
+    return res;
+  }
+  std::vector< Point > points;
+  std::istream_iterator< Point > begin(iss), end{};
+  std::copy(begin, end, std::back_inserter(points));
+  if (iss.eof() && points.size() == n) {
+    res = Polygon(points);
+  }
+  return res;
 }
 
 std::istream & alekseev::operator>>(std::istream & is, expected e)

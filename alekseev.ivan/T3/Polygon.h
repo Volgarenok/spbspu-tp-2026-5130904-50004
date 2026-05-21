@@ -19,6 +19,7 @@ namespace alekseev {
 
   struct Polygon {
     std::vector< Point > points_;
+    Polygon();
     explicit Polygon(const std::vector< Point > & points);
 
     double area() const;
@@ -28,6 +29,7 @@ namespace alekseev {
 
   double operator+(double a, const Polygon & b);
   std::istream & operator>>(std::istream & is, Polygon & p);
+  Polygon from_string(const std::string & s);
 
   struct expected {
     std::string source;
