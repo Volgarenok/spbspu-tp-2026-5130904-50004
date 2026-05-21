@@ -119,10 +119,7 @@ double alekseev::extremum_area(const data_t & data, const args_t & args, bool ma
   std::transform(data.begin(), data.end(), std::back_inserter(squares), [k](const Polygon & x) {
     return k * x.area();
   });
-  if (squares.empty()) {
-    return 0.0;
-  }
-  return *std::max(squares.begin(), squares.end());
+  return *std::max_element(squares.begin(), squares.end());
 }
 
 double alekseev::max_area(const data_t & data, const args_t & args)
@@ -148,7 +145,7 @@ size_t alekseev::extremum_size(const data_t & data, const args_t & args, bool ma
   std::transform(data.begin(), data.end(), std::back_inserter(sizes), [k](const Polygon & x) {
     return k * x.size();
   });
-  return *std::max(sizes.begin(), sizes.end());
+  return *std::max_element(sizes.begin(), sizes.end());
 }
 
 size_t alekseev::max_size(const data_t & data, const args_t & args)
