@@ -65,13 +65,16 @@ double alekseev::area(const data_t & data, const args_t & args)
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
+  if (data.empty()) {
+    throw std::invalid_argument("Empty data");
+  }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     int odd = args[1] == "ODD";
     std::vector< Polygon > temp;
     std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [odd](const Polygon & x) {
       return x.size() % 2 == odd;
     });
-    return std::accumulate(data.begin(), data.end(), 0.0);
+    return std::accumulate(temp.begin(), temp.end(), 0.0);
   } else if (args[0] == "MEAN") {
     double area = std::accumulate(data.begin(), data.end(), 0.0);
     return area / data.size();
@@ -93,6 +96,9 @@ double alekseev::extremum(const data_t & data, const args_t & args, bool max)
 {
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
+  }
+  if (data.empty()) {
+    throw std::invalid_argument("Empty data");
   }
   int k = max ? 1 : -1;
   if (args[0] == "AREA") {
@@ -126,6 +132,9 @@ double alekseev::count(const data_t & data, const args_t & args)
 {
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
+  }
+  if (data.empty()) {
+    throw std::invalid_argument("Empty data");
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     int odd = args[1] == "ODD";

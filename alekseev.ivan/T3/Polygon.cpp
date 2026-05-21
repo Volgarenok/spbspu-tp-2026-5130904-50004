@@ -84,13 +84,13 @@ alekseev::Polygon::Polygon(const std::vector< std::string > & args)
 
 double alekseev::Polygon::area() const
 {
-  int area = 0;
+  long long area = 0;
   for (size_t i = 0; i < size(); ++i) {
     size_t j = (i + 1) % size();
     area += points_[i].x * points_[j].y;
     area -= points_[j].x * points_[i].y;
   }
-  return abs(area) / 2.0;
+  return std::abs(area) / 2.0;
 }
 
 size_t alekseev::Polygon::size() const
@@ -111,9 +111,12 @@ bool alekseev::Polygon::is_inner(const Point & p) const
     Point a = points_[i];
     Point b = points_[j];
     bool intersect = ((a.y < p.y) != (b.y < p.y));
-    intersect = intersect && (p.x < (b.x - a.x) / (b.y - a.y) * (p.y - a.y) + a.x);
     if (intersect) {
-      inside = !inside;
+      double x_intersect = static_cast< double >(b.x - a.x) * (p.y - a.y) / static_cast< double >(b.
+        y - a.y) + a.x;
+      if (p.x < x_intersect) {
+        inside = !inside;
+      }
     }
   }
   return inside;
