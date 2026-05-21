@@ -2,9 +2,7 @@
 #include <sstream>
 #include <string>
 #include <iterator>
-#include <numeric>
 #include <cmath>
-#include <functional>
 #include <algorithm>
 
 alekseev::Point alekseev::Point::operator+(const Point & other) const
@@ -15,6 +13,11 @@ alekseev::Point alekseev::Point::operator+(const Point & other) const
 alekseev::Point alekseev::Point::operator-(const Point & other) const
 {
   return {x - other.x, y - other.y};
+}
+
+bool alekseev::Point::operator==(const Point & other) const
+{
+  return x == other.x && y == other.y;
 }
 
 bool alekseev::less_angle(const Point & a, const Point & b, double xc, double yc)
@@ -51,6 +54,35 @@ std::ostream & alekseev::operator<<(std::ostream & os, const Point & p)
   }
   os << "(" << p.x << ";" << p.y << ")";
   return os;
+}
+
+int alekseev::cross(const Point & o, const Point & a, const Point & b)
+{
+  return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);;
+}
+
+bool alekseev::onSegment(const Point & p, const Point & a, const Point & b)
+{
+  bool cr = cross(p, a, b) == 0;
+  bool x = std::min(a.x, b.x) <= p.x && p.x <= std::max(a.x, b.x);
+  bool y = std::min(a.y, b.y) <= p.y && p.y <= std::max(a.y, b.y);
+  return cr && x && y;
+}
+
+bool alekseev::segmentsIntersect(const Point & a, const Point & b, const Point & c, const Point & d)
+{
+  int o1 = cross(a, b, c);
+  int o2 = cross(a, b, d);
+  int o3 = cross(c, d, a);
+  int o4 = cross(c, d, b);
+  if (o1 * o2 < 0 && o3 * o4 < 0) {
+    return true;
+  }
+
+  if (onSegment(a, b, c) || onSegment(a, b, d) || onSegment(c, d, a) || onSegment(c, d, b)) {
+    return true;
+  }
+  return false;
 }
 
 alekseev::Polygon::Polygon():
@@ -125,9 +157,21 @@ bool alekseev::Polygon::is_inner(const Point & p) const
 
 bool alekseev::Polygon::intersects(const Polygon & other) const
 {
-  return std::any_of(points_.begin(), points_.end(), [other](Point p) {
-    return other.is_inner(p);
-  });
+  for (size_t i = 0; i < size(); ++i) {
+    Point a = points_[i];
+    Point b = points_[(i + 1) % size()];
+    for (size_t j = 0; j < other.size(); ++j) {
+      Point c = other.points_[j];
+      Point d = other.points_[(j + 1) % other.size()];
+      if (segmentsIntersect(a, b, c, d)) {
+        return true;
+      }
+    }
+  }
+  if (is_inner(other.points_[0]) || other.is_inner(points_[0])) {
+    return true;
+  }
+  return false;
 }
 
 double alekseev::operator+(double a, const Polygon & b)

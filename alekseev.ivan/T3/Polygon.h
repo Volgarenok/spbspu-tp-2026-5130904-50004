@@ -2,7 +2,6 @@
 #define POLYGON_H
 
 #include <iostream>
-#include <utility>
 #include <vector>
 
 namespace alekseev {
@@ -11,12 +10,16 @@ namespace alekseev {
 
     Point operator+(const Point & other) const;
     Point operator-(const Point & other) const;
+    bool operator==(const Point & other) const;
   };
 
   bool less_angle(const Point & a, const Point & b, double xc, double yc);
   Point point_from_string(const std::string & s);
   std::istream & operator>>(std::istream & is, Point & p);
   std::ostream & operator<<(std::ostream & os, const Point & p);
+  int cross(const Point & o, const Point & a, const Point & b);
+  bool onSegment(const Point & p, const Point & a, const Point & b);
+  bool segmentsIntersect(const Point & a, const Point & b, const Point & c, const Point & d);
 
   struct Polygon {
     std::vector< Point > points_;
