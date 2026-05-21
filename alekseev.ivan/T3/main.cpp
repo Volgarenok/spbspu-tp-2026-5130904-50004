@@ -9,10 +9,11 @@ namespace alekseev {
   using command = std::function< double (data_t &, const args_t &) >;
   using const_command = std::function< double (const data_t &, const args_t &) >;
 
-  double area(const data_t &, const args_t &);
-  double max(const data_t &, const args_t &);
-  double min(const data_t &, const args_t &);
-  double count(const data_t &, const args_t &);
+  double area(const data_t & data, const args_t & args);
+  double extremum(const data_t & data, const args_t & args, bool max);
+  double max(const data_t & data, const args_t & args);
+  double min(const data_t & data, const args_t & args);
+  double count(const data_t & data, const args_t & args);
 }
 
 int main()
@@ -46,4 +47,37 @@ double alekseev::area(const data_t & data, const args_t & args)
       throw std::invalid_argument("Wrong argument");
     }
   }
+}
+
+double alekseev::extremum(const data_t & data, const args_t & args, bool max)
+{
+  if (args.size() != 1) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  int k = max ? 1 : -1;
+  if (args[0] == "AREA") {
+    std::vector< double > squares;
+    std::transform(data.begin(), data.end(), std::back_inserter(squares), [k](const Polygon & x) {
+      return k * x.area();
+    });
+    return *std::max(squares.begin(), squares.end());
+  } else if (args[0] == "VERTEXES") {
+    std::vector< double > sizes;
+    std::transform(data.begin(), data.end(), std::back_inserter(sizes), [k](const Polygon & x) {
+      return k * x.size();
+    });
+    return *std::max(sizes.begin(), sizes.end());
+  } else {
+    throw std::invalid_argument("Wrong argument");
+  }
+}
+
+double alekseev::max(const data_t & data, const args_t & args)
+{
+  return extremum(data, args, true);
+}
+
+double alekseev::min(const data_t & data, const args_t & args)
+{
+  return extremum(data, args, false);
 }
