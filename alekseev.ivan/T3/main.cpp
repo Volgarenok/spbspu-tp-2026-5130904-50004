@@ -20,7 +20,7 @@ namespace alekseev {
   double count(const data_t & data, const args_t & args);
   double rects(const data_t & data, const args_t & args);
   double intersections(const data_t & data, const args_t & args);
-  std::map< std::string, const_command > cmds;
+  std::map< std::string, const_command > init_commands();
 }
 
 int main(int argc, char * argv[])
@@ -44,6 +44,8 @@ int main(int argc, char * argv[])
     return p.size() == 0;
   });
   data.erase(rem_it, data.end());
+
+  std::map< std::string, alekseev::const_command > cmds = alekseev::init_commands();
   std::string command;
   std::cout << std::fixed << std::setprecision(2);
   while (std::getline(std::cin, command)) {
@@ -54,7 +56,7 @@ int main(int argc, char * argv[])
     alekseev::args_t args;
     std::copy(b, e, std::back_inserter(args));
     try {
-      std::cout << alekseev::cmds.at(name)(data, args) << "\n";
+      std::cout << cmds.at(name)(data, args) << "\n";
     } catch (...) {
       std::cout << "<INVALID COMMAND>\n";
     }
@@ -168,4 +170,16 @@ double alekseev::intersections(const data_t & data, const args_t & args)
   return std::count_if(data.begin(), data.end(), [p](const Polygon & x) {
     return x.intersects(p);
   });
+}
+
+std::map< std::string, alekseev::const_command > alekseev::init_commands()
+{
+  std::map< std::string, const_command > cmds;
+  cmds["AREA"] = area;
+  cmds["MAX"] = max;
+  cmds["MIN"] = min;
+  cmds["COUNT"] = count;
+  cmds["RECTS"] = rects;
+  cmds["INTERSECTIONS"] = intersections;
+  return cmds;
 }
