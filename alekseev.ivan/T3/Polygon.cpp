@@ -22,6 +22,18 @@ bool alekseev::less_angle(const Point & a, const Point & b, double xc, double yc
   return std::atan2(a.y - yc, a.x - xc) < std::atan2(b.y - yc, b.x - xc);
 }
 
+alekseev::Point alekseev::point_from_string(const std::string & s)
+{
+  Point p{0, 0};
+  std::istringstream iss(s);
+  iss >> expected{"("} >> p.x >> expected{";"};
+  iss >> p.y >> expected{")"};
+  if (iss.fail() && !iss.eof()) {
+    throw std::invalid_argument("Wrong format");
+  }
+  return p;
+}
+
 std::istream & alekseev::operator>>(std::istream & is, Point p)
 {
   if (!is) {
@@ -56,6 +68,20 @@ alekseev::Polygon::Polygon(const std::vector< Point > & points):
   std::sort(points_.begin(), points_.end(), std::bind(less_angle, _1, _2, xc, yc));
 }
 
+alekseev::Polygon::Polygon(const std::vector< std::string > & args)
+{
+  size_t n = std::stoull(args.at(0));
+  if (args.size() != n + 1) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  std::vector< Point > points;
+  std::transform(args.begin() + 1, args.end(), std::back_inserter(points),
+      [](const std::string & s) {
+        return point_from_string(s);
+      });
+  *this = Polygon(points);
+}
+
 double alekseev::Polygon::area() const
 {
   int area = 0;
@@ -75,6 +101,29 @@ size_t alekseev::Polygon::size() const
 double alekseev::Polygon::operator+(const Polygon & other) const
 {
   return area() + other.area();
+}
+
+bool alekseev::Polygon::is_inner(const Point & p) const
+{
+  bool inside = false;
+  for (size_t i = 0; i < size(); ++i) {
+    size_t j = (i + 1) % size();
+    Point a = points_[i];
+    Point b = points_[j];
+    bool intersect = ((a.y < p.y) != (b.y < p.y));
+    intersect = intersect && (p.x < (b.x - a.x) / (b.y - a.y) * (p.y - a.y) + a.x);
+    if (intersect) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+bool alekseev::Polygon::intersects(const Polygon & other) const
+{
+  return std::any_of(points_.begin(), points_.end(), [other](Point p) {
+    return other.is_inner(p);
+  });
 }
 
 double alekseev::operator+(double a, const Polygon & b)

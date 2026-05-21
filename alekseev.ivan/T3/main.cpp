@@ -112,3 +112,14 @@ double alekseev::rects(const data_t & data, const args_t & args)
   }
   return std::count_if(data.begin(), data.end(), is_rectangle);
 }
+
+double alekseev::intersections(const data_t & data, const args_t & args)
+{
+  if (args.empty()) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  Polygon p(args);
+  return std::count_if(data.begin(), data.end(), [p](const Polygon & x) {
+    return x.intersects(p);
+  });
+}

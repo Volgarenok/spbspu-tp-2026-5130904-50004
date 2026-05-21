@@ -14,6 +14,7 @@ namespace alekseev {
   };
 
   bool less_angle(const Point & a, const Point & b, double xc, double yc);
+  Point point_from_string(const std::string & s);
   std::istream & operator>>(std::istream & is, Point p);
   std::ostream & operator<<(std::ostream & os, const Point & p);
 
@@ -21,10 +22,13 @@ namespace alekseev {
     std::vector< Point > points_;
     Polygon();
     explicit Polygon(const std::vector< Point > & points);
+    explicit Polygon(const std::vector< std::string > & args);
 
     double area() const;
     size_t size() const;
     double operator+(const Polygon & other) const;
+    bool is_inner(const Point & p) const;
+    bool intersects(const Polygon & other) const;
   };
 
   double operator+(double a, const Polygon & b);
