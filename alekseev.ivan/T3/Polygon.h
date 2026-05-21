@@ -30,6 +30,7 @@ namespace alekseev {
   double operator+(double a, const Polygon & b);
   std::istream & operator>>(std::istream & is, Polygon & p);
   Polygon from_string(const std::string & s);
+  bool is_rectangle(const Polygon & p);
 
   struct expected {
     std::string source;

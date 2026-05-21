@@ -126,6 +126,25 @@ alekseev::Polygon alekseev::from_string(const std::string & line)
   return res;
 }
 
+bool alekseev::is_rectangle(const Polygon & p)
+{
+  if (p.size() != 4) {
+    return false;
+  }
+  bool first_x = true, first_y = true;
+  for (size_t i = 0; i < 4 && (first_x || first_y); ++i) {
+    size_t j = (i + 1) % 4;
+    if (i % 2 == 0) {
+      first_x = p.points_[i].x == p.points_[j].x;
+      first_y = p.points_[i].y == p.points_[j].y;
+    } else {
+      first_x = p.points_[i].y == p.points_[j].y;
+      first_y = p.points_[i].x == p.points_[j].x;
+    }
+  }
+  return first_x || first_y;
+}
+
 std::istream & alekseev::operator>>(std::istream & is, expected e)
 {
   if (!is) {

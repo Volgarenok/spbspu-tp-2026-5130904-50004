@@ -6,7 +6,6 @@
 namespace alekseev {
   using data_t = std::vector< Polygon >;
   using args_t = std::vector< std::string >;
-  using command = std::function< double (data_t &, const args_t &) >;
   using const_command = std::function< double (const data_t &, const args_t &) >;
 
   double area(const data_t & data, const args_t & args);
@@ -14,6 +13,8 @@ namespace alekseev {
   double max(const data_t & data, const args_t & args);
   double min(const data_t & data, const args_t & args);
   double count(const data_t & data, const args_t & args);
+  double rects(const data_t & data, const args_t & args);
+  double intersections(const data_t & data, const args_t & args);
 }
 
 int main()
@@ -102,4 +103,12 @@ double alekseev::count(const data_t & data, const args_t & args)
       throw std::invalid_argument("Wrong argument");
     }
   }
+}
+
+double alekseev::rects(const data_t & data, const args_t & args)
+{
+  if (!args.empty()) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  return std::count_if(data.begin(), data.end(), is_rectangle);
 }
