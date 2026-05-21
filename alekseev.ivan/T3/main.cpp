@@ -2,6 +2,8 @@
 #include "Polygon.h"
 #include <algorithm>
 #include <numeric>
+#include <fstream>
+#include <iterator>
 
 namespace alekseev {
   using data_t = std::vector< Polygon >;
@@ -17,8 +19,26 @@ namespace alekseev {
   double intersections(const data_t & data, const args_t & args);
 }
 
-int main()
+int main(int argc, char * argv[])
 {
+  if (argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " input_file\n";
+    return 1;
+  }
+  std::ifstream ifs(argv[1]);
+  if (!ifs) {
+    std::cerr << "Error opening file " << argv[1] << "\n";
+    return 1;
+  }
+  alekseev::data_t data;
+  std::string line;
+  while (std::getline(ifs, line)) {
+    data.push_back(alekseev::from_string(line));
+  }
+  ifs.close();
+  std::remove_if(data.begin(), data.end(), [](const alekseev::Polygon & p) {
+    return p.size() == 0;
+  });
 }
 
 double alekseev::area(const data_t & data, const args_t & args)
