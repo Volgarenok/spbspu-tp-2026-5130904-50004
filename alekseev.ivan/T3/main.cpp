@@ -78,7 +78,7 @@ double alekseev::area(const data_t & data, const args_t & args)
   }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     bool odd = (args[0] == "ODD");
-    std::vector< Polygon > temp(data.size());
+    std::vector< Polygon > temp;
     std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [odd](const Polygon & x) {
       return (x.size() % 2 == 1) == odd;
     });
@@ -119,6 +119,9 @@ double alekseev::extremum_area(const data_t & data, const args_t & args, bool ma
   std::transform(data.begin(), data.end(), std::back_inserter(squares), [k](const Polygon & x) {
     return k * x.area();
   });
+  if (squares.empty()) {
+    return 0.0;
+  }
   return *std::max(squares.begin(), squares.end());
 }
 
@@ -163,10 +166,10 @@ size_t alekseev::count(const data_t & data, const args_t & args)
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
-  if (data.empty()) {
-    throw std::invalid_argument("Invalid vertex count");
-  }
   if (args[0] == "EVEN" || args[0] == "ODD") {
+    if (data.empty()) {
+      return 0;
+    }
     bool odd = args[0] == "ODD";
     return std::count_if(data.begin(), data.end(), [odd](const Polygon & x) {
       return (x.size() % 2 == 1) == odd;
@@ -176,6 +179,9 @@ size_t alekseev::count(const data_t & data, const args_t & args)
       size_t n = std::stoull(args[0]);
       if (n < 3) {
         throw std::invalid_argument("Invalid vertex count");
+      }
+      if (data.empty()) {
+        return 0;
       }
       return std::count_if(data.begin(), data.end(), [n](const Polygon & x) {
         return x.size() == n;
