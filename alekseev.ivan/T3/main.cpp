@@ -11,34 +11,24 @@
 namespace alekseev {
   using data_t = std::vector< Polygon >;
   using args_t = std::vector< std::string >;
-  using const_command = std::function< double (const data_t &, const args_t &) >;
-  using double_command = std::function< double (const data_t &, const args_t &) >;
   using size_t_command = std::function< size_t (const data_t &, const args_t &) >;
 
-  double area_even_odd(const data_t & data, const args_t & args);
-  double area_mean(const data_t & data, const args_t & args);
-  double area_n(const data_t & data, const args_t & args);
-  double extremum_area(const data_t & data, const args_t & args);
-  size_t extremum_size(const data_t & data, const args_t & args);
+  double area(const data_t & data, const args_t & args);
+  double extremum_area(const data_t & data, const args_t & args, bool max);
   double max_area(const data_t & data, const args_t & args);
   double min_area(const data_t & data, const args_t & args);
-  double max_size(const data_t & data, const args_t & args);
-  double min_size(const data_t & data, const args_t & args);
+  size_t extremum_size(const data_t & data, const args_t & args, bool max);
+  size_t max_size(const data_t & data, const args_t & args);
+  size_t min_size(const data_t & data, const args_t & args);
   size_t count(const data_t & data, const args_t & args);
+  size_t rects(const data_t & data, const args_t & args);
+  size_t intersections(const data_t & data, const args_t & args);
+
   struct Exec {
-    std::map< std::string, double_command > d_cmds;
     std::map< std::string, size_t_command > n_cmds;
     Exec();
+    void operator()(const std::string & name, const data_t & data, const args_t & args);
   };
-
-  double area(const data_t & data, const args_t & args);
-  double extremum(const data_t & data, const args_t & args, bool max);
-  double max(const data_t & data, const args_t & args);
-  double min(const data_t & data, const args_t & args);
-  double count(const data_t & data, const args_t & args);
-  double rects(const data_t & data, const args_t & args);
-  double intersections(const data_t & data, const args_t & args);
-  std::map< std::string, const_command > init_commands();
 }
 
 int main(int argc, char * argv[])
@@ -63,7 +53,7 @@ int main(int argc, char * argv[])
   });
   data.erase(rem_it, data.end());
 
-  std::map< std::string, alekseev::const_command > cmds = alekseev::init_commands();
+  alekseev::Exec exec;
   std::string command;
   std::cout << std::fixed << std::setprecision(2);
   while (std::getline(std::cin, command)) {
@@ -74,7 +64,7 @@ int main(int argc, char * argv[])
     alekseev::args_t args;
     std::copy(b, e, std::back_inserter(args));
     try {
-      std::cout << cmds.at(name)(data, args) << "\n";
+      exec(name, data, args);
     } catch (...) {
       std::cout << "<INVALID COMMAND>\n";
     }
@@ -98,9 +88,9 @@ double alekseev::area(const data_t & data, const args_t & args)
       throw std::invalid_argument("Empty data");
     }
     double area = std::accumulate(data.begin(), data.end(), 0.0);
-    return area / data.size();
+    return area / static_cast< double >(data.size());
   } else {
-    try {
+    try
       size_t n = std::stoull(args[0]);
       data_t temp;
       std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [n](const Polygon & x) {
@@ -113,43 +103,59 @@ double alekseev::area(const data_t & data, const args_t & args)
   }
 }
 
-double alekseev::extremum(const data_t & data, const args_t & args, bool max)
+double alekseev::extremum_area(const data_t & data, const args_t & args, bool max)
 {
-  if (args.size() != 1) {
+  if (!args.empty()) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   if (data.empty()) {
     throw std::invalid_argument("Empty data");
   }
   int k = max ? 1 : -1;
-  if (args[0] == "AREA") {
-    std::vector< double > squares;
-    std::transform(data.begin(), data.end(), std::back_inserter(squares), [k](const Polygon & x) {
-      return k * x.area();
-    });
-    return *std::max(squares.begin(), squares.end());
-  } else if (args[0] == "VERTEXES") {
-    std::vector< double > sizes;
-    std::transform(data.begin(), data.end(), std::back_inserter(sizes), [k](const Polygon & x) {
-      return k * x.size();
-    });
-    return *std::max(sizes.begin(), sizes.end());
-  } else {
-    throw std::invalid_argument("Wrong argument");
+  std::vector< double > squares;
+  std::transform(data.begin(), data.end(), std::back_inserter(squares), [k](const Polygon & x) {
+    return k * x.area();
+  });
+  return *std::max(squares.begin(), squares.end());
+}
+
+double alekseev::max_area(const data_t & data, const args_t & args)
+{
+  return extremum_area(data, args, true);
+}
+
+double alekseev::min_area(const data_t & data, const args_t & args)
+{
+  return extremum_area(data, args, false);
+}
+
+size_t alekseev::extremum_size(const data_t & data, const args_t & args, bool max)
+{
+  if (!args.empty()) {
+    throw std::invalid_argument("Wrong number of arguments");
   }
+  if (data.empty()) {
+    throw std::invalid_argument("Empty data");
+  }
+  int k = max ? 1 : -1;
+  std::vector< size_t > sizes;
+  std::transform(data.begin(), data.end(), std::back_inserter(sizes), [k](const Polygon & x) {
+    return k * x.size();
+  });
+  return *std::max(sizes.begin(), sizes.end());
 }
 
-double alekseev::max(const data_t & data, const args_t & args)
+size_t alekseev::max_size(const data_t & data, const args_t & args)
 {
-  return extremum(data, args, true);
+  return extremum_size(data, args, true);
 }
 
-double alekseev::min(const data_t & data, const args_t & args)
+size_t alekseev::min_size(const data_t & data, const args_t & args)
 {
-  return extremum(data, args, false);
+  return extremum_size(data, args, false);
 }
 
-double alekseev::count(const data_t & data, const args_t & args)
+size_t alekseev::count(const data_t & data, const args_t & args)
 {
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -171,7 +177,7 @@ double alekseev::count(const data_t & data, const args_t & args)
   }
 }
 
-double alekseev::rects(const data_t & data, const args_t & args)
+size_t alekseev::rects(const data_t & data, const args_t & args)
 {
   if (!args.empty()) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -179,7 +185,7 @@ double alekseev::rects(const data_t & data, const args_t & args)
   return std::count_if(data.begin(), data.end(), is_rectangle);
 }
 
-double alekseev::intersections(const data_t & data, const args_t & args)
+size_t alekseev::intersections(const data_t & data, const args_t & args)
 {
   if (args.empty()) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -190,14 +196,35 @@ double alekseev::intersections(const data_t & data, const args_t & args)
   });
 }
 
-std::map< std::string, alekseev::const_command > alekseev::init_commands()
+alekseev::Exec::Exec()
 {
-  std::map< std::string, const_command > cmds;
-  cmds["AREA"] = area;
-  cmds["MAX"] = max;
-  cmds["MIN"] = min;
-  cmds["COUNT"] = count;
-  cmds["RECTS"] = rects;
-  cmds["INTERSECTIONS"] = intersections;
-  return cmds;
+  n_cmds["MAX"] = max_size;
+  n_cmds["MIN"] = min_size;
+  n_cmds["COUNT"] = count;
+  n_cmds["RECTS"] = rects;
+  n_cmds["INTERSECTIONS"] = intersections;
+}
+
+void alekseev::Exec::operator()(const std::string & name, const data_t & data, const args_t & args)
+{
+  IOGuard guard(std::cout);
+  std::cout << std::fixed << std::setprecision(1);
+  if (args.empty()) {
+    if (name == "RECTS") {
+      std::cout << rects(data, args);
+      return;
+    }
+  } else {
+    if (name == "MAX" && args[0] == "AREA") {
+      std::cout << max_area(data, args);
+      return;
+    } else if (name == "MIN" && args[0] == "AREA") {
+      std::cout << min_area(data, args);
+      return;
+    } else {
+      std::cout << n_cmds.at(name)(data, args);
+      return;
+    }
+  }
+  throw std::invalid_argument("Wrong argument");
 }
