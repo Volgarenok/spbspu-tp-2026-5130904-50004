@@ -160,6 +160,9 @@ size_t alekseev::count(const data_t & data, const args_t & args)
   if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
+  if (data.empty()) {
+    throw std::invalid_argument("Empty data");
+  }
   if (args[0] == "EVEN" || args[0] == "ODD") {
     bool odd = args[0] == "ODD";
     return std::count_if(data.begin(), data.end(), [odd](const Polygon & x) {
@@ -204,7 +207,6 @@ alekseev::Exec::Exec()
   n_cmds["MAX"] = max_size;
   n_cmds["MIN"] = min_size;
   n_cmds["COUNT"] = count;
-  n_cmds["RECTS"] = rects;
   n_cmds["INTERSECTIONS"] = intersections;
 }
 
@@ -222,7 +224,10 @@ void alekseev::Exec::operator()(const std::string & name, const data_t & data, c
       std::cout << max_area(data, args) << "\n";
       return;
     } else if (name == "MIN" && args[0] == "AREA") {
-      std::cout << min_area(data, args);
+      std::cout << min_area(data, args) << "\n";
+      return;
+    } else if (name == "AREA") {
+      std::cout << area(data, args) << "\n";
       return;
     } else {
       std::cout << n_cmds.at(name)(data, args) << "\n";
