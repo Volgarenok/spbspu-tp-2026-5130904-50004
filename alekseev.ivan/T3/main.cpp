@@ -81,3 +81,25 @@ double alekseev::min(const data_t & data, const args_t & args)
 {
   return extremum(data, args, false);
 }
+
+double alekseev::count(const data_t & data, const args_t & args)
+{
+  if (args.size() != 1) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  if (args[0] == "EVEN" || args[0] == "ODD") {
+    int odd = args[1] == "ODD";
+    return std::count_if(data.begin(), data.end(), [odd](const Polygon & x) {
+      return x.size() % 2 == odd;
+    });
+  } else {
+    try {
+      size_t n = std::stoull(args[0]);
+      return std::count_if(data.begin(), data.end(), [n](const Polygon & x) {
+        return x.size() == n;
+      });
+    } catch (...) {
+      throw std::invalid_argument("Wrong argument");
+    }
+  }
+}
