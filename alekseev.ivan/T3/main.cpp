@@ -90,7 +90,7 @@ double alekseev::area(const data_t & data, const args_t & args)
     double area = std::accumulate(data.begin(), data.end(), 0.0);
     return area / static_cast< double >(data.size());
   } else {
-    try
+    try {
       size_t n = std::stoull(args[0]);
       data_t temp;
       std::copy_if(data.begin(), data.end(), std::back_inserter(temp), [n](const Polygon & x) {
