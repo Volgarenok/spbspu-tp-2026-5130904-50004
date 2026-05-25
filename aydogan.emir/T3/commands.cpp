@@ -37,6 +37,16 @@ namespace
     }
   };
 
+  struct IsPermutation
+  {
+    const aydogan::Polygon& polygon;
+
+    bool operator()(const aydogan::Polygon& current) const
+    {
+      return aydogan::isPermutationOf(current, polygon);
+    }
+  };
+
   struct AreaLess
   {
     bool operator()(const aydogan::Polygon& left, const aydogan::Polygon& right) const
@@ -221,4 +231,18 @@ void aydogan::printCountVertexCount(
   }
 
   output << std::count_if(polygons.begin(), polygons.end(), HasVertexCount{ count }) << "\n";
+}
+
+void aydogan::printPerms(
+  const PolygonList& polygons,
+  const Polygon& polygon,
+  std::ostream& output
+)
+{
+  output << std::count_if(polygons.begin(), polygons.end(), IsPermutation{ polygon }) << "\n";
+}
+
+void aydogan::printRightShapes(const PolygonList& polygons, std::ostream& output)
+{
+  output << std::count_if(polygons.begin(), polygons.end(), hasRightAngle) << "\n";
 }
