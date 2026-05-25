@@ -14,6 +14,11 @@ namespace
     return (index + 1) % size;
   }
 
+  std::size_t getPreviousIndex(std::size_t index, std::size_t size)
+  {
+    return (index + size - 1) % size;
+  }
+
   long long getDoubleAreaTerm(const aydogan::Polygon& polygon, std::size_t index)
   {
     std::size_t next = getNextIndex(index, polygon.points.size());
@@ -25,6 +30,23 @@ namespace
       - static_cast< long long >(currentPoint.y) * nextPoint.x;
   }
 
+  bool hasRightAngleAt(const aydogan::Polygon& polygon, std::size_t index)
+  {
+    std::size_t previous = getPreviousIndex(index, polygon.points.size());
+    std::size_t next = getNextIndex(index, polygon.points.size());
+
+    const aydogan::Point& previousPoint = polygon.points[previous];
+    const aydogan::Point& currentPoint = polygon.points[index];
+    const aydogan::Point& nextPoint = polygon.points[next];
+
+    long long firstX = previousPoint.x - currentPoint.x;
+    long long firstY = previousPoint.y - currentPoint.y;
+    long long secondX = nextPoint.x - currentPoint.x;
+    long long secondY = nextPoint.y - currentPoint.y;
+
+    return firstX * secondX + firstY * secondY == 0;
+  }
+
   struct DoubleAreaTerm
   {
     const aydogan::Polygon& polygon;
@@ -32,6 +54,16 @@ namespace
     long long operator()(std::size_t index) const
     {
       return getDoubleAreaTerm(polygon, index);
+    }
+  };
+
+  struct RightAngleAt
+  {
+    const aydogan::Polygon& polygon;
+
+    bool operator()(std::size_t index) const
+    {
+      return hasRightAngleAt(polygon, index);
     }
   };
 }
@@ -200,4 +232,26 @@ bool aydogan::hasVertexCount(const Polygon& polygon, std::size_t count)
 std::size_t aydogan::getVertexCount(const Polygon& polygon)
 {
   return polygon.points.size();
+}
+
+bool aydogan::isPermutationOf(const Polygon& left, const Polygon& right)
+{
+  return left.points.size() == right.points.size()
+    && std::is_permutation(
+      left.points.begin(),
+      left.points.end(),
+      right.points.begin()
+    );
+}
+
+bool aydogan::hasRightAngle(const Polygon& polygon)
+{
+  std::vector< std::size_t > indexes(polygon.points.size());
+  std::iota(indexes.begin(), indexes.end(), 0);
+
+  return std::any_of(
+    indexes.begin(),
+    indexes.end(),
+    RightAngleAt{ polygon }
+  );
 }
