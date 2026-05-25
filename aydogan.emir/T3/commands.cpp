@@ -252,7 +252,7 @@ namespace
       }
       else if (command == "PERMS")
       {
-        Polygon polygon;
+        aydogan::Polygon polygon;
         input >> polygon;
 
         if (input)
