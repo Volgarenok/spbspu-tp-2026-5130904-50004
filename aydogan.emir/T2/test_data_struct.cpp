@@ -148,3 +148,25 @@ BOOST_AUTO_TEST_CASE(invalid_binary_test)
 
   BOOST_CHECK(!input);
 }
+
+BOOST_AUTO_TEST_CASE(invalid_literal_with_space_test)
+{
+  std::istringstream input("(:key1 1 ull:key2 0b1:key3 \"x\":)");
+
+  aydogan::DataStruct data{};
+
+  input >> data;
+
+  BOOST_CHECK(!input);
+}
+
+BOOST_AUTO_TEST_CASE(invalid_binary_with_space_test)
+{
+  std::istringstream input("(:key1 1ull:key2 0 b1:key3 \"x\":)");
+
+  aydogan::DataStruct data{};
+
+  input >> data;
+
+  BOOST_CHECK(!input);
+}

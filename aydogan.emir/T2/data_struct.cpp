@@ -172,9 +172,8 @@ std::istream& aydogan::operator>>(std::istream& input, UllLiteralIO&& data)
   for (std::size_t i = 0; i < 3; ++i)
   {
     char current = '\0';
-    input >> current;
 
-    if (!input)
+    if (!input.get(current))
     {
       return input;
     }
@@ -204,9 +203,7 @@ std::istream& aydogan::operator>>(std::istream& input, UllBinaryIO&& data)
   char zero = '\0';
   char letter = '\0';
 
-  input >> zero >> letter;
-
-  if (!input)
+  if (!input.get(zero) || !input.get(letter))
   {
     return input;
   }
