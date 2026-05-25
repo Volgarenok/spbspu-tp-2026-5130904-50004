@@ -71,3 +71,46 @@ BOOST_AUTO_TEST_CASE(area_square_test)
   BOOST_REQUIRE(input);
   BOOST_CHECK_CLOSE(aydogan::getArea(polygon), 4.0, 0.001);
 }
+
+BOOST_AUTO_TEST_CASE(vertex_count_helpers_test)
+{
+  std::istringstream input("4 (0;0) (2;0) (2;2) (0;2)");
+
+  aydogan::Polygon polygon;
+
+  input >> polygon;
+
+  BOOST_REQUIRE(input);
+  BOOST_CHECK(aydogan::hasEvenVertexCount(polygon));
+  BOOST_CHECK(!aydogan::hasOddVertexCount(polygon));
+  BOOST_CHECK(aydogan::hasVertexCount(polygon, 4));
+  BOOST_CHECK_EQUAL(aydogan::getVertexCount(polygon), 4);
+}
+
+BOOST_AUTO_TEST_CASE(permutation_test)
+{
+  std::istringstream firstInput("4 (0;0) (2;0) (2;2) (0;2)");
+  std::istringstream secondInput("4 (2;2) (0;2) (0;0) (2;0)");
+
+  aydogan::Polygon first;
+  aydogan::Polygon second;
+
+  firstInput >> first;
+  secondInput >> second;
+
+  BOOST_REQUIRE(firstInput);
+  BOOST_REQUIRE(secondInput);
+  BOOST_CHECK(aydogan::isPermutationOf(first, second));
+}
+
+BOOST_AUTO_TEST_CASE(right_angle_test)
+{
+  std::istringstream input("3 (0;0) (4;0) (0;3)");
+
+  aydogan::Polygon polygon;
+
+  input >> polygon;
+
+  BOOST_REQUIRE(input);
+  BOOST_CHECK(aydogan::hasRightAngle(polygon));
+}
