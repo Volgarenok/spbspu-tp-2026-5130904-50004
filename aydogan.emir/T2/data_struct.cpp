@@ -8,6 +8,91 @@
 #include <limits>
 #include <sstream>
 
+namespace
+{
+  bool readDataLine(std::istream& input, aydogan::DataStruct& data)
+  {
+    aydogan::DataStruct temporary{};
+    bool hasKey1 = false;
+    bool hasKey2 = false;
+    bool hasKey3 = false;
+
+    input >> aydogan::DelimiterIO{ '(' } >> aydogan::DelimiterIO{ ':' };
+
+    for (std::size_t i = 0; input && i < 3; ++i)
+    {
+      std::string label;
+
+      while (input)
+      {
+        int next = input.peek();
+
+        if (next == ' ' || next == '\t')
+        {
+          input.get();
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      std::getline(input, label, ' ');
+
+      if (!input)
+      {
+        return false;
+      }
+
+      if (label == "key1")
+      {
+        if (hasKey1)
+        {
+          return false;
+        }
+
+        input >> aydogan::UllLiteralIO{ temporary.key1 } >> aydogan::DelimiterIO{ ':' };
+        hasKey1 = true;
+      }
+      else if (label == "key2")
+      {
+        if (hasKey2)
+        {
+          return false;
+        }
+
+        input >> aydogan::UllBinaryIO{ temporary.key2 } >> aydogan::DelimiterIO{ ':' };
+        hasKey2 = true;
+      }
+      else if (label == "key3")
+      {
+        if (hasKey3)
+        {
+          return false;
+        }
+
+        input >> aydogan::StringIO{ temporary.key3 } >> aydogan::DelimiterIO{ ':' };
+        hasKey3 = true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    input >> aydogan::DelimiterIO{ ')' };
+    input >> std::ws;
+
+    if (!input || !input.eof() || !hasKey1 || !hasKey2 || !hasKey3)
+    {
+      return false;
+    }
+
+    data = temporary;
+    return true;
+  }
+}
+
 std::istream& aydogan::operator>>(std::istream& input, DelimiterIO&& data)
 {
   std::istream::sentry sentry(input);
@@ -158,5 +243,31 @@ std::istream& aydogan::operator>>(std::istream& input, UllBinaryIO&& data)
   }
 
   data.value = value;
+  return input;
+}
+
+std::istream& aydogan::operator>>(std::istream& input, DataStruct& data)
+{
+  std::istream::sentry sentry(input);
+
+  if (!sentry)
+  {
+    return input;
+  }
+
+  std::string line;
+
+  while (std::getline(input, line))
+  {
+    std::istringstream lineInput(line);
+    DataStruct temporary{};
+
+    if (readDataLine(lineInput, temporary))
+    {
+      data = temporary;
+      return input;
+    }
+  }
+
   return input;
 }
