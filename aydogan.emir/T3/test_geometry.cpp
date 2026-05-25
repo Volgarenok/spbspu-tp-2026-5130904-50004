@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE T3Tests
 #include <boost/test/included/unit_test.hpp>
 
+#include "commands.hpp"
 #include "geometry.hpp"
 
 #include <sstream>
@@ -113,4 +114,113 @@ BOOST_AUTO_TEST_CASE(right_angle_test)
 
   BOOST_REQUIRE(input);
   BOOST_CHECK(aydogan::hasRightAngle(polygon));
+}
+
+BOOST_AUTO_TEST_CASE(area_commands_test)
+{
+  aydogan::PolygonList polygons;
+
+  std::istringstream triangleInput("3 (0;0) (4;0) (0;3)");
+  std::istringstream squareInput("4 (0;0) (2;0) (2;2) (0;2)");
+
+  aydogan::Polygon triangle;
+  aydogan::Polygon square;
+
+  triangleInput >> triangle;
+  squareInput >> square;
+
+  polygons.push_back(triangle);
+  polygons.push_back(square);
+
+  std::ostringstream output;
+
+  aydogan::printAreaOdd(polygons, output);
+  aydogan::printAreaEven(polygons, output);
+  aydogan::printAreaMean(polygons, output);
+
+  BOOST_CHECK_EQUAL(output.str(), "6.0\n4.0\n5.0\n");
+}
+
+BOOST_AUTO_TEST_CASE(count_and_extreme_commands_test)
+{
+  aydogan::PolygonList polygons;
+
+  std::istringstream triangleInput("3 (0;0) (4;0) (0;3)");
+  std::istringstream squareInput("4 (0;0) (2;0) (2;2) (0;2)");
+
+  aydogan::Polygon triangle;
+  aydogan::Polygon square;
+
+  triangleInput >> triangle;
+  squareInput >> square;
+
+  polygons.push_back(triangle);
+  polygons.push_back(square);
+
+  std::ostringstream output;
+
+  aydogan::printCountOdd(polygons, output);
+  aydogan::printCountEven(polygons, output);
+  aydogan::printMaxArea(polygons, output);
+  aydogan::printMinVertexes(polygons, output);
+
+  BOOST_CHECK_EQUAL(output.str(), "1\n1\n6.0\n3\n");
+}
+
+BOOST_AUTO_TEST_CASE(variant_commands_test)
+{
+  aydogan::PolygonList polygons;
+
+  std::istringstream firstInput("4 (0;0) (2;0) (2;2) (0;2)");
+  std::istringstream secondInput("4 (2;2) (0;2) (0;0) (2;0)");
+  std::istringstream thirdInput("3 (0;0) (4;0) (0;3)");
+
+  aydogan::Polygon first;
+  aydogan::Polygon second;
+  aydogan::Polygon third;
+
+  firstInput >> first;
+  secondInput >> second;
+  thirdInput >> third;
+
+  polygons.push_back(first);
+  polygons.push_back(second);
+  polygons.push_back(third);
+
+  std::ostringstream output;
+
+  aydogan::printPerms(polygons, first, output);
+  aydogan::printRightShapes(polygons, output);
+
+  BOOST_CHECK_EQUAL(output.str(), "2\n3\n");
+}
+
+BOOST_AUTO_TEST_CASE(run_commands_test)
+{
+  aydogan::PolygonList polygons;
+
+  std::istringstream triangleInput("3 (0;0) (4;0) (0;3)");
+  std::istringstream squareInput("4 (0;0) (2;0) (2;2) (0;2)");
+
+  aydogan::Polygon triangle;
+  aydogan::Polygon square;
+
+  triangleInput >> triangle;
+  squareInput >> square;
+
+  polygons.push_back(triangle);
+  polygons.push_back(square);
+
+  std::istringstream commands(
+    "AREA ODD\n"
+    "COUNT EVEN\n"
+    "RIGHTSHAPES\n"
+    "BAD COMMAND\n"
+  );
+
+  std::ostringstream output;
+
+  aydogan::runCommands(polygons, commands, output);
+
+  BOOST_CHECK_EQUAL(output.str(), "6.0\n1\n2\n<INVALID COMMAND>\n");
 }
