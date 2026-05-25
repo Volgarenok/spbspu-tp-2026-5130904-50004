@@ -109,3 +109,42 @@ BOOST_AUTO_TEST_CASE(sort_vector_test)
 
   BOOST_CHECK_EQUAL(data[3].key1, 2ull);
 }
+
+BOOST_AUTO_TEST_CASE(skip_invalid_line_test)
+{
+  std::istringstream input(
+    "(:key1 1ull:key1 2ull:key2 0b1:key3 \"bad\":)\n"
+    "(:key2 0b101:key3 \"good\":key1 7ull:)"
+  );
+
+  aydogan::DataStruct data{};
+
+  input >> data;
+
+  BOOST_REQUIRE(input);
+  BOOST_CHECK_EQUAL(data.key1, 7ull);
+  BOOST_CHECK_EQUAL(data.key2, 5ull);
+  BOOST_CHECK_EQUAL(data.key3, "good");
+}
+
+BOOST_AUTO_TEST_CASE(invalid_duplicate_key_test)
+{
+  std::istringstream input("(:key1 1ull:key1 2ull:key2 0b1:key3 \"x\":)");
+
+  aydogan::DataStruct data{};
+
+  input >> data;
+
+  BOOST_CHECK(!input);
+}
+
+BOOST_AUTO_TEST_CASE(invalid_binary_test)
+{
+  std::istringstream input("(:key1 1ull:key2 0b:key3 \"x\":)");
+
+  aydogan::DataStruct data{};
+
+  input >> data;
+
+  BOOST_CHECK(!input);
+}
