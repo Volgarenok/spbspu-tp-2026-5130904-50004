@@ -5,6 +5,36 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
+#include <vector>
+
+namespace
+{
+  std::size_t getNextIndex(std::size_t index, std::size_t size)
+  {
+    return (index + 1) % size;
+  }
+
+  long long getDoubleAreaTerm(const aydogan::Polygon& polygon, std::size_t index)
+  {
+    std::size_t next = getNextIndex(index, polygon.points.size());
+
+    const aydogan::Point& currentPoint = polygon.points[index];
+    const aydogan::Point& nextPoint = polygon.points[next];
+
+    return static_cast< long long >(currentPoint.x) * nextPoint.y
+      - static_cast< long long >(currentPoint.y) * nextPoint.x;
+  }
+
+  struct DoubleAreaTerm
+  {
+    const aydogan::Polygon& polygon;
+
+    long long operator()(std::size_t index) const
+    {
+      return getDoubleAreaTerm(polygon, index);
+    }
+  };
+}
 
 std::istream& aydogan::operator>>(std::istream& input, DelimiterIO&& data)
 {
@@ -121,4 +151,53 @@ std::ostream& aydogan::operator<<(std::ostream& output, const Polygon& polygon)
   }
 
   return output;
+}
+
+bool aydogan::operator==(const Point& left, const Point& right)
+{
+  return left.x == right.x && left.y == right.y;
+}
+
+bool aydogan::operator==(const Polygon& left, const Polygon& right)
+{
+  return left.points.size() == right.points.size()
+    && std::equal(left.points.begin(), left.points.end(), right.points.begin());
+}
+
+double aydogan::getArea(const Polygon& polygon)
+{
+  std::vector< std::size_t > indexes(polygon.points.size());
+  std::iota(indexes.begin(), indexes.end(), 0);
+
+  std::vector< long long > terms(indexes.size());
+  std::transform(
+    indexes.begin(),
+    indexes.end(),
+    terms.begin(),
+    DoubleAreaTerm{ polygon }
+  );
+
+  long long doubleArea = std::accumulate(terms.begin(), terms.end(), 0ll);
+
+  return std::abs(static_cast< double >(doubleArea)) / 2.0;
+}
+
+bool aydogan::hasEvenVertexCount(const Polygon& polygon)
+{
+  return polygon.points.size() % 2 == 0;
+}
+
+bool aydogan::hasOddVertexCount(const Polygon& polygon)
+{
+  return polygon.points.size() % 2 != 0;
+}
+
+bool aydogan::hasVertexCount(const Polygon& polygon, std::size_t count)
+{
+  return polygon.points.size() == count;
+}
+
+std::size_t aydogan::getVertexCount(const Polygon& polygon)
+{
+  return polygon.points.size();
 }
