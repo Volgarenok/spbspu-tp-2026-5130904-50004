@@ -7,6 +7,7 @@
 #include <iterator>
 #include <numeric>
 #include <sstream>
+#include <vector>
 
 namespace
 {
@@ -90,6 +91,19 @@ namespace
 
     return getAreaSum(filtered);
   }
+
+  void requireNotEmpty(const aydogan::PolygonList& polygons, std::ostream& output, bool& ok)
+  {
+    if (polygons.empty())
+    {
+      printInvalid(output);
+      ok = false;
+    }
+    else
+    {
+      ok = true;
+    }
+  }
 }
 
 void aydogan::printAreaEven(const PolygonList& polygons, std::ostream& output)
@@ -126,4 +140,85 @@ void aydogan::printAreaVertexCount(
   }
 
   printDouble(getFilteredAreaSum(polygons, HasVertexCount{ count }), output);
+}
+
+void aydogan::printMaxArea(const PolygonList& polygons, std::ostream& output)
+{
+  bool ok = false;
+  requireNotEmpty(polygons, output, ok);
+
+  if (!ok)
+  {
+    return;
+  }
+
+  auto result = std::max_element(polygons.begin(), polygons.end(), AreaLess{});
+  printDouble(getArea(*result), output);
+}
+
+void aydogan::printMaxVertexes(const PolygonList& polygons, std::ostream& output)
+{
+  bool ok = false;
+  requireNotEmpty(polygons, output, ok);
+
+  if (!ok)
+  {
+    return;
+  }
+
+  auto result = std::max_element(polygons.begin(), polygons.end(), VertexCountLess{});
+  output << getVertexCount(*result) << "\n";
+}
+
+void aydogan::printMinArea(const PolygonList& polygons, std::ostream& output)
+{
+  bool ok = false;
+  requireNotEmpty(polygons, output, ok);
+
+  if (!ok)
+  {
+    return;
+  }
+
+  auto result = std::min_element(polygons.begin(), polygons.end(), AreaLess{});
+  printDouble(getArea(*result), output);
+}
+
+void aydogan::printMinVertexes(const PolygonList& polygons, std::ostream& output)
+{
+  bool ok = false;
+  requireNotEmpty(polygons, output, ok);
+
+  if (!ok)
+  {
+    return;
+  }
+
+  auto result = std::min_element(polygons.begin(), polygons.end(), VertexCountLess{});
+  output << getVertexCount(*result) << "\n";
+}
+
+void aydogan::printCountEven(const PolygonList& polygons, std::ostream& output)
+{
+  output << std::count_if(polygons.begin(), polygons.end(), hasEvenVertexCount) << "\n";
+}
+
+void aydogan::printCountOdd(const PolygonList& polygons, std::ostream& output)
+{
+  output << std::count_if(polygons.begin(), polygons.end(), hasOddVertexCount) << "\n";
+}
+
+void aydogan::printCountVertexCount(
+  const PolygonList& polygons,
+  std::size_t count,
+  std::ostream& output
+)
+{
+  if (count < 3)
+  {
+    printInvalid(output);
+    return;
+  }
+
+  output << std::count_if(polygons.begin(), polygons.end(), HasVertexCount{ count }) << "\n";
 }
