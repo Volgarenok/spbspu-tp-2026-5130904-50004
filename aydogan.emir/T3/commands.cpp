@@ -7,6 +7,7 @@
 #include <iterator>
 #include <numeric>
 #include <sstream>
+#include <string>
 #include <vector>
 
 namespace
@@ -63,6 +64,30 @@ namespace
     }
   };
 
+  struct Line
+  {
+    std::string text;
+  };
+
+  std::istream& operator>>(std::istream& input, Line& line)
+  {
+    std::istream::sentry sentry(input);
+
+    if (!sentry)
+    {
+      return input;
+    }
+
+    std::getline(input, line.text);
+
+    if (line.text.empty() && !input)
+    {
+      input.setstate(std::ios::failbit);
+    }
+
+    return input;
+  }
+
   void printInvalid(std::ostream& output)
   {
     output << "<INVALID COMMAND>\n";
@@ -114,6 +139,143 @@ namespace
       ok = true;
     }
   }
+
+  struct CommandExecutor
+  {
+    const aydogan::PolygonList& polygons;
+
+    std::string operator()(const Line& line) const
+    {
+      std::istringstream input(line.text);
+      std::ostringstream output;
+
+      std::string command;
+      input >> command;
+
+      if (command == "AREA")
+      {
+        std::string argument;
+        input >> argument;
+
+        if (argument == "EVEN")
+        {
+          aydogan::printAreaEven(polygons, output);
+        }
+        else if (argument == "ODD")
+        {
+          aydogan::printAreaOdd(polygons, output);
+        }
+        else if (argument == "MEAN")
+        {
+          aydogan::printAreaMean(polygons, output);
+        }
+        else
+        {
+          std::istringstream numberInput(argument);
+          std::size_t count = 0;
+          numberInput >> count;
+
+          if (numberInput && numberInput.eof())
+          {
+            aydogan::printAreaVertexCount(polygons, count, output);
+          }
+          else
+          {
+            printInvalid(output);
+          }
+        }
+      }
+      else if (command == "MAX")
+      {
+        std::string argument;
+        input >> argument;
+
+        if (argument == "AREA")
+        {
+          aydogan::printMaxArea(polygons, output);
+        }
+        else if (argument == "VERTEXES")
+        {
+          aydogan::printMaxVertexes(polygons, output);
+        }
+        else
+        {
+          printInvalid(output);
+        }
+      }
+      else if (command == "MIN")
+      {
+        std::string argument;
+        input >> argument;
+
+        if (argument == "AREA")
+        {
+          aydogan::printMinArea(polygons, output);
+        }
+        else if (argument == "VERTEXES")
+        {
+          aydogan::printMinVertexes(polygons, output);
+        }
+        else
+        {
+          printInvalid(output);
+        }
+      }
+      else if (command == "COUNT")
+      {
+        std::string argument;
+        input >> argument;
+
+        if (argument == "EVEN")
+        {
+          aydogan::printCountEven(polygons, output);
+        }
+        else if (argument == "ODD")
+        {
+          aydogan::printCountOdd(polygons, output);
+        }
+        else
+        {
+          std::istringstream numberInput(argument);
+          std::size_t count = 0;
+          numberInput >> count;
+
+          if (numberInput && numberInput.eof())
+          {
+            aydogan::printCountVertexCount(polygons, count, output);
+          }
+          else
+          {
+            printInvalid(output);
+          }
+        }
+      }
+      else if (command == "PERMS")
+      {
+        Polygon polygon;
+        input >> polygon;
+
+        if (input)
+        {
+          aydogan::printPerms(polygons, polygon, output);
+        }
+        else
+        {
+          printInvalid(output);
+        }
+      }
+      else if (command == "RIGHTSHAPES")
+      {
+        aydogan::printRightShapes(polygons, output);
+      }
+      else
+      {
+        printInvalid(output);
+      }
+
+      return output.str();
+    }
+  };
 }
 
 void aydogan::printAreaEven(const PolygonList& polygons, std::ostream& output)
@@ -245,4 +407,26 @@ void aydogan::printPerms(
 void aydogan::printRightShapes(const PolygonList& polygons, std::ostream& output)
 {
   output << std::count_if(polygons.begin(), polygons.end(), hasRightAngle) << "\n";
+}
+
+void aydogan::runCommands(
+  const PolygonList& polygons,
+  std::istream& input,
+  std::ostream& output
+)
+{
+  std::vector< Line > lines;
+
+  std::copy(
+    std::istream_iterator< Line >(input),
+    std::istream_iterator< Line >(),
+    std::back_inserter(lines)
+  );
+
+  std::transform(
+    lines.begin(),
+    lines.end(),
+    std::ostream_iterator< std::string >(output, ""),
+    CommandExecutor{ polygons }
+  );
 }
