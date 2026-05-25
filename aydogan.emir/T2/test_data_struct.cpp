@@ -3,8 +3,10 @@
 
 #include "data_struct.hpp"
 
+#include <algorithm>
 #include <sstream>
 #include <string>
+#include <vector>
 
 BOOST_AUTO_TEST_CASE(read_key_order_123_test)
 {
@@ -54,4 +56,56 @@ BOOST_AUTO_TEST_CASE(output_zero_binary_test)
   output << data;
 
   BOOST_CHECK_EQUAL(output.str(), "(:key1 1ull:key2 0b0:key3 \"Zero\":)");
+}
+
+BOOST_AUTO_TEST_CASE(compare_by_key1_test)
+{
+  aydogan::DataStruct first{1ull, 10ull, "bbb"};
+  aydogan::DataStruct second{2ull, 1ull, "a"};
+
+  BOOST_CHECK(aydogan::compareData(first, second));
+  BOOST_CHECK(!aydogan::compareData(second, first));
+}
+
+BOOST_AUTO_TEST_CASE(compare_by_key2_test)
+{
+  aydogan::DataStruct first{1ull, 5ull, "bbb"};
+  aydogan::DataStruct second{1ull, 10ull, "a"};
+
+  BOOST_CHECK(aydogan::compareData(first, second));
+  BOOST_CHECK(!aydogan::compareData(second, first));
+}
+
+BOOST_AUTO_TEST_CASE(compare_by_key3_length_test)
+{
+  aydogan::DataStruct first{1ull, 1ull, "a"};
+  aydogan::DataStruct second{1ull, 1ull, "bbbb"};
+
+  BOOST_CHECK(aydogan::compareData(first, second));
+  BOOST_CHECK(!aydogan::compareData(second, first));
+}
+
+BOOST_AUTO_TEST_CASE(sort_vector_test)
+{
+  std::vector< aydogan::DataStruct > data;
+  data.push_back(aydogan::DataStruct{2ull, 1ull, "a"});
+  data.push_back(aydogan::DataStruct{1ull, 4ull, "long"});
+  data.push_back(aydogan::DataStruct{1ull, 3ull, "medium"});
+  data.push_back(aydogan::DataStruct{1ull, 3ull, "a"});
+
+  std::sort(data.begin(), data.end(), aydogan::compareData);
+
+  BOOST_CHECK_EQUAL(data[0].key1, 1ull);
+  BOOST_CHECK_EQUAL(data[0].key2, 3ull);
+  BOOST_CHECK_EQUAL(data[0].key3, "a");
+
+  BOOST_CHECK_EQUAL(data[1].key1, 1ull);
+  BOOST_CHECK_EQUAL(data[1].key2, 3ull);
+  BOOST_CHECK_EQUAL(data[1].key3, "medium");
+
+  BOOST_CHECK_EQUAL(data[2].key1, 1ull);
+  BOOST_CHECK_EQUAL(data[2].key2, 4ull);
+  BOOST_CHECK_EQUAL(data[2].key3, "long");
+
+  BOOST_CHECK_EQUAL(data[3].key1, 2ull);
 }
