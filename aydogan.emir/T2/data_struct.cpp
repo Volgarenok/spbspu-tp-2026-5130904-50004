@@ -271,3 +271,60 @@ std::istream& aydogan::operator>>(std::istream& input, DataStruct& data)
 
   return input;
 }
+
+std::ostream& aydogan::operator<<(std::ostream& output, const DataStruct& data)
+{
+  std::ostream::sentry sentry(output);
+
+  if (!sentry)
+  {
+    return output;
+  }
+
+  IOFmtGuard guard(output);
+
+  output << "(:";
+  output << "key1 " << data.key1 << "ull:";
+  output << "key2 0b";
+
+  if (data.key2 == 0)
+  {
+    output << "0";
+  }
+  else
+  {
+    std::string binary;
+
+    unsigned long long value = data.key2;
+
+    while (value > 0)
+    {
+      binary += static_cast< char >('0' + value % 2);
+      value /= 2;
+    }
+
+    std::reverse(binary.begin(), binary.end());
+    output << binary;
+  }
+
+  output << ":";
+  output << "key3 " << std::quoted(data.key3) << ":";
+  output << ")";
+
+  return output;
+}
+
+bool aydogan::compareData(const DataStruct& left, const DataStruct& right)
+{
+  if (left.key1 != right.key1)
+  {
+    return left.key1 < right.key1;
+  }
+
+  if (left.key2 != right.key2)
+  {
+    return left.key2 < right.key2;
+  }
+
+  return left.key3.length() < right.key3.length();
+}
