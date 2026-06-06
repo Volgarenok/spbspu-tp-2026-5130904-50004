@@ -66,6 +66,39 @@ namespace pozdeev
     return out;
   }
 
+  std::istream& operator>>(std::istream& in, UllHexIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    char zero = '0';
+    char x = '0';
+    in >> zero >> x;
+    if (in && zero == '0' && (x == 'x' || x == 'X'))
+    {
+      in >> std::hex >> dest.ref;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const UllHexOut& dest)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    IOGuard guard(out);
+    out << "0x" << std::hex << std::uppercase << dest.val;
+    return out;
+  }
+
   std::istream& operator>>(std::istream& in, StringIO&& dest)
   {
     std::istream::sentry sentry(in);
