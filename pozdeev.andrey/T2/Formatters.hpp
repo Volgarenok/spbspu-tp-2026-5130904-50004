@@ -55,6 +55,14 @@ namespace pozdeev
     const std::string& val;
   };
 
+  std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
+  std::istream& operator>>(std::istream& in, DoubleLiteralIO&& dest);
+  std::ostream& operator<<(std::ostream& out, const DoubleLiteralOut& dest);
+  std::istream& operator>>(std::istream& in, UllHexIO&& dest);
+  std::ostream& operator<<(std::ostream& out, const UllHexOut& dest);
+  std::istream& operator>>(std::istream& in, StringIO&& dest);
+  std::ostream& operator<<(std::ostream& out, const StringOut& dest);
+
 }
 
 #endif
