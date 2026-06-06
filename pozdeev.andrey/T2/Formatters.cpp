@@ -34,6 +34,38 @@ namespace pozdeev
     return in;
   }
 
+  std::istream& operator>>(std::istream& in, DoubleLiteralIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    if (!(in >> dest.ref))
+    {
+      return in;
+    }
+    char suffix = '0';
+    in >> suffix;
+    if (in && suffix != 'd' && suffix != 'D')
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const DoubleLiteralOut& dest)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    IOGuard guard(out);
+    out << std::fixed << std::setprecision(1) << dest.val << 'd';
+    return out;
+  }
+
   std::istream& operator>>(std::istream& in, StringIO&& dest)
   {
     std::istream::sentry sentry(in);
