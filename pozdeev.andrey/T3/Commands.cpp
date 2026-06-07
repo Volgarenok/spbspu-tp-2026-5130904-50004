@@ -54,4 +54,56 @@ namespace pozdeev
       throw std::invalid_argument("Invalid argument");
     }
   }
+
+  void executeMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Empty polygons");
+    }
+    std::string arg;
+    in >> arg;
+
+    if (arg == "AREA")
+    {
+      auto it = std::max_element(polygons.begin(), polygons.end(), compareArea);
+      IOGuard guard(out);
+      out << std::fixed << std::setprecision(1) << getArea(*it) << '\n';
+    }
+    else if (arg == "VERTEXES")
+    {
+      auto it = std::max_element(polygons.begin(), polygons.end(), compareVertexes);
+      out << it->points.size() << '\n';
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
+  }
+
+  void executeMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Empty polygons");
+    }
+    std::string arg;
+    in >> arg;
+
+    if (arg == "AREA")
+    {
+      auto it = std::min_element(polygons.begin(), polygons.end(), compareArea);
+      IOGuard guard(out);
+      out << std::fixed << std::setprecision(1) << getArea(*it) << '\n';
+    }
+    else if (arg == "VERTEXES")
+    {
+      auto it = std::min_element(polygons.begin(), polygons.end(), compareVertexes);
+      out << it->points.size() << '\n';
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
+  }
 }
