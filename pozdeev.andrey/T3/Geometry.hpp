@@ -29,4 +29,24 @@ namespace pozdeev
   bool isEven(const Polygon& p);
   bool isOdd(const Polygon& p);
   bool hasVertexes(const Polygon& p, size_t vertexes);
+
+  bool compareArea(const Polygon& a, const Polygon& b);
+  bool compareVertexes(const Polygon& a, const Polygon& b);
+
+  bool comparePointX(const Point& a, const Point& b);
+  bool comparePointY(const Point& a, const Point& b);
+  bool compareMinX(const Polygon& a, const Polygon& b);
+  bool compareMaxX(const Polygon& a, const Polygon& b);
+  bool compareMinY(const Polygon& a, const Polygon& b);
+  bool compareMaxY(const Polygon& a, const Polygon& b);
+
+  int getMinX(const Polygon& p);
+  int getMaxX(const Polygon& p);
+  int getMinY(const Polygon& p);
+  int getMaxY(const Polygon& p);
+
+  bool isSameOffset(const Point& p1, const Point& p2, const Point& offset);
+  bool isSame(const Polygon& p1, const Polygon& p2);
 }
+
+#endif
