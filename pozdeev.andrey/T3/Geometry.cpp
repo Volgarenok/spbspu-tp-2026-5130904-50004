@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include <cmath>
+#include <functional>
 
 namespace pozdeev
 {
@@ -151,5 +152,23 @@ namespace pozdeev
   bool compareMaxY(const Polygon& a, const Polygon& b)
   {
     return getMaxY(a) < getMaxY(b);
+  }
+
+  bool isSameOffset(const Point& p1, const Point& p2, const Point& offset)
+  {
+    return p1.x == p2.x + offset.x && p1.y == p2.y + offset.y;
+  }
+
+  bool isSame(const Polygon& p1, const Polygon& p2)
+  {
+    if (p1.points.size() != p2.points.size())
+    {
+      return false;
+    }
+    Point offset;
+    offset.x = p1.points.front().x - p2.points.front().x;
+    offset.y = p1.points.front().y - p2.points.front().y;
+    using namespace std::placeholders;
+    return std::equal(p1.points.begin(), p1.points.end(), p2.points.begin(), std::bind(isSameOffset, _1, _2, offset));
   }
 }
