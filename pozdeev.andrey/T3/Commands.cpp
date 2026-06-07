@@ -131,4 +131,47 @@ namespace pozdeev
       throw std::invalid_argument("Invalid argument");
     }
   }
+
+  void executeInframe(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    Polygon target;
+    if (!(in >> target))
+    {
+      throw std::invalid_argument("Invalid polygon");
+    }
+    if (polygons.empty())
+    {
+      out << "<FALSE>\n";
+      return;
+    }
+    int minX = getMinX(@id8251725 (*std)::min_element(polygons.begin(), polygons.end(), compareMinX));
+    int maxX = getMaxX(@id8251725 (*std)::max_element(polygons.begin(), polygons.end(), compareMaxX));
+    int minY = getMinY(@id8251725 (*std)::min_element(polygons.begin(), polygons.end(), compareMinY));
+    int maxY = getMaxY(@id8251725 (*std)::max_element(polygons.begin(), polygons.end(), compareMaxY));
+
+    int tMinX = getMinX(target);
+    int tMaxX = getMaxX(target);
+    int tMinY = getMinY(target);
+    int tMaxY = getMaxY(target);
+
+    if (tMinX >= minX && tMaxX <= maxX && tMinY >= minY && tMaxY <= maxY)
+    {
+      out << "<TRUE>\n";
+    }
+    else
+    {
+      out << "<FALSE>\n";
+    }
+  }
+
+  void executeSame(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    Polygon target;
+    if (!(in >> target))
+    {
+      throw std::invalid_argument("Invalid polygon");
+    }
+    using namespace std::placeholders;
+    out << std::count_if(polygons.begin(), polygons.end(), std::bind(isSame, _1, target)) << '\n';
+  }
 }
