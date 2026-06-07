@@ -132,7 +132,8 @@ namespace pozdeev
     }
   }
 
-  void executeInframe(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void executeInframe(const std::vector< Polygon >& polygons,
+std::istream& in, std::ostream& out)
   {
     Polygon target;
     if (!(in >> target))
@@ -144,10 +145,10 @@ namespace pozdeev
       out << "<FALSE>\n";
       return;
     }
-    int minX = getMinX(@id8251725 (*std)::min_element(polygons.begin(), polygons.end(), compareMinX));
-    int maxX = getMaxX(@id8251725 (*std)::max_element(polygons.begin(), polygons.end(), compareMaxX));
-    int minY = getMinY(@id8251725 (*std)::min_element(polygons.begin(), polygons.end(), compareMinY));
-    int maxY = getMaxY(@id8251725 (*std)::max_element(polygons.begin(), polygons.end(), compareMaxY));
+    int minX = getMinX(*std::min_element(polygons.begin(), polygons.end(), compareMinX));
+    int maxX = getMaxX(*std::max_element(polygons.begin(), polygons.end(), compareMaxX));
+    int minY = getMinY(*std::min_element(polygons.begin(), polygons.end(), compareMinY));
+    int maxY = getMaxY(*std::max_element(polygons.begin(), polygons.end(), compareMaxY));
 
     int tMinX = getMinX(target);
     int tMaxX = getMaxX(target);
