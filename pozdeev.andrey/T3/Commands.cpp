@@ -6,6 +6,28 @@
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
+#include <cctype>
+
+namespace
+{
+  void checkEmptyLine(std::istream& in)
+  {
+    char c;
+    while (in.get(c))
+    {
+      if (c == '\n')
+      {
+        in.unget();
+        break;
+      }
+      if (!std::isspace(c))
+      {
+        in.setstate(std::ios::failbit);
+        throw std::invalid_argument("Trailing garbage");
+      }
+    }
+  }
+}
 
 namespace pozdeev
 {
@@ -13,6 +35,8 @@ namespace pozdeev
   {
     std::string arg;
     in >> arg;
+    checkEmptyLine(in);
+
     std::vector< double > areas(polygons.size());
 
     if (arg == "EVEN")
@@ -43,6 +67,10 @@ namespace pozdeev
     else if (std::isdigit(arg[0]))
     {
       size_t vertexes = std::stoull(arg);
+      if (vertexes < 3)
+      {
+        throw std::invalid_argument("Invalid vertexes count");
+      }
       using namespace std::placeholders;
       std::transform(polygons.begin(), polygons.end(), areas.begin(), std::bind(getAreaIfNum, _1, vertexes));
       double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
@@ -63,6 +91,7 @@ namespace pozdeev
     }
     std::string arg;
     in >> arg;
+    checkEmptyLine(in);
 
     if (arg == "AREA")
     {
@@ -89,6 +118,7 @@ namespace pozdeev
     }
     std::string arg;
     in >> arg;
+    checkEmptyLine(in);
 
     if (arg == "AREA")
     {
@@ -111,6 +141,7 @@ namespace pozdeev
   {
     std::string arg;
     in >> arg;
+    checkEmptyLine(in);
 
     if (arg == "EVEN")
     {
@@ -123,6 +154,10 @@ namespace pozdeev
     else if (std::isdigit(arg[0]))
     {
       size_t vertexes = std::stoull(arg);
+      if (vertexes < 3)
+      {
+        throw std::invalid_argument("Invalid vertexes count");
+      }
       using namespace std::placeholders;
       out << std::count_if(polygons.begin(), polygons.end(), std::bind(hasVertexes, _1, vertexes)) << '\n';
     }
@@ -132,14 +167,15 @@ namespace pozdeev
     }
   }
 
-  void executeInframe(const std::vector< Polygon >& polygons,
-std::istream& in, std::ostream& out)
+  void executeInframe(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     Polygon target;
     if (!(in >> target))
     {
       throw std::invalid_argument("Invalid polygon");
     }
+    checkEmptyLine(in);
+
     if (polygons.empty())
     {
       out << "<FALSE>\n";
@@ -172,6 +208,8 @@ std::istream& in, std::ostream& out)
     {
       throw std::invalid_argument("Invalid polygon");
     }
+    checkEmptyLine(in);
+
     using namespace std::placeholders;
     out << std::count_if(polygons.begin(), polygons.end(), std::bind(isSame, _1, target)) << '\n';
   }
