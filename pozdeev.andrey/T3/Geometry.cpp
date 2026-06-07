@@ -92,4 +92,64 @@ namespace pozdeev
   {
     return p.points.size() == vertexes;
   }
+
+  bool compareArea(const Polygon& a, const Polygon& b)
+  {
+    return getArea(a) < getArea(b);
+  }
+
+  bool compareVertexes(const Polygon& a, const Polygon& b)
+  {
+    return a.points.size() < b.points.size();
+  }
+
+  bool comparePointX(const Point& a, const Point& b)
+  {
+    return a.x < b.x;
+  }
+
+  bool comparePointY(const Point& a, const Point& b)
+  {
+    return a.y < b.y;
+  }
+
+  int getMinX(const Polygon& p)
+  {
+    return std::min_element(p.points.begin(), p.points.end(), comparePointX)->x;
+  }
+
+  int getMaxX(const Polygon& p)
+  {
+    return std::max_element(p.points.begin(), p.points.end(), comparePointX)->x;
+  }
+
+  int getMinY(const Polygon& p)
+  {
+    return std::min_element(p.points.begin(), p.points.end(), comparePointY)->y;
+  }
+
+  int getMaxY(const Polygon& p)
+  {
+    return std::max_element(p.points.begin(), p.points.end(), comparePointY)->y;
+  }
+
+  bool compareMinX(const Polygon& a, const Polygon& b)
+  {
+    return getMinX(a) < getMinX(b);
+  }
+
+  bool compareMaxX(const Polygon& a, const Polygon& b)
+  {
+    return getMaxX(a) < getMaxX(b);
+  }
+
+  bool compareMinY(const Polygon& a, const Polygon& b)
+  {
+    return getMinY(a) < getMinY(b);
+  }
+
+  bool compareMaxY(const Polygon& a, const Polygon& b)
+  {
+    return getMaxY(a) < getMaxY(b);
+  }
 }
