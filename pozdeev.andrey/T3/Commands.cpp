@@ -106,4 +106,29 @@ namespace pozdeev
       throw std::invalid_argument("Invalid argument");
     }
   }
+
+  void executeCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    std::string arg;
+    in >> arg;
+
+    if (arg == "EVEN")
+    {
+      out << std::count_if(polygons.begin(), polygons.end(), isEven) << '\n';
+    }
+    else if (arg == "ODD")
+    {
+      out << std::count_if(polygons.begin(), polygons.end(), isOdd) << '\n';
+    }
+    else if (std::isdigit(arg[0]))
+    {
+      size_t vertexes = std::stoull(arg);
+      using namespace std::placeholders;
+      out << std::count_if(polygons.begin(), polygons.end(), std::bind(hasVertexes, _1, vertexes)) << '\n';
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
+  }
 }
