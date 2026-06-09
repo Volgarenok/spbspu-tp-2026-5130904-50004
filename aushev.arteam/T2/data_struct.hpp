@@ -5,6 +5,7 @@
 #include <utility>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 
 namespace aushev {
 
@@ -130,6 +131,21 @@ inline std::istream& operator>>(std::istream& is, DataStruct& data) {
 
         while (is.get(ch) && ch != '\n' && ch != ')') {}
     }
+}
+
+inline std::ostream& operator<<(std::ostream& os, const DataStruct& data) {
+    os << "(:";
+    os << "key1 " << std::scientific << std::setprecision(6) << data.key1_ << ":";
+    os << "key2 (:N " << data.key2_.first << ":D " << data.key2_.second << ":):";
+    os << "key3 \"";
+    for (char c : data.key3_) {
+        if (c == '"' || c == '\\') {
+            os << '\\';
+        }
+        os << c;
+    }
+    os << "\":)";
+    return os;
 }
 
 }
