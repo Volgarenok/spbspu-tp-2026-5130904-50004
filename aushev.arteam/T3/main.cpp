@@ -166,6 +166,32 @@ int run(int argc, const char* argv[]) {
                     std::cout << "<INVALID COMMAND>\n";
                 }
             }
+        } else if (cmd == "PERMS") {
+            Polygon p;
+            if (std::cin >> p) {
+                size_t count = 0;
+                for (const auto& poly : polygons) {
+                    if (isPermutation(poly, p)) {
+                        ++count;
+                    }
+                }
+                std::cout << count << "\n";
+            } else {
+                std::cout << "<INVALID COMMAND>\n";
+            }
+        } else if (cmd == "SAME") {
+            Polygon p;
+            if (std::cin >> p) {
+                size_t count = 0;
+                for (const auto& poly : polygons) {
+                    if (isSame(poly, p)) {
+                        ++count;
+                    }
+                }
+                std::cout << count << "\n";
+            } else {
+                std::cout << "<INVALID COMMAND>\n";
+            }
         } else {
             std::cout << "<INVALID COMMAND>\n";
         }
