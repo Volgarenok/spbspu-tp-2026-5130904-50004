@@ -8,6 +8,7 @@ namespace aushev {
 
 int run() {
     std::vector<DataStruct> records;
+    
     std::copy(std::istream_iterator<DataStruct>(std::cin),
               std::istream_iterator<DataStruct>(),
               std::back_inserter(records));
