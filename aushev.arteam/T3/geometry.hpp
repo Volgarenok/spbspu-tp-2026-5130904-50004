@@ -112,6 +112,41 @@ inline std::ostream& operator<<(std::ostream& os, const Polygon& poly) {
     return os;
 }
 
+inline bool isPermutation(const Polygon& p1, const Polygon& p2) {
+    if (p1.points_.size() != p2.points_.size()) {
+        return false;
+    }
+    std::vector<Point> v1 = p1.points_;
+    std::vector<Point> v2 = p2.points_;
+    std::sort(v1.begin(), v1.end());
+    std::sort(v2.begin(), v2.end());
+    return v1 == v2;
+}
+
+inline bool isSame(const Polygon& p1, const Polygon& p2) {
+    if (p1.points_.size() != p2.points_.size()) {
+        return false;
+    }
+    if (p1.points_.empty()) {
+        return true;
+    }
+
+    std::vector<Point> v1 = p1.points_;
+    std::vector<Point> v2 = p2.points_;
+    std::sort(v1.begin(), v1.end());
+    std::sort(v2.begin(), v2.end());
+
+    int dx = v2[0].x_ - v1[0].x_;
+    int dy = v2[0].y_ - v1[0].y_;
+
+    for (size_t i = 1; i < v1.size(); ++i) {
+        if (v2[i].x_ - v1[i].x_ != dx || v2[i].y_ - v1[i].y_ != dy) {
+            return false;
+        }
+    }
+    return true;
+}
+
 }
 
 #endif
