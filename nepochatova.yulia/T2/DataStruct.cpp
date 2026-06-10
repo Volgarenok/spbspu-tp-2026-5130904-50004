@@ -1,6 +1,7 @@
 #include "DataStruct.h"
 #include "IOGuard.h"
 #include <iostream>
+#include <limits>
 
 namespace nepochatova {
   std::istream& parseField(std::istream& in, const std::string& key, int& mask, DataStruct& ds)
@@ -24,6 +25,32 @@ namespace nepochatova {
       default:   in.setstate(std::ios_base::failbit); return in;
     }
     if (in) mask |= field;
+    return in;
+  }
+
+  std::istream& operator>>(std::istream& in, DataStruct& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) return in;
+
+    DataStruct tmp{};
+    char dummy = 0;
+    int mask = 0;
+    std::string k1, k2, k3;
+
+    in >> DelimiterIO{'(', dummy}
+    >> DelimiterIO{':', dummy} >> k1 >> KeyValueInp{k1, mask, tmp} >> DelimiterIO{':', dummy}
+    >> DelimiterIO{':', dummy} >> k2 >> KeyValueInp{k2, mask, tmp} >> DelimiterIO{':', dummy}
+    >> DelimiterIO{':', dummy} >> k3 >> KeyValueInp{k3, mask, tmp} >> DelimiterIO{':', dummy}
+    >> DelimiterIO{')', dummy};
+
+    if (in && mask == ALL) {
+      dest = tmp;
+    } else {
+      in.clear();
+      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      in >> dest;
+    }
     return in;
   }
 }

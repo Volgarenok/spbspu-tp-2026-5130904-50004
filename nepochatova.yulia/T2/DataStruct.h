@@ -13,9 +13,9 @@ namespace nepochatova {
 };
 
   struct DataStruct {
-    long long key1;           // SLL_LIT
-    unsigned long long key2;  // ULL_LIT
-    std::string key3;         // String in quotes
+    long long key1;
+    unsigned long long key2;
+    std::string key3;
   };
 
   struct KeyValueInp {
