@@ -30,4 +30,21 @@ struct LabelIO {
 };
 std::istream& operator>>(std::istream& in, LabelIO&& dest);
 
+struct SllLitIO {
+  long long& ref_;
+};
+std::istream& operator>>(std::istream& in, SllLitIO&& dest);
+std::ostream& operator<<(std::ostream& out, const SllLitIO& src);
+
+struct UllLitIO {
+  unsigned long long& ref_;
+};
+std::istream& operator>>(std::istream& in, UllLitIO&& dest);
+std::ostream& operator<<(std::ostream& out, const UllLitIO& src);
+
+struct StringIO {
+  std::string& ref_;
+};
+std::istream& operator>>(std::istream& in, StringIO&& dest);
+
 #endif

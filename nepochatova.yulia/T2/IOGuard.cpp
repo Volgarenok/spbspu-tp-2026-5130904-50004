@@ -27,6 +27,16 @@ namespace nepochatova {
     return in;
   }
 
+  std::istream& operator>>(std::istream& in, StringIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) return in;
+    char last = 0;
+    in >> DelimiterIO{'"', last};
+    if (!in) return in;
+    std::getline(in, dest.ref_, '"');
+    return in;
+  }
+
   IOguard::IOguard(std::basic_ios<char>& s):
     s_(s),
     precision_(s.precision()),
