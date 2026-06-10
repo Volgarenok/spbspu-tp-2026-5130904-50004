@@ -18,4 +18,16 @@ namespace nepochatova {
     char fill_;
   };
 }
+
+struct DelimiterIO {
+  char expected_;
+  char& last_;
+};
+std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
+
+struct LabelIO {
+  std::string expected_;
+};
+std::istream& operator>>(std::istream& in, LabelIO&& dest);
+
 #endif
