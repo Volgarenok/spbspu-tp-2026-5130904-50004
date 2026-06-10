@@ -30,8 +30,8 @@ namespace nepochatova {
 
   std::istream& operator>>(std::istream& in, DataStruct& dest)
   {
-    std::istream::sentry sentry(in);
-    if (!sentry) return in;
+    std::istream::sentry s(in);
+    if (!s) return in;
 
     DataStruct tmp{};
     char dummy = 0;
@@ -52,5 +52,15 @@ namespace nepochatova {
       in >> dest;
     }
     return in;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src) {
+    std::ostream::sentry s(out);
+    if (!s) return out;
+    IOguard guard(out);
+    out << "(:key1 " << SllLitIO{src.key1}
+    << ":key2 " << UllLitIO{src.key2}
+    << ":key3 \"" << src.key3 << "\":)";
+    return out;
   }
 }

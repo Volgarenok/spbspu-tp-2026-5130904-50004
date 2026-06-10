@@ -24,6 +24,7 @@ namespace nepochatova {
     DataStruct& ds;
   };
 
+  std::istream& operator>>(std::istream& in, KeyValueInp&& inp);
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& src);
   bool operator<(const DataStruct& lhs, const DataStruct& rhs);
