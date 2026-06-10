@@ -54,7 +54,8 @@ namespace nepochatova {
     return in;
   }
 
-  std::ostream& operator<<(std::ostream& out, const DataStruct& src) {
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+  {
     std::ostream::sentry s(out);
     if (!s) return out;
     IOguard guard(out);
@@ -62,5 +63,37 @@ namespace nepochatova {
     << ":key2 " << UllLitIO{src.key2}
     << ":key3 \"" << src.key3 << "\":)";
     return out;
+  }
+
+  bool operator<(const DataStruct& lhs, const DataStruct& rhs)
+  {
+    bool c1 = key1_less(lhs.key1, rhs.key1);
+    bool c1_eq = key1_equal(lhs.key1, rhs.key1);
+    bool c2 = key2_less(lhs.key2, rhs.key2);
+    bool c2_eq = key2_equal(lhs.key2, rhs.key2);
+    bool c3 = key3_less(lhs.key3, rhs.key3);
+
+    return c1 || (c1_eq && c2) || (c1_eq && c2_eq && c3);
+  }
+
+  bool key1_less(long long a, long long b)
+  {
+    return a < b;
+  }
+  bool key1_equal(long long a, long long b)
+  {
+    return a == b;
+  }
+  bool key2_less(unsigned long long a, unsigned long long b)
+  {
+    return a < b;
+  }
+  bool key2_equal(unsigned long long a, unsigned long long b)
+  {
+    return a == b;
+  }
+  bool key3_less(const std::string& a, const std::string& b)
+  {
+    return a.size() < b.size();
   }
 }

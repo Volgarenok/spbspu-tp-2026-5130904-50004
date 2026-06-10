@@ -29,5 +29,10 @@ namespace nepochatova {
   std::ostream& operator<<(std::ostream& out, const DataStruct& src);
   bool operator<(const DataStruct& lhs, const DataStruct& rhs);
 
+  bool key1_less(long long a, long long b);
+  bool key1_equal(long long a, long long b);
+  bool key2_less(unsigned long long a, unsigned long long b);
+  bool key2_equal(unsigned long long a, unsigned long long b);
+  bool key3_less(const std::string& a, const std::string& b);
 }
 #endif
