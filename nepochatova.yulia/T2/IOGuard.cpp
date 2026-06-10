@@ -27,11 +27,43 @@ namespace nepochatova {
     return in;
   }
 
+  std::istream& operator>>(std::istream& in, SllLitIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) return in;
+    long long value = 0;
+    char c1 = 0, c2 = 0;
+    in >> value >> DelimiterIO{'l', c1} >> DelimiterIO{'l', c2};
+    std::string lit{c1, c2};
+    std::transform(lit.begin(), lit.end(), lit.begin(), ::tolower);
+    if (in && lit == "ll") {
+      dest.ref_ = value;
+    } else {
+      in.setstate(std::ios_base::failbit);
+    }
+    return in;
+  }
+
   std::ostream& operator<<(std::ostream& out, const SllLitIO& src) {
     std::ostream::sentry sentry(out);
     if (!sentry) return out;
     out << src.ref_ << "ll";
     return out;
+  }
+
+  std::istream& operator>>(std::istream& in, UllLitIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) return in;
+    unsigned long long value = 0;
+    char c1 = 0, c2 = 0, c3 = 0;
+    in >> value >> DelimiterIO{'u', c1} >> DelimiterIO{'l', c2} >> DelimiterIO{'l', c3};
+    std::string lit{c1, c2, c3};
+    std::transform(lit.begin(), lit.end(), lit.begin(), ::tolower);
+    if (in && lit == "ull") {
+      dest.ref_ = value;
+    } else {
+      in.setstate(std::ios_base::failbit);
+    }
+    return in;
   }
 
   std::ostream& operator<<(std::ostream& out, const UllLitIO& src) {
