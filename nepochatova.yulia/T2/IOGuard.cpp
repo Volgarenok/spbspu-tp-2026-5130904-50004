@@ -27,6 +27,20 @@ namespace nepochatova {
     return in;
   }
 
+  std::ostream& operator<<(std::ostream& out, const SllLitIO& src) {
+    std::ostream::sentry sentry(out);
+    if (!sentry) return out;
+    out << src.ref_ << "ll";
+    return out;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const UllLitIO& src) {
+    std::ostream::sentry sentry(out);
+    if (!sentry) return out;
+    out << src.ref_ << "ull";
+    return out;
+  }
+
   std::istream& operator>>(std::istream& in, StringIO&& dest) {
     std::istream::sentry sentry(in);
     if (!sentry) return in;
