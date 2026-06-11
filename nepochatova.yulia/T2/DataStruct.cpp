@@ -1,35 +1,47 @@
 #include "DataStruct.h"
 #include "IOGuard.h"
 #include <iostream>
-#include <limits>
 
 namespace nepochatova {
-  std::istream& parseField(std::istream& in, const std::string& key, int& mask, DataStruct& ds)
-  {
+  std::istream& parseField(std::istream& in, const std::string& key, int& mask, DataStruct& ds) {
     Field field = static_cast<Field>(0);
-    if (key == "key1")      field = KEY1;
-    else if (key == "key2") field = KEY2;
-    else if (key == "key3") field = KEY3;
-    else {
+    if (key == "key1") {
+      field = KEY1;
+    }
+    else if (key == "key2") {
+      field = KEY2;
+    }
+    else if (key == "key3") {
+      field = KEY3;
+    } else {
       in.setstate(std::ios_base::failbit);
       return in;
     }
-    if (mask & field) {
+    if (mask & static_cast<int>(field)) {
       in.setstate(std::ios_base::failbit);
       return in;
     }
     switch (field) {
-      case KEY1: in >> SllLitIO{ds.key1}; break;
-      case KEY2: in >> UllLitIO{ds.key2}; break;
-      case KEY3: in >> StringIO{ds.key3}; break;
-      default:   in.setstate(std::ios_base::failbit); return in;
+      case KEY1: in >> SllLitIO{ds.key1};
+        break;
+      case KEY2: in >> UllLitIO{ds.key2};
+        break;
+      case KEY3: in >> StringIO{ds.key3};
+        break;
+      default:   in.setstate(std::ios_base::failbit);
+        return in;
     }
-    if (in) mask |= field;
+    if (in) {
+      mask |= static_cast<int>(field);
+    }
     return in;
   }
 
-  std::istream& operator>>(std::istream& in, DataStruct& dest)
-  {
+  std::istream& operator>>(std::istream& in, KeyValueInp&& inp) {
+    return parseField(in, inp.key, inp.mask, inp.ds);
+  }
+
+  std::istream& operator>>(std::istream& in, DataStruct& dest) {
     std::istream::sentry s(in);
     if (!s) return in;
 
@@ -44,7 +56,7 @@ namespace nepochatova {
     >> DelimiterIO{':', dummy} >> k3 >> KeyValueInp{k3, mask, tmp} >> DelimiterIO{':', dummy}
     >> DelimiterIO{')', dummy};
 
-    if (in && mask == ALL) {
+    if (in && mask == static_cast<int>(ALL)) {
       dest = tmp;
     } else {
       in.clear();
@@ -59,8 +71,8 @@ namespace nepochatova {
     std::ostream::sentry s(out);
     if (!s) return out;
     IOguard guard(out);
-    out << "(:key1 " << SllLitIO{src.key1}
-    << ":key2 " << UllLitIO{src.key2}
+    out << "(:key1 " << SllLitOut{src.key1}
+    << ":key2 " << UllLitOut{src.key2}
     << ":key3 \"" << src.key3 << "\":)";
     return out;
   }
