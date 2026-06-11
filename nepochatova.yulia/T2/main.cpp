@@ -17,6 +17,8 @@ int main() {
     }
   }
 
+  std::cerr << "DEBUG: Read " << data.size() << " records\n";
+
   std::sort(data.begin(), data.end());
 
   using oit_t = std::ostream_iterator<T>;
