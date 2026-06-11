@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <cctype>
 #include <string>
-#include <istream>
 
 namespace nepochatova {
   IOguard::IOguard(std::basic_ios<char>& s):
@@ -69,6 +68,14 @@ namespace nepochatova {
     return out;
   }
 
+  std::ostream& operator<<(std::ostream& out, const SllLitOut& src)
+  {
+    std::ostream::sentry s(out);
+    if (!s) return out;
+    out << src.ref_ << "ll";
+    return out;
+  }
+
   std::istream& operator>>(std::istream& in, UllLitIO&& dest)
   {
     std::istream::sentry s(in);
@@ -88,6 +95,13 @@ namespace nepochatova {
 
   std::ostream& operator<<(std::ostream& out, const UllLitIO& src)
   {
+    std::ostream::sentry s(out);
+    if (!s) return out;
+    out << src.ref_ << "ull";
+    return out;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const UllLitOut& src) {
     std::ostream::sentry s(out);
     if (!s) return out;
     out << src.ref_ << "ull";
