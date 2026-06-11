@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iosfwd>
+#include <limits>
 
 namespace nepochatova {
   enum Field {

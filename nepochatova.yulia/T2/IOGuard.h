@@ -4,6 +4,7 @@
 #include "DataStruct.h"
 #include <ios>
 #include <string>
+#include <istream>
 
 namespace nepochatova {
   class IOguard
@@ -36,9 +37,20 @@ namespace nepochatova {
   std::istream& operator>>(std::istream& in, SllLitIO&& dest);
   std::ostream& operator<<(std::ostream& out, const SllLitIO& src);
 
+  struct SllLitOut {
+    const long long& ref_;
+  };
+  std::ostream& operator<<(std::ostream& out, const SllLitOut& src);
+
   struct UllLitIO {
     unsigned long long& ref_;
   };
+
+  struct UllLitOut {
+    const unsigned long long& ref_;
+  };
+
+  std::ostream& operator<<(std::ostream& out, const UllLitOut& src);
   std::istream& operator>>(std::istream& in, UllLitIO&& dest);
   std::ostream& operator<<(std::ostream& out, const UllLitIO& src);
 
