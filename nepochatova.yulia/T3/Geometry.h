@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 
-
 namespace nepochatova {
   struct Point {
     int x, y;
