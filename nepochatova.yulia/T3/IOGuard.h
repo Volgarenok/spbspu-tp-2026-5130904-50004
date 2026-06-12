@@ -3,8 +3,6 @@
 
 #include <ios>
 #include <string>
-#include <istream>
-#include <ostream>
 
 namespace nepochatova {
   class IOguard

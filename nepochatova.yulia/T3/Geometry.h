@@ -47,5 +47,6 @@ namespace nepochatova {
     bool operator()(const Polygon& a, const Polygon& b) const;
   };
 
+  void processCommands(std::vector<Polygon> &shapes);
 }
 #endif

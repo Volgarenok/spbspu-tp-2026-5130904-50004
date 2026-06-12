@@ -1,5 +1,6 @@
 #include "IOGuard.h"
 #include <cctype>
+#include <istream>
 
 namespace nepochatova {
   IOguard::IOguard(std::basic_ios<char>& s):
