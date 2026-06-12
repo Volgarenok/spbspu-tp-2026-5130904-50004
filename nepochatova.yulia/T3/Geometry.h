@@ -14,6 +14,7 @@ namespace nepochatova {
   struct Polygon {
     std::vector<Point> points;
 
+    double area() const;
     bool operator==(const Polygon &other) const;
   };
 

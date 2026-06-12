@@ -26,6 +26,19 @@ namespace nepochatova {
     return std::equal(points.begin(), points.end(), other.points.begin());
   }
 
+  double Polygon::area() const {
+    if (points.size() < 3) {
+      return 0.0;
+    }
+    double s = 0.0;
+    for (size_t i = 0; i < points.size(); ++i) {
+      size_t j = (i + 1) % points.size();
+      s += static_cast<double>(points[i].x) * points[j].y;
+      s -= static_cast<double>(points[j].x) * points[i].y;
+    }
+    return std::abs(s) / 2.0;
+  }
+
   std::istream& operator>>(std::istream& in, PointIO&& dest) {
     std::istream::sentry s(in);
     if (!s) return in;
