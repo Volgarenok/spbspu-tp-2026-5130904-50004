@@ -8,25 +8,34 @@ namespace nepochatova {
     char c;
   };
 
-  std::istream& operator>>(std::istream& in, SemiDelim&& d) {
+  std::istream& operator>>(std::istream& in, SemiDelim&& d)
+  {
     std::istream::sentry s(in);
-    if (!s) return in;
+    if (!s) {
+      return in;
+    }
     char ch;
-    if (!(in >> ch) || ch != d.c)
+    if (!(in >> ch) || ch != d.c) {
       in.setstate(std::ios_base::failbit);
+    }
     return in;
   }
 
-  bool Point::operator==(const Point& other) const {
+  bool Point::operator==(const Point& other) const
+  {
     return x == other.x && y == other.y;
   }
 
-  bool Polygon::operator==(const Polygon& other) const {
-    if (points.size() != other.points.size()) return false;
+  bool Polygon::operator==(const Polygon& other) const
+  {
+    if (points.size() != other.points.size()) {
+      return false;
+    }
     return std::equal(points.begin(), points.end(), other.points.begin());
   }
 
-  double Polygon::area() const {
+  double Polygon::area() const
+  {
     if (points.size() < 3) {
       return 0.0;
     }
@@ -39,9 +48,42 @@ namespace nepochatova {
     return std::abs(s) / 2.0;
   }
 
-  std::istream& operator>>(std::istream& in, PointIO&& dest) {
+  size_t Polygon::vertexCount() const
+  {
+    return points.size();
+  }
+
+  double AreaSumEven::operator()(double acc, const Polygon& p) const
+  {
+    return acc + (p.vertexCount() % 2 == 0 ? p.area() : 0.0);
+  }
+
+  double AreaSumOdd::operator()(double acc, const Polygon& p) const
+  {
+    return acc + (p.vertexCount() % 2 != 0 ? p.area() : 0.0);
+  }
+
+  double AreaSumAll::operator()(double acc, const Polygon& p) const
+  {
+    return acc + p.area();
+  }
+
+  bool VertexLess::operator()(const Polygon& a, const Polygon& b) const
+  {
+    return a.vertexCount() < b.vertexCount();
+  }
+
+  bool AreaLess::operator()(const Polygon& a, const Polygon& b) const
+  {
+    return a.area() < b.area();
+  }
+
+  std::istream& operator>>(std::istream& in, PointIO&& dest)
+  {
     std::istream::sentry s(in);
-    if (!s) return in;
+    if (!s) {
+      return in;
+    }
 
     char dummy = 0;
 
@@ -54,13 +96,16 @@ namespace nepochatova {
     return in;
   }
 
-  std::istream& operator>>(std::istream& in, Polygon& poly) {
+  std::istream& operator>>(std::istream& in, Polygon& poly)
+  {
     std::istream::sentry s(in);
-    if (!s) return in;
-
+    if (!s) {
+      return in;
+    }
     size_t n;
-    if (!(in >> n)) return in;
-
+    if (!(in >> n)) {
+      return in;
+    }
     poly.points.clear();
     poly.points.reserve(n);
 

@@ -15,6 +15,7 @@ namespace nepochatova {
     std::vector<Point> points;
 
     double area() const;
+    size_t vertexCount() const;
     bool operator==(const Polygon &other) const;
   };
 
@@ -24,6 +25,27 @@ namespace nepochatova {
 
   std::istream &operator>>(std::istream &in, PointIO &&dest);
   std::istream &operator>>(std::istream &in, Polygon &poly);
+
+
+  struct AreaSumEven {
+    double operator()(double acc, const Polygon& p) const;
+  };
+
+  struct AreaSumOdd {
+    double operator()(double acc, const Polygon& p) const;
+  };
+
+  struct AreaSumAll {
+    double operator()(double acc, const Polygon& p) const;
+  };
+
+  struct VertexLess {
+    bool operator()(const Polygon& a, const Polygon& b) const;
+  };
+
+  struct AreaLess {
+    bool operator()(const Polygon& a, const Polygon& b) const;
+  };
 
 }
 #endif

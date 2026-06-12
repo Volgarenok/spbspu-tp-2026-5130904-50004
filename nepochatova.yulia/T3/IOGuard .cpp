@@ -20,7 +20,9 @@ namespace nepochatova {
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
   {
     std::istream::sentry s(in);
-    if (!s) return in;
+    if (!s) {
+      return in;
+    }
     in >> dest.last_;
     if (in && (std::tolower(static_cast<unsigned char>(dest.last_)) !=
                std::tolower(static_cast<unsigned char>(dest.expected_)))) {
