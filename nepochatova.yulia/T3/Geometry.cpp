@@ -17,6 +17,15 @@ namespace nepochatova {
     return in;
   }
 
+  bool Point::operator==(const Point& other) const {
+    return x == other.x && y == other.y;
+  }
+
+  bool Polygon::operator==(const Polygon& other) const {
+    if (points.size() != other.points.size()) return false;
+    return std::equal(points.begin(), points.end(), other.points.begin());
+  }
+
   std::istream& operator>>(std::istream& in, PointIO&& dest) {
     std::istream::sentry s(in);
     if (!s) return in;
