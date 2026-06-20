@@ -27,10 +27,9 @@ int main()
     velizade::printAllInfo(shapes);
 
     double x, y, k;
-    std::cout << "Enter pivot point (x y) and scale factor: ";
     if (!(std::cin >> x >> y >> k))
     {
-      std::cerr << "Invalid input: expected three numbers" << "\n";
+      std::cerr << "Invalid input" << "\n";
       return 1;
     }
     if (k <= 0)
