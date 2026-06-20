@@ -11,7 +11,7 @@ namespace velizade
     double denom = (b1.x - a1.x) * (b2.y - a2.y) - (b1.y - a1.y) * (b2.x - a2.x);
     if (std::fabs(denom) < 1e-12)
     {
-      throw std::runtime_error("Diagonals are parallel, no intersection");
+      return {(a1.x + b1.x + a2.x + b2.x) / 4.0, (a1.y + b1.y + a2.y + b2.y) / 4.0};
     }
     double t = ((a2.x - a1.x) * (b2.y - a2.y) - (a2.y - a1.y) * (b2.x - a2.x)) / denom;
     return {a1.x + t * (b1.x - a1.x), a1.y + t * (b1.y - a1.y)};
