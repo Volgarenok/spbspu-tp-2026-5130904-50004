@@ -29,8 +29,7 @@ int main()
     double x, y, k;
     if (!(std::cin >> x >> y >> k))
     {
-      std::cerr << "Invalid input" << "\n";
-      return 1;
+      return 0;
     }
     if (k <= 0)
     {
