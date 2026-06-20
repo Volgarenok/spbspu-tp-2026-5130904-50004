@@ -62,8 +62,8 @@ namespace velizade
       return;
     }
     auto rect = sptr->getFrameRect();
-    std::cout << "  Area: " << sptr->getArea() << ", FrameRect: center=(" << rect.pos.x << ", " << rect.pos.y << "), w=" << rect.width
-              << ", h=" << rect.height << "\n";
+    std::cout << "  Area: " << sptr->getArea() << ", FrameRect: center=(" << rect.pos.x << ", "
+              << rect.pos.y << "), w=" << rect.width << ", h=" << rect.height << "\n";
   }
 
   void printAllInfo(const std::vector<std::shared_ptr<Shape>>& shapes)
@@ -77,7 +77,8 @@ namespace velizade
     std::cout << "Total area: " << totalArea << "\n";
 
     auto common = getCommonFrameRect(shapes);
-    std::cout << "Common FrameRect: center=(" << common.pos.x << ", " << common.pos.y << "), w=" << common.width << ", h=" << common.height << "\n";
+    std::cout << "Common FrameRect: center=(" << common.pos.x << ", " << common.pos.y
+              << "), w=" << common.width << ", h=" << common.height << "\n";
   }
 
   void scaleShapes(std::vector<std::shared_ptr<Shape>>& shapes, const point_t& pivot, double k)
