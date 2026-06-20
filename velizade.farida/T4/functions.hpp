@@ -2,6 +2,7 @@
 #define FUNCTIONS_HPP
 
 #include "rectangle.hpp"
+#include "shape.hpp"
 #include <vector>
 #include <memory>
 
