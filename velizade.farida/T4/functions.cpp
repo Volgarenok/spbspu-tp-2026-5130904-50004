@@ -62,7 +62,8 @@ namespace velizade
       return;
     }
     auto rect = sptr->getFrameRect();
-    std::cout << "  Area: " << sptr->getArea() << ", FrameRect: center=(" << rect.pos.x << ", " << rect.pos.y << "), w=" << rect.width << ", h=" << rect.height << "\n";
+    std::cout << "  Area: " << sptr->getArea() << ", FrameRect: center=(" << rect.pos.x << ", " << rect.pos.y << "), w=" << rect.width
+              << ", h=" << rect.height << "\n";
   }
 
   void printAllInfo(const std::vector<std::shared_ptr<Shape>>& shapes)
