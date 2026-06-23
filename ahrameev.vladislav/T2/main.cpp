@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <vector>
 
 #include "data_struct.h"
@@ -6,15 +8,12 @@
 int main()
 {
   std::vector< ahrameev::DataStruct > data;
-  ahrameev::DataStruct temp = {0.0, 0LL, ""};
 
-  while (std::cin >> temp)
-  {
-    data.push_back(temp);
-  }
+  using InputIterator = std::istream_iterator< ahrameev::DataStruct >;
+  std::copy(InputIterator{std::cin}, InputIterator{}, std::back_inserter(data));
 
-  for (size_t i = 0; i < data.size(); ++i)
-  {
-    std::cout << data[i] << "\n";
-  }
+  std::sort(data.begin(), data.end());
+
+  using OutputIterator = std::ostream_iterator< ahrameev::DataStruct >;
+  std::copy(data.begin(), data.end(), OutputIterator{std::cout, "\n"});
 }
