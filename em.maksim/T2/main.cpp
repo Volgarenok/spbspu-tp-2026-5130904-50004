@@ -238,6 +238,72 @@ std::istream& em::operator>>(std::istream& is, DataStruct& d) {
   return is;
 }
 
+std::ostream& em::operator<<(std::ostream& os, const IntLL& u) {
+  std::ostream::sentry s(os);
+  if (!s) {
+    return os;
+  }
+  IOGuard guard(os);
+  os << u.u << "ll";
+  return os;
+}
+
+std::ostream& em::operator<<(std::ostream& os, const Complex& c) {
+  std::ostream::sentry s(os);
+  if (!s) {
+    return os;
+  }
+  IOGuard guard(os);
+  os << std::fixed << std::setprecision(1);
+  os << "#c(" << c.c.real() << " " << c.c.imag() << ")";
+  return os;
+}
+
+std::ostream& em::operator<<(std::ostream& os, const DataStruct& d) {
+  std::ostream::sentry s(os);
+  if (!s) {
+    return os;
+  }
+  IOGuard guard(os);
+  os << "(:" << "key1 " << d.key1 << ":"
+     << "key2 " << d.key2 << ":"
+     << "key3 \"" << d.key3 << "\":)";
+  return os;
+}
+
+bool em::operator<(const IntLL& a, const IntLL& b) {
+  return a.u < b.u;
+}
+
+bool em::operator<(const Complex& a, const Complex& b) {
+  return std::abs(a.c) < std::abs(b.c);
+}
+
+bool em::operator<(const DataStruct& a, const DataStruct& b) {
+  if (a.key1.u != b.key1.u) {
+    return a.key1.u < b.key1.u;
+  }
+  if (std::abs(a.key2.c) != std::abs(b.key2.c)) {
+    return std::abs(a.key2.c) < std::abs(b.key2.c);
+  }
+  return a.key3.length() < b.key3.length();
+}
+
+bool em::operator==(const DataStruct& a, const DataStruct& b) {
+  return (a.key1.u == b.key1.u) && (a.key2.c == b.key2.c) &&
+    (a.key3 == b.key3);
+}
+
+bool em::myLess(const DataStruct& d1, const DataStruct& d2) {
+  if (d1.key1.u != d2.key1.u) {
+    return d1.key1.u < d2.key1.u;
+  }
+  if (std::abs(d1.key2.c) != std::abs(d2.key2.c)) {
+    return std::abs(d1.key2.c) < std::abs(d2.key2.c);
+  }
+  return d1.key3.length() < d2.key3.length();
+}
+
 int main() {
   return 0;
 }
