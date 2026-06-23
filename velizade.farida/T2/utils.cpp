@@ -136,7 +136,7 @@ std::istream& velizade::operator>>(std::istream& in, velizade::HexLiteral& num)
 std::ostream& velizade::operator<<(std::ostream& out, const velizade::HexLiteral& num)
 {
   velizade::StreamGuard guard(out);
-  out << "0x" << std::hex << std::nouppercase << num.value << std::dec;
+  out << "0x" << std::hex << std::ouppercase << num.value << std::dec;
   return out;
 }
 
