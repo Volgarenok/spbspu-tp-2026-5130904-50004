@@ -1,30 +1,24 @@
-#include "dataStruct.hpp"
 #include "utils.hpp"
-#include <vector>
+#include <cctype>
+#include <string>
 
-bool velizade::operator<(const velizade::DataStruct& lhs, const velizade::DataStruct& rhs)
+velizade::StreamGuard::StreamGuard(std::ios& stream):
+    stream_(stream),
+    precision_(stream.precision()),
+    width_(stream.width()),
+    flags_(stream.flags()),
+    fill_(stream.fill())
+{}
+
+velizade::StreamGuard::~StreamGuard()
 {
-  if (!(lhs.key1 == rhs.key1))
-  {
-    return lhs.key1 < rhs.key1;
-  }
-  if (!(lhs.key2 == rhs.key2))
-  {
-    return lhs.key2 < rhs.key2;
-  }
-  return lhs.key3.size() < rhs.key3.size();
+  stream_.precision(precision_);
+  stream_.width(width_);
+  stream_.flags(flags_);
+  stream_.fill(fill_);
 }
 
-std::ostream& velizade::operator<<(std::ostream& out, const velizade::DataStruct& ds)
-{
-  velizade::StreamGuard guard(out);
-  out << "(key1 " << ds.key1
-      << ":key2 " << ds.key2
-      << ":key3 \"" << ds.key3 << "\":)";
-  return out;
-}
-
-std::istream& velizade::operator>>(std::istream& in, velizade::DataStruct& ds)
+std::istream& velizade::operator>>(std::istream& in, velizade::DecLiteral& num)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -33,85 +27,149 @@ std::istream& velizade::operator>>(std::istream& in, velizade::DataStruct& ds)
   }
 
   velizade::StreamGuard guard(in);
-  velizade::DataStruct temp;
-  bool hasKey1 = false;
-  bool hasKey2 = false;
-  bool hasKey3 = false;
-
-  if (!velizade::readExpectedChar(in, '('))
+  std::string token;
+  char ch;
+  while (in.get(ch))
   {
+    if (ch == ' ' || ch == '\t' || ch == '\n' || ch == ':' || ch == ')')
+    {
+      in.unget();
+      break;
+    }
+    token.push_back(ch);
+  }
+  if (token.empty())
+  {
+    in.setstate(std::ios::failbit);
     return in;
   }
 
-  for (int i = 0; i < 3; ++i)
+  if (token.size() < 4)
   {
-    std::string key;
-    in >> key;
-    if (!in)
-    {
-      return in;
-    }
-
-    if (key == "key1")
-    {
-      if (hasKey1)
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
-      in >> temp.key1;
-      hasKey1 = true;
-    }
-    else if (key == "key2")
-    {
-      if (hasKey2)
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
-      in >> temp.key2;
-      hasKey2 = true;
-    }
-    else if (key == "key3")
-    {
-      if (hasKey3)
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
-      char quote;
-      if (!(in >> quote) || quote != '"')
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
-      std::getline(in, temp.key3, '"');
-      hasKey3 = true;
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
-
-    if (!velizade::readExpectedChar(in, ':'))
-    {
-      return in;
-    }
+    in.setstate(std::ios::failbit);
+    return in;
   }
-
-  if (!velizade::readExpectedChar(in, ')'))
+  std::string suffix = token.substr(token.size() - 3);
+  for (char& c : suffix)
   {
+    c = std::tolower(static_cast<unsigned char>(c));
+  }
+  if (suffix != "ull")
+  {
+    in.setstate(std::ios::failbit);
     return in;
   }
 
-  if (hasKey1 && hasKey2 && hasKey3)
+  std::string digits = token.substr(0, token.size() - 3);
+  if (digits.empty() || digits.find_first_not_of("0123456789") != std::string::npos)
   {
-    ds = temp;
+    in.setstate(std::ios::failbit);
+    return in;
   }
-  else
+
+  try
+  {
+    num.value = std::stoull(digits);
+  }
+  catch (...)
   {
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+
+std::ostream& velizade::operator<<(std::ostream& out, const velizade::DecLiteral& num)
+{
+  velizade::StreamGuard guard(out);
+  out << num.value << "ull";
+  return out;
+}
+
+bool velizade::operator<(const velizade::DecLiteral& a, const velizade::DecLiteral& b)
+{
+  return a.value < b.value;
+}
+
+bool velizade::operator==(const velizade::DecLiteral& a, const velizade::DecLiteral& b)
+{
+  return a.value == b.value;
+}
+
+std::istream& velizade::operator>>(std::istream& in, velizade::HexLiteral& num)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+
+  velizade::StreamGuard guard(in);
+  std::string token;
+  char ch;
+  while (in.get(ch))
+  {
+    if (ch == ' ' || ch == '\t' || ch == '\n' || ch == ':' || ch == ')')
+    {
+      in.unget();
+      break;
+    }
+    token.push_back(ch);
+  }
+  if (token.empty())
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
+  if (token.size() < 3 || token[0] != '0' || (token[1] != 'x' && token[1] != 'X'))
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
+  std::string hexPart = token.substr(2);
+  if (hexPart.empty() || hexPart.find_first_not_of("0123456789abcdefABCDEF") != std::string::npos)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
+  try
+  {
+    num.value = std::stoull(hexPart, nullptr, 16);
+  }
+  catch (...)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
+std::ostream& velizade::operator<<(std::ostream& out, const velizade::HexLiteral& num)
+{
+  velizade::StreamGuard guard(out);
+  out << "0x" << std::hex << std::nouppercase << num.value << std::dec;
+  return out;
+}
+
+bool velizade::operator<(const velizade::HexLiteral& a, const velizade::HexLiteral& b)
+{
+  return a.value < b.value;
+}
+
+bool velizade::operator==(const velizade::HexLiteral& a, const velizade::HexLiteral& b)
+{
+  return a.value == b.value;
+}
+
+bool velizade::readExpectedChar(std::istream& in, char expected)
+{
+  char c;
+  in >> c;
+  if (c != expected)
+  {
+    in.setstate(std::ios::failbit);
+    return false;
+  }
+  return true;
 }
