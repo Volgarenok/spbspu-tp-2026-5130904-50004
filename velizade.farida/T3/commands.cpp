@@ -31,7 +31,7 @@ static velizade::Polygon readPolygonFromStream(std::istream& in)
   std::copy_n(std::istream_iterator<velizade::Point>(iss), n, std::back_inserter(p.points));
 
   iss >> std::ws;
-  if (in.fail() || p.points.size() != n || !iss.eof())
+  if (iss.fail() || p.points.size() != n || !iss.eof())
   {
     in.setstate(std::ios::failbit);
     return {};
@@ -221,7 +221,6 @@ void velizade::same(std::istream& in, std::ostream& out, const std::vector<Polyg
   if (in.fail() || target.points.empty())
   {
     in.clear();
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     out << "<INVALID COMMAND>\n";
     return;
   }
