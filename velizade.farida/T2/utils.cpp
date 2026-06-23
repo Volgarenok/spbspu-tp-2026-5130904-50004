@@ -28,10 +28,14 @@ std::istream& velizade::operator>>(std::istream& in, velizade::DecLiteral& num)
 
   velizade::StreamGuard guard(in);
   std::string token;
-  in >> token;
-  if (!in)
+  char c;
+  while (in.get(c) && c != ':' && !std::isspace(static_cast<unsigned char>(c)))
   {
-    return in;
+    token += c;
+  }
+  if (in)
+  {
+    in.putback(c);
   }
 
   if (token.size() < 4)
@@ -40,9 +44,9 @@ std::istream& velizade::operator>>(std::istream& in, velizade::DecLiteral& num)
     return in;
   }
   std::string suffix = token.substr(token.size() - 3);
-  for (char& c : suffix)
+  for (char& ch : suffix)
   {
-    c = std::tolower(static_cast<unsigned char>(c));
+    ch = std::tolower(static_cast<unsigned char>(ch));
   }
   if (suffix != "ull")
   {
@@ -95,10 +99,14 @@ std::istream& velizade::operator>>(std::istream& in, velizade::HexLiteral& num)
 
   velizade::StreamGuard guard(in);
   std::string token;
-  in >> token;
-  if (!in)
+  char c;
+  while (in.get(c) && c != ':' && !std::isspace(static_cast<unsigned char>(c)))
   {
-    return in;
+    token += c;
+  }
+  if (in)
+  {
+    in.putback(c);
   }
 
   if (token.size() < 3 || token[0] != '0' || (token[1] != 'x' && token[1] != 'X'))
@@ -145,8 +153,7 @@ bool velizade::operator==(const velizade::HexLiteral& a, const velizade::HexLite
 bool velizade::readExpectedChar(std::istream& in, char expected)
 {
   char c;
-  in >> c;
-  if (c != expected)
+  if (!(in >> c) || c != expected)
   {
     in.setstate(std::ios::failbit);
     return false;
