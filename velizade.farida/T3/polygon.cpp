@@ -147,8 +147,9 @@ std::istream& velizade::operator>>(std::istream& in, Polygon& p)
   p.points.clear();
   p.points.reserve(n);
   std::copy_n(std::istream_iterator<Point>(in), n, std::back_inserter(p.points));
-  if (in.fail())
+  if (in.fail() || p.points.size() != n || n < 3)
   {
+    in.setstate(std::ios::failbit);
     p.points.clear();
   }
   return in;

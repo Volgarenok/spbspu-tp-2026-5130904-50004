@@ -11,14 +11,17 @@ static velizade::Polygon readPolygonFromStream(std::istream& in)
 {
   velizade::Polygon p;
   size_t n;
-  if (in >> n)
+  if (!(in >> n))
   {
-    p.points.reserve(n);
-    std::copy_n(std::istream_iterator<velizade::Point>(in), n, std::back_inserter(p.points));
-    if (in.fail())
-    {
-      p.points.clear();
-    }
+    in.setstate(std::ios::failbit);
+    return p;
+  }
+  p.points.reserve(n);
+  std::copy_n(std::istream_iterator<velizade::Point>(in), n, std::back_inserter(p.points));
+  if (in.fail() || p.points.size() != n || n < 3)
+  {
+    in.setstate(std::ios::failbit);
+    p.points.clear();
   }
   return p;
 }
