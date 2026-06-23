@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCT_H
 #define DATA_STRUCT_H
 
+#include <iostream>
 #include <string>
 
 namespace ahrameev
@@ -13,6 +14,7 @@ namespace ahrameev
   };
 
   bool operator<(const DataStruct& lhs, const DataStruct& rhs);
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src);
 }
 
 #endif
