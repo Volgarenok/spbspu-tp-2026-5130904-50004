@@ -38,11 +38,66 @@ namespace
     char exp;
   };
 
+  struct DoubleLitIO
+  {
+    double& ref;
+  };
+
+  struct SignedLongLongLitIO
+  {
+    long long& ref;
+  };
+
   std::istream& operator>>(std::istream& input, DelimiterIO&& dest)
   {
     char symbol = '\0';
     input >> symbol;
     if (input && (symbol != dest.exp))
+    {
+      input.setstate(std::ios::failbit);
+    }
+    return input;
+  }
+
+  std::istream& operator>>(std::istream& input, DoubleLitIO&& dest)
+  {
+    double value = 0.0;
+    input >> value;
+    if (!input)
+    {
+      return input;
+    }
+    char suffix = '\0';
+    input >> suffix;
+    if (input && ((suffix == 'd') || (suffix == 'D')))
+    {
+      dest.ref = value;
+    }
+    else
+    {
+      input.setstate(std::ios::failbit);
+    }
+    return input;
+  }
+
+  std::istream& operator>>(std::istream& input, SignedLongLongLitIO&& dest)
+  {
+    long long value = 0;
+    input >> value;
+    if (!input)
+    {
+      return input;
+    }
+    char firstSuffix = '\0';
+    char secondSuffix = '\0';
+    input >> firstSuffix >> secondSuffix;
+    bool isLower = (firstSuffix == 'l') && (secondSuffix == 'l');
+    bool isUpper = (firstSuffix == 'L') && (secondSuffix == 'L');
+    if (input && (isLower || isUpper))
+    {
+      dest.ref = value;
+    }
+    else
     {
       input.setstate(std::ios::failbit);
     }

@@ -5,8 +5,10 @@
 
 int main()
 {
-  std::istringstream iss("(:");
-  char c1 = '\0', c2 = '\0';
-  iss >> c1 >> c2;
-  std::cout << "Read: '" << c1 << "' '" << c2 << "'\n";
+  std::istringstream iss("50.0d -89LL");
+  double d = 0.0;
+  long long ll = 0;
+  iss >> d >> ll; 
+  std::cout << "d=" << d << " ll=" << ll << "\n";
+  return 0;
 }
