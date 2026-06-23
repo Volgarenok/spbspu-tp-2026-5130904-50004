@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <string>
 
 namespace
@@ -135,6 +136,89 @@ namespace
   }
 }
 
+std::istream& ahrameev::operator>>(std::istream& in, DataStruct& dest)
+{
+  while (in)
+  {
+    DataStruct temp = {0.0, 0LL, ""};
+    bool hasKey1 = false;
+    bool hasKey2 = false;
+    bool hasKey3 = false;
+
+    in >> DelimiterIO{'('} >> DelimiterIO{':'};
+    if (in)
+    {
+      while (in)
+      {
+        skipSpaces(in);
+        if (in.peek() == ')')
+        {
+          break;
+        }
+
+        std::string label = "";
+        in >> label;
+        if (!in)
+        {
+          break;
+        }
+
+        if (label == "key1")
+        {
+          in >> DoubleLitIO{temp.key1};
+          hasKey1 = true;
+        }
+        else if (label == "key2")
+        {
+          in >> SignedLongLongLitIO{temp.key2};
+          hasKey2 = true;
+        }
+        else if (label == "key3")
+        {
+          in >> QuotedStringIO{temp.key3};
+          hasKey3 = true;
+        }
+        else
+        {
+          in.setstate(std::ios::failbit);
+          break;
+        }
+
+        if (in)
+        {
+          in >> DelimiterIO{':'};
+        }
+      }
+
+      if (in)
+      {
+        skipSpaces(in);
+        in >> DelimiterIO{')'};
+      }
+    }
+
+    if (in && hasKey1 && hasKey2 && hasKey3)
+    {
+      dest = temp;
+      return in;
+    }
+
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  return in;
+}
+
+std::ostream& ahrameev::operator<<(std::ostream& out, const DataStruct& src)
+{
+  IOguard guard(out);
+  out << "(:key1 "
+      << std::fixed << std::setprecision(1) << src.key1 << "d"
+      << ":key2 " << src.key2 << "ll"
+      << ":key3 \"" << src.key3 << "\":)";
+  return out;
+}
+
 bool ahrameev::operator<(const DataStruct& lhs, const DataStruct& rhs)
 {
   if (lhs.key1 != rhs.key1)
@@ -146,14 +230,4 @@ bool ahrameev::operator<(const DataStruct& lhs, const DataStruct& rhs)
     return lhs.key2 < rhs.key2;
   }
   return lhs.key3.length() < rhs.key3.length();
-}
-
-std::ostream& ahrameev::operator<<(std::ostream& out, const DataStruct& src)
-{
-  IOguard guard(out);
-  out << "(:key1 "
-      << std::fixed << std::setprecision(1) << src.key1 << "d"
-      << ":key2 " << src.key2 << "ll"
-      << ":key3 \"" << src.key3 << "\":)";
-  return out;
 }
