@@ -6,8 +6,9 @@
 #include <set>
 #include <limits>
 #include <array>
+#include <iterator>
 
-static struct CrossSum
+struct CrossSum
 {
   const velizade::Polygon& p;
   double operator()(double sum, size_t i) const
@@ -18,7 +19,7 @@ static struct CrossSum
   }
 };
 
-static struct LessX
+struct LessX
 {
   bool operator()(const velizade::Point& a, const velizade::Point& b) const
   {
@@ -26,7 +27,7 @@ static struct LessX
   }
 };
 
-static struct LessY
+struct LessY
 {
   bool operator()(const velizade::Point& a, const velizade::Point& b) const
   {
@@ -34,7 +35,7 @@ static struct LessY
   }
 };
 
-static struct ShiftChecker
+struct ShiftChecker
 {
   const std::set<velizade::Point>& setB;
   int dx, dy;
@@ -45,7 +46,7 @@ static struct ShiftChecker
   }
 };
 
-static struct FindShiftInB
+struct FindShiftInB
 {
   const velizade::Polygon& a;
   const std::set<velizade::Point>& setB;
@@ -59,7 +60,7 @@ static struct FindShiftInB
   }
 };
 
-static struct CheckRightAngle
+struct CheckRightAngle
 {
   const velizade::Polygon& p;
   bool operator()(size_t i) const
