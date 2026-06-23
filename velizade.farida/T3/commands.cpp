@@ -6,23 +6,37 @@
 #include <iterator>
 #include <cctype>
 #include <limits>
+#include <sstream>
+#include <string>
 
 static velizade::Polygon readPolygonFromStream(std::istream& in)
 {
-  velizade::Polygon p;
+  std::string line;
+  if (!std::getline(in, line))
+  {
+    in.setstate(std::ios::failbit);
+    return {};
+  }
+
+  std::istringstream iss(line);
   size_t n;
-  if (!(in >> n))
+  if (!(iss >> n) || n < 3)
   {
     in.setstate(std::ios::failbit);
-    return p;
+    return {};
   }
+
+  velizade::Polygon p;
   p.points.reserve(n);
-  std::copy_n(std::istream_iterator<velizade::Point>(in), n, std::back_inserter(p.points));
-  if (in.fail() || p.points.size() != n || n < 3)
+  std::copy_n(std::istream_iterator<velizade::Point>(iss), n, std::back_inserter(p.points));
+
+  iss >> std::ws;
+  if (in.fail() || p.points.size() != n || !iss.eof())
   {
     in.setstate(std::ios::failbit);
-    p.points.clear();
+    return {};
   }
+
   return p;
 }
 
