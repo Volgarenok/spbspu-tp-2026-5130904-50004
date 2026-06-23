@@ -151,14 +151,6 @@ std::istream& velizade::operator>>(std::istream& in, Polygon& p)
   {
     in.setstate(std::ios::failbit);
     p.points.clear();
-    return in;
-  }
-  in >> std::ws;
-  int next = in.peek();
-  if (next != EOF && next != '\n')
-  {
-    in.setstate(std::ios::failbit);
-    p.points.clear();
   }
   return in;
 }

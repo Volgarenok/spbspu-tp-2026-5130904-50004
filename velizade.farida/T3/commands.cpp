@@ -22,14 +22,6 @@ static velizade::Polygon readPolygonFromStream(std::istream& in)
   {
     in.setstate(std::ios::failbit);
     p.points.clear();
-    return p;
-  }
-  in >> std::ws;
-  int next = in.peek();
-  if (next != EOF && next != '\n')
-  {
-    in.setstate(std::ios::failbit);
-    p.points.clear();
   }
   return p;
 }
