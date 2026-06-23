@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iterator>
 #include <cctype>
+#include <limits>
 
 static velizade::Polygon readPolygonFromStream(std::istream& in)
 {
@@ -41,6 +42,11 @@ void velizade::area(std::istream& in, std::ostream& out, const std::vector<Polyg
   if (isNum)
   {
     size_t count = static_cast<size_t>(std::stoul(arg));
+    if (count < 3)
+    {
+      out << "<INVALID COMMAND>\n";
+      return;
+    }
     HasVertexCount pred{count};
     SumAreaIf<HasVertexCount> summer{pred};
     double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0, summer);
@@ -158,6 +164,11 @@ void velizade::count(std::istream& in, std::ostream& out, const std::vector<Poly
   if (isNum)
   {
     size_t count = static_cast<size_t>(std::stoul(arg));
+    if (count < 3)
+    {
+      out << "<INVALID COMMAND>\n";
+      return;
+    }
     HasVertexCount pred{count};
     size_t n = std::count_if(polygons.begin(), polygons.end(), pred);
     out << n << '\n';
@@ -192,6 +203,8 @@ void velizade::same(std::istream& in, std::ostream& out, const std::vector<Polyg
   Polygon target = readPolygonFromStream(in);
   if (in.fail() || target.points.empty())
   {
+    in.clear();
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     out << "<INVALID COMMAND>\n";
     return;
   }
