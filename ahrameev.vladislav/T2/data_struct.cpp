@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 namespace
 {
@@ -47,6 +48,25 @@ namespace
   {
     long long& ref;
   };
+
+  struct QuotedStringIO
+  {
+    std::string& ref;
+  };
+
+  bool isSpace(char symbol)
+  {
+    return (symbol == ' ') || (symbol == '\t')
+      || (symbol == '\n') || (symbol == '\r');
+  }
+
+  void skipSpaces(std::istream& input)
+  {
+    while (input && isSpace(static_cast< char >(input.peek())))
+    {
+      input.get();
+    }
+  }
 
   std::istream& operator>>(std::istream& input, DelimiterIO&& dest)
   {
@@ -102,6 +122,16 @@ namespace
       input.setstate(std::ios::failbit);
     }
     return input;
+  }
+
+  std::istream& operator>>(std::istream& input, QuotedStringIO&& dest)
+  {
+    input >> DelimiterIO{'"'};
+    if (!input)
+    {
+      return input;
+    }
+    return std::getline(input, dest.ref, '"');
   }
 }
 
