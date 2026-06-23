@@ -305,5 +305,11 @@ bool em::myLess(const DataStruct& d1, const DataStruct& d2) {
 }
 
 int main() {
+  std::vector<em::DataStruct> v;
+  using ItT = std::istream_iterator<em::DataStruct>;
+  std::copy(ItT(std::cin), ItT(), std::back_inserter(v));
+  std::sort(v.begin(), v.end(), em::myLess);
+  using OttT = std::ostream_iterator<em::DataStruct>;
+  std::copy(v.begin(), v.end(), OttT(std::cout, "\n"));
   return 0;
 }
