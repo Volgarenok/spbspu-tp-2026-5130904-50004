@@ -32,6 +32,22 @@ namespace
     std::basic_ios< char >::fmtflags fmt_;
     char fill_;
   };
+
+  struct DelimiterIO
+  {
+    char exp;
+  };
+
+  std::istream& operator>>(std::istream& input, DelimiterIO&& dest)
+  {
+    char symbol = '\0';
+    input >> symbol;
+    if (input && (symbol != dest.exp))
+    {
+      input.setstate(std::ios::failbit);
+    }
+    return input;
+  }
 }
 
 bool ahrameev::operator<(const DataStruct& lhs, const DataStruct& rhs)

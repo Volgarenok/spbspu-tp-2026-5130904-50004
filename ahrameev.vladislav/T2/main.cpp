@@ -1,9 +1,12 @@
 #include <iostream>
+#include <sstream>
 
 #include "data_struct.h"
 
 int main()
 {
-  ahrameev::DataStruct test = {1.5, 42LL, "hello"};
-  std::cout << test << "\n";
+  std::istringstream iss("(:");
+  char c1 = '\0', c2 = '\0';
+  iss >> c1 >> c2;
+  std::cout << "Read: '" << c1 << "' '" << c2 << "'\n";
 }
