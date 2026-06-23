@@ -18,7 +18,7 @@ bool velizade::operator<(const velizade::DataStruct& lhs, const velizade::DataSt
 std::ostream& velizade::operator<<(std::ostream& out, const velizade::DataStruct& ds)
 {
   velizade::StreamGuard guard(out);
-  out << "(key1 " << ds.key1
+  out << "(:key1 " << ds.key1
       << ":key2 " << ds.key2
       << ":key3 \"" << ds.key3 << "\":)";
   return out;
