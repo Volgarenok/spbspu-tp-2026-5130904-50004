@@ -5,28 +5,29 @@
 #include <vector>
 #include <iosfwd>
 
-namespace em {
+namespace em
+{
+  struct Polygon
+  {
+    std::vector< Point > points;
+  };
 
-struct Polygon {
-  std::vector<Point> points;
-};
+  std::istream & operator>>(std::istream & is, Polygon & poly);
+  std::ostream & operator<<(std::ostream & os, const Polygon & poly);
 
-std::istream& operator>>(std::istream& is, Polygon& poly);
-std::ostream& operator<<(std::ostream& os, const Polygon& poly);
+  double calculateArea(const Polygon & poly);
+  bool hasRightAngle(const Polygon & poly);
 
-double calculateArea(const Polygon& poly);
-bool hasRightAngle(const Polygon& poly);
+  struct BoundingBox
+  {
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+  };
 
-struct BoundingBox {
-  int minX;
-  int minY;
-  int maxX;
-  int maxY;
-};
+  BoundingBox getBoundingBox(const std::vector< Polygon > & shapes);
+  bool isInsideFrame(const Polygon & poly, const BoundingBox & box);
+}
 
-BoundingBox getBoundingBox(const std::vector<Polygon>& shapes);
-bool isInsideFrame(const Polygon& poly, const BoundingBox& box);
-
-}  // namespace em
-
-#endif  // EM_POLYGON_HPP
+#endif

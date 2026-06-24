@@ -3,16 +3,16 @@
 
 #include <iosfwd>
 
-namespace em {
+namespace em
+{
+  struct Point
+  {
+    int x;
+    int y;
+  };
 
-struct Point {
-  int x;
-  int y;
-};
-
-std::istream& operator>>(std::istream& is, Point& p);
-std::ostream& operator<<(std::ostream& os, const Point& p);
-
+  std::istream & operator>>(std::istream & is, Point & p);
+  std::ostream & operator<<(std::ostream & os, const Point & p);
 }
 
 #endif
