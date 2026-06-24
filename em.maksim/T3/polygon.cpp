@@ -1,5 +1,7 @@
 #include "polygon.hpp"
 #include <cmath>
+#include <algorithm>
+#include <limits>
 
 namespace em {
 
@@ -61,6 +63,34 @@ bool hasRightAngle(const Polygon& poly) {
     }
   }
   return false;
+}
+
+BoundingBox getBoundingBox(const std::vector<Polygon>& shapes) {
+  BoundingBox box{
+    std::numeric_limits<int>::max(),
+    std::numeric_limits<int>::max(),
+    std::numeric_limits<int>::min(),
+    std::numeric_limits<int>::min()
+  };
+  for (const auto& poly : shapes) {
+    for (const auto& p : poly.points) {
+      box.minX = std::min(box.minX, p.x);
+      box.minY = std::min(box.minY, p.y);
+      box.maxX = std::max(box.maxX, p.x);
+      box.maxY = std::max(box.maxY, p.y);
+    }
+  }
+  return box;
+}
+
+bool isInsideFrame(const Polygon& poly, const BoundingBox& box) {
+  return std::all_of(
+    poly.points.cbegin(), poly.points.cend(),
+    [&box](const Point& p) {
+      return p.x >= box.minX && p.x <= box.maxX &&
+             p.y >= box.minY && p.y <= box.maxY;
+    }
+  );
 }
 
 }  // namespace em

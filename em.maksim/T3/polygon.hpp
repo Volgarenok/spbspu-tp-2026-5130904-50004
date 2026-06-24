@@ -17,6 +17,16 @@ std::ostream& operator<<(std::ostream& os, const Polygon& poly);
 double calculateArea(const Polygon& poly);
 bool hasRightAngle(const Polygon& poly);
 
-}
+struct BoundingBox {
+  int minX;
+  int minY;
+  int maxX;
+  int maxY;
+};
 
-#endif
+BoundingBox getBoundingBox(const std::vector<Polygon>& shapes);
+bool isInsideFrame(const Polygon& poly, const BoundingBox& box);
+
+}  // namespace em
+
+#endif  // EM_POLYGON_HPP

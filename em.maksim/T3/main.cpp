@@ -162,6 +162,19 @@ void processCountVertexes(const std::vector<Polygon>& shapes, size_t num) {
   std::cout << cnt << "\n";
 }
 
+void processInFrame(const std::vector<Polygon>& shapes, const Polygon& test) {
+  if (shapes.empty()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  const BoundingBox box = getBoundingBox(shapes);
+  if (isInsideFrame(test, box)) {
+    std::cout << "<TRUE>\n";
+  } else {
+    std::cout << "<FALSE>\n";
+  }
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -231,6 +244,13 @@ int main(int argc, char* argv[]) {
         } catch (...) {
           std::cout << "<INVALID COMMAND>\n";
         }
+      }
+    } else if (command == "INFRAME") {
+      em::Polygon test;
+      if (std::cin >> test) {
+        em::processInFrame(shapes, test);
+      } else {
+        std::cout << "<INVALID COMMAND>\n";
       }
     }
   }
