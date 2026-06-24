@@ -36,6 +36,20 @@ void processAreaOdd(const std::vector<Polygon>& shapes) {
   std::cout << std::fixed << std::setprecision(1) << sum << "\n";
 }
 
+void processAreaMean(const std::vector<Polygon>& shapes) {
+  if (shapes.empty()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  const double total = std::accumulate(
+    shapes.cbegin(), shapes.cend(), 0.0,
+    std::bind(std::plus<double>(), std::placeholders::_1,
+              std::bind(calculateArea, std::placeholders::_2))
+  );
+  std::cout << std::fixed << std::setprecision(1)
+            << (total / shapes.size()) << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -65,6 +79,8 @@ int main(int argc, char* argv[]) {
         em::processAreaEven(shapes);
       } else if (param == "ODD") {
         em::processAreaOdd(shapes);
+      } else if (param == "MEAN") {
+        em::processAreaMean(shapes);
       }
     }
   }
