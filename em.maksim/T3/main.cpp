@@ -112,6 +112,17 @@ void processMaxVertexes(const std::vector<Polygon>& shapes) {
   std::cout << it->points.size() << "\n";
 }
 
+void processMinVertexes(const std::vector<Polygon>& shapes) {
+  if (shapes.empty()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  const auto it = std::min_element(
+    shapes.cbegin(), shapes.cend(), CompareSize{}
+  );
+  std::cout << it->points.size() << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -164,6 +175,8 @@ int main(int argc, char* argv[]) {
       std::cin >> param;
       if (param == "AREA") {
         em::processMinArea(shapes);
+      } else if (param == "VERTEXES") {
+        em::processMinVertexes(shapes);
       }
     }
   }
