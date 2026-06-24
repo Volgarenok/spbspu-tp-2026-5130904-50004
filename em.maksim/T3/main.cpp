@@ -83,6 +83,18 @@ void processMaxArea(const std::vector<Polygon>& shapes) {
             << calculateArea(*it) << "\n";
 }
 
+void processMinArea(const std::vector<Polygon>& shapes) {
+  if (shapes.empty()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  const auto it = std::min_element(
+    shapes.cbegin(), shapes.cend(), CompareArea{}
+  );
+  std::cout << std::fixed << std::setprecision(1)
+            << calculateArea(*it) << "\n";
+}
+
 struct CompareSize {
   bool operator()(const Polygon& a, const Polygon& b) const {
     return a.points.size() < b.points.size();
@@ -146,6 +158,12 @@ int main(int argc, char* argv[]) {
         em::processMaxArea(shapes);
       } else if (param == "VERTEXES") {
         em::processMaxVertexes(shapes);
+      }
+    } else if (command == "MIN") {
+      std::string param;
+      std::cin >> param;
+      if (param == "AREA") {
+        em::processMinArea(shapes);
       }
     }
   }
