@@ -132,5 +132,4 @@ int main(int argc, char* argv[])
   std::vector< ahrameev::Polygon > polygons = loadPolygonsFromFile(argv[1]);
   ahrameev::BoundingBox globalBox = ahrameev::computeGlobalBoundingBox(polygons);
   processCommandLoop(polygons, globalBox);
-  return 0;
 }

@@ -147,6 +147,11 @@ namespace ahrameev
     return is;
   }
 
+  std::istream& operator>>(std::istream& is, Polygon& poly)
+  {
+    return readPolygon(is, poly);
+  }
+
   bool isPermutation(const Polygon& a, const Polygon& b)
   {
     if (a.points.size() != b.points.size())

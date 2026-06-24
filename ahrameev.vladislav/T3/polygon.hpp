@@ -25,6 +25,7 @@ namespace ahrameev
 
   std::istream& readPoint(std::istream& is, Point& p);
   std::istream& readPolygon(std::istream& is, Polygon& poly);
+  std::istream& operator>>(std::istream& is, Polygon& poly);
 
   bool operator==(const Point& a, const Point& b);
 
