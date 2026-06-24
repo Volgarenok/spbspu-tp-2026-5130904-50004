@@ -175,6 +175,14 @@ void processInFrame(const std::vector<Polygon>& shapes, const Polygon& test) {
   }
 }
 
+void processRightShapes(const std::vector<Polygon>& shapes) {
+  const size_t cnt = std::count_if(
+    shapes.cbegin(), shapes.cend(),
+    std::bind(hasRightAngle, std::placeholders::_1)
+  );
+  std::cout << cnt << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -252,6 +260,8 @@ int main(int argc, char* argv[]) {
       } else {
         std::cout << "<INVALID COMMAND>\n";
       }
+    } else if (command == "RIGHTSHAPES") {
+      em::processRightShapes(shapes);
     }
   }
 
