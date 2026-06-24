@@ -1,7 +1,28 @@
 #include "polygon.hpp"
 
+#include <algorithm>
+
 namespace ahrameev
 {
+
+  bool lessPoint(const Point& a, const Point& b)
+  {
+    if (a.x != b.x)
+    {
+      return a.x < b.x;
+    }
+    return a.y < b.y;
+  }
+
+  bool equalPoint(const Point& a, const Point& b)
+  {
+    return (a.x == b.x) && (a.y == b.y);
+  }
+
+  bool operator==(const Point& a, const Point& b)
+  {
+    return equalPoint(a, b);
+  }
 
   namespace
   {
@@ -83,6 +104,22 @@ namespace ahrameev
       return true;
     }
 
+    std::vector< Point > makeSortedCopy(const std::vector< Point >& src)
+    {
+      std::vector< Point > copy = src;
+      std::sort(copy.begin(), copy.end(), lessPoint);
+      return copy;
+    }
+
+    bool areEqualVectors(const std::vector< Point >& a, const std::vector< Point >& b)
+    {
+      if (a.size() != b.size())
+      {
+        return false;
+      }
+      return std::equal(a.begin(), a.end(), b.begin(), equalPoint);
+    }
+
   }
 
   std::istream& readPoint(std::istream& is, Point& p)
@@ -108,6 +145,17 @@ namespace ahrameev
       return is;
     }
     return is;
+  }
+
+  bool isPermutation(const Polygon& a, const Polygon& b)
+  {
+    if (a.points.size() != b.points.size())
+    {
+      return false;
+    }
+    std::vector< Point > sortedA = makeSortedCopy(a.points);
+    std::vector< Point > sortedB = makeSortedCopy(b.points);
+    return areEqualVectors(sortedA, sortedB);
   }
 
 }
