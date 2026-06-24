@@ -50,6 +50,21 @@ void processAreaMean(const std::vector<Polygon>& shapes) {
             << (total / shapes.size()) << "\n";
 }
 
+struct AreaAccumulator {
+  size_t target;
+  explicit AreaAccumulator(size_t t): target(t) {}
+  double operator()(double acc, const Polygon& p) const {
+    return acc + ((p.points.size() == target) ? calculateArea(p) : 0.0);
+  }
+};
+
+void processAreaVertexes(const std::vector<Polygon>& shapes, size_t num) {
+  const double sum = std::accumulate(
+    shapes.cbegin(), shapes.cend(), 0.0, AreaAccumulator(num)
+  );
+  std::cout << std::fixed << std::setprecision(1) << sum << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -81,6 +96,13 @@ int main(int argc, char* argv[]) {
         em::processAreaOdd(shapes);
       } else if (param == "MEAN") {
         em::processAreaMean(shapes);
+      } else {
+        try {
+          const size_t num = std::stoul(param);
+          em::processAreaVertexes(shapes, num);
+        } catch (...) {
+          std::cout << "<INVALID COMMAND>\n";
+        }
       }
     }
   }
