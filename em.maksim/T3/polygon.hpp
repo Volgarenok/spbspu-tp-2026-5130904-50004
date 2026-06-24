@@ -15,6 +15,7 @@ std::istream& operator>>(std::istream& is, Polygon& poly);
 std::ostream& operator<<(std::ostream& os, const Polygon& poly);
 
 double calculateArea(const Polygon& poly);
+bool hasRightAngle(const Polygon& poly);
 
 }
 
