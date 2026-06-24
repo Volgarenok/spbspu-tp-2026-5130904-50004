@@ -123,6 +123,45 @@ void processMinVertexes(const std::vector<Polygon>& shapes) {
   std::cout << it->points.size() << "\n";
 }
 
+bool isEvenVertices(const Polygon& p) {
+  return p.points.size() % 2 == 0;
+}
+
+bool isOddVertices(const Polygon& p) {
+  return p.points.size() % 2 != 0;
+}
+
+void processCountEven(const std::vector<Polygon>& shapes) {
+  const size_t cnt = std::count_if(
+    shapes.cbegin(), shapes.cend(),
+    std::bind(isEvenVertices, std::placeholders::_1)
+  );
+  std::cout << cnt << "\n";
+}
+
+void processCountOdd(const std::vector<Polygon>& shapes) {
+  const size_t cnt = std::count_if(
+    shapes.cbegin(), shapes.cend(),
+    std::bind(isOddVertices, std::placeholders::_1)
+  );
+  std::cout << cnt << "\n";
+}
+
+struct VertexCountPredicate {
+  size_t target;
+  explicit VertexCountPredicate(size_t t): target(t) {}
+  bool operator()(const Polygon& p) const {
+    return p.points.size() == target;
+  }
+};
+
+void processCountVertexes(const std::vector<Polygon>& shapes, size_t num) {
+  const size_t cnt = std::count_if(
+    shapes.cbegin(), shapes.cend(), VertexCountPredicate(num)
+  );
+  std::cout << cnt << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -177,6 +216,21 @@ int main(int argc, char* argv[]) {
         em::processMinArea(shapes);
       } else if (param == "VERTEXES") {
         em::processMinVertexes(shapes);
+      }
+    } else if (command == "COUNT") {
+      std::string param;
+      std::cin >> param;
+      if (param == "EVEN") {
+        em::processCountEven(shapes);
+      } else if (param == "ODD") {
+        em::processCountOdd(shapes);
+      } else {
+        try {
+          const size_t num = std::stoul(param);
+          em::processCountVertexes(shapes, num);
+        } catch (...) {
+          std::cout << "<INVALID COMMAND>\n";
+        }
       }
     }
   }
