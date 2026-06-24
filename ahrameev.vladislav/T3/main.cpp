@@ -69,6 +69,57 @@ namespace
     return polygons;
   }
 
+  bool readCommandName(std::istringstream& stream, std::string& cmd)
+  {
+    if (!(stream >> cmd))
+    {
+      return false;
+    }
+    return true;
+  }
+
+  void dispatchCommand(
+    const std::string& cmdLine,
+    const std::vector< ahrameev::Polygon >& polygons,
+    const ahrameev::BoundingBox& globalBox)
+  {
+    if (cmdLine.empty())
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      return;
+    }
+    std::istringstream cmdStream(cmdLine);
+    std::string cmd;
+    if (!readCommandName(cmdStream, cmd))
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      return;
+    }
+    if (cmd == "PERMS")
+    {
+      ahrameev::handlePermsCommand(polygons, cmdStream);
+    }
+    else if (cmd == "INFRAME")
+    {
+      ahrameev::handleInFrameCommand(globalBox, cmdStream);
+    }
+    else
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
+
+  void processCommandLoop(
+    const std::vector< ahrameev::Polygon >& polygons,
+    const ahrameev::BoundingBox& globalBox)
+  {
+    std::string cmdLine;
+    while (std::getline(std::cin, cmdLine))
+    {
+      dispatchCommand(cmdLine, polygons, globalBox);
+    }
+  }
+
 }
 
 int main(int argc, char* argv[])
@@ -80,4 +131,6 @@ int main(int argc, char* argv[])
   }
   std::vector< ahrameev::Polygon > polygons = loadPolygonsFromFile(argv[1]);
   ahrameev::BoundingBox globalBox = ahrameev::computeGlobalBoundingBox(polygons);
+  processCommandLoop(polygons, globalBox);
+  return 0;
 }
