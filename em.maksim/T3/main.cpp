@@ -83,6 +83,23 @@ void processMaxArea(const std::vector<Polygon>& shapes) {
             << calculateArea(*it) << "\n";
 }
 
+struct CompareSize {
+  bool operator()(const Polygon& a, const Polygon& b) const {
+    return a.points.size() < b.points.size();
+  }
+};
+
+void processMaxVertexes(const std::vector<Polygon>& shapes) {
+  if (shapes.empty()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  const auto it = std::max_element(
+    shapes.cbegin(), shapes.cend(), CompareSize{}
+  );
+  std::cout << it->points.size() << "\n";
+}
+
 }  // namespace em
 
 int main(int argc, char* argv[]) {
@@ -127,6 +144,8 @@ int main(int argc, char* argv[]) {
       std::cin >> param;
       if (param == "AREA") {
         em::processMaxArea(shapes);
+      } else if (param == "VERTEXES") {
+        em::processMaxVertexes(shapes);
       }
     }
   }
