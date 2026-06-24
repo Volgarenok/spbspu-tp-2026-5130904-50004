@@ -20,4 +20,12 @@ std::istream& operator>>(std::istream& is, Polygon& poly) {
   return is;
 }
 
+std::ostream& operator<<(std::ostream& os, const Polygon& poly) {
+  os << poly.points.size();
+  for (const auto& p : poly.points) {
+    os << " " << p;
+  }
+  return os;
+}
+
 }

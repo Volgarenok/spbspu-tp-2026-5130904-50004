@@ -12,6 +12,7 @@ struct Polygon {
 };
 
 std::istream& operator>>(std::istream& is, Polygon& poly);
+std::ostream& operator<<(std::ostream& os, const Polygon& poly);
 
 }
 
