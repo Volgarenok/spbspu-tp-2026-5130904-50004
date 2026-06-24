@@ -1,4 +1,4 @@
-#include "point.hpp"
+#include "polygon.hpp"
 
 int main() {
   return 0;
