@@ -14,11 +14,24 @@ double areaIfEven(const Polygon& p) {
   return (p.points.size() % 2 == 0) ? calculateArea(p) : 0.0;
 }
 
+double areaIfOdd(const Polygon& p) {
+  return (p.points.size() % 2 != 0) ? calculateArea(p) : 0.0;
+}
+
 void processAreaEven(const std::vector<Polygon>& shapes) {
   const double sum = std::accumulate(
     shapes.cbegin(), shapes.cend(), 0.0,
     std::bind(std::plus<double>(), std::placeholders::_1,
               std::bind(areaIfEven, std::placeholders::_2))
+  );
+  std::cout << std::fixed << std::setprecision(1) << sum << "\n";
+}
+
+void processAreaOdd(const std::vector<Polygon>& shapes) {
+  const double sum = std::accumulate(
+    shapes.cbegin(), shapes.cend(), 0.0,
+    std::bind(std::plus<double>(), std::placeholders::_1,
+              std::bind(areaIfOdd, std::placeholders::_2))
   );
   std::cout << std::fixed << std::setprecision(1) << sum << "\n";
 }
@@ -50,6 +63,8 @@ int main(int argc, char* argv[]) {
       std::cin >> param;
       if (param == "EVEN") {
         em::processAreaEven(shapes);
+      } else if (param == "ODD") {
+        em::processAreaOdd(shapes);
       }
     }
   }
