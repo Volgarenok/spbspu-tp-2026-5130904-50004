@@ -185,6 +185,129 @@ void processRightShapes(const std::vector<Polygon>& shapes) {
 
 }  // namespace em
 
+namespace {
+
+void handleAreaCommand(
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  std::string param;
+  if (!(input >> param)) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  if (param == "EVEN") {
+    em::processAreaEven(shapes);
+  } else if (param == "ODD") {
+    em::processAreaOdd(shapes);
+  } else if (param == "MEAN") {
+    em::processAreaMean(shapes);
+  } else {
+    try {
+      const size_t num = std::stoul(param);
+      em::processAreaVertexes(shapes, num);
+    } catch (...) {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
+}
+
+void handleMaxCommand(
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  std::string param;
+  if (!(input >> param)) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  if (param == "AREA") {
+    em::processMaxArea(shapes);
+  } else if (param == "VERTEXES") {
+    em::processMaxVertexes(shapes);
+  } else {
+    std::cout << "<INVALID COMMAND>\n";
+  }
+}
+
+void handleMinCommand(
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  std::string param;
+  if (!(input >> param)) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  if (param == "AREA") {
+    em::processMinArea(shapes);
+  } else if (param == "VERTEXES") {
+    em::processMinVertexes(shapes);
+  } else {
+    std::cout << "<INVALID COMMAND>\n";
+  }
+}
+
+void handleCountCommand(
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  std::string param;
+  if (!(input >> param)) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  if (param == "EVEN") {
+    em::processCountEven(shapes);
+  } else if (param == "ODD") {
+    em::processCountOdd(shapes);
+  } else {
+    try {
+      const size_t num = std::stoul(param);
+      em::processCountVertexes(shapes, num);
+    } catch (...) {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
+}
+
+void handleInFrameCommand(
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  em::Polygon test;
+  if (input >> test) {
+    em::processInFrame(shapes, test);
+  } else {
+    std::cout << "<INVALID COMMAND>\n";
+    input.clear();
+  }
+}
+
+void processCommand(
+  const std::string& command,
+  const std::vector<em::Polygon>& shapes,
+  std::istream& input
+) {
+  if (command == "AREA") {
+    handleAreaCommand(shapes, input);
+  } else if (command == "MAX") {
+    handleMaxCommand(shapes, input);
+  } else if (command == "MIN") {
+    handleMinCommand(shapes, input);
+  } else if (command == "COUNT") {
+    handleCountCommand(shapes, input);
+  } else if (command == "INFRAME") {
+    handleInFrameCommand(shapes, input);
+  } else if (command == "RIGHTSHAPES") {
+    em::processRightShapes(shapes);
+  } else {
+    std::cout << "<INVALID COMMAND>\n";
+  }
+}
+
+}  // anonymous namespace
+
 int main(int argc, char* argv[]) {
   if (argc != 2) {
     std::cerr << "Usage: " << argv[0] << " <filename>\n";
@@ -205,64 +328,7 @@ int main(int argc, char* argv[]) {
 
   std::string command;
   while (std::cin >> command) {
-    if (command == "AREA") {
-      std::string param;
-      std::cin >> param;
-      if (param == "EVEN") {
-        em::processAreaEven(shapes);
-      } else if (param == "ODD") {
-        em::processAreaOdd(shapes);
-      } else if (param == "MEAN") {
-        em::processAreaMean(shapes);
-      } else {
-        try {
-          const size_t num = std::stoul(param);
-          em::processAreaVertexes(shapes, num);
-        } catch (...) {
-          std::cout << "<INVALID COMMAND>\n";
-        }
-      }
-    } else if (command == "MAX") {
-      std::string param;
-      std::cin >> param;
-      if (param == "AREA") {
-        em::processMaxArea(shapes);
-      } else if (param == "VERTEXES") {
-        em::processMaxVertexes(shapes);
-      }
-    } else if (command == "MIN") {
-      std::string param;
-      std::cin >> param;
-      if (param == "AREA") {
-        em::processMinArea(shapes);
-      } else if (param == "VERTEXES") {
-        em::processMinVertexes(shapes);
-      }
-    } else if (command == "COUNT") {
-      std::string param;
-      std::cin >> param;
-      if (param == "EVEN") {
-        em::processCountEven(shapes);
-      } else if (param == "ODD") {
-        em::processCountOdd(shapes);
-      } else {
-        try {
-          const size_t num = std::stoul(param);
-          em::processCountVertexes(shapes, num);
-        } catch (...) {
-          std::cout << "<INVALID COMMAND>\n";
-        }
-      }
-    } else if (command == "INFRAME") {
-      em::Polygon test;
-      if (std::cin >> test) {
-        em::processInFrame(shapes, test);
-      } else {
-        std::cout << "<INVALID COMMAND>\n";
-      }
-    } else if (command == "RIGHTSHAPES") {
-      em::processRightShapes(shapes);
-    }
+    processCommand(command, shapes, std::cin);
   }
 
   return 0;
