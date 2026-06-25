@@ -67,3 +67,56 @@ namespace chadin {
     }
 
   }
+
+  void processCommands(std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  {
+    using namespace std::placeholders;
+    std::string cmd;
+    while (in >> cmd) {
+      if (cmd == "AREA") {
+        std::string sub;
+        if (!(in >> sub)) break;
+        if (sub == "EVEN") {
+          std::vector<Polygon> filtered;
+          auto is_even = std::bind(std::equal_to<size_t>(),
+                                   std::bind(std::modulus<size_t>(), std::bind(detail::getVertexes, _1), 2),
+                                   0);
+          std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(filtered), is_even);
+          std::vector<double> areas(filtered.size());
+          std::transform(filtered.begin(), filtered.end(), areas.begin(), detail::getArea);
+          double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
+          out << std::fixed << std::setprecision(1) << sum << '\n';
+        } else if (sub == "ODD") {
+          std::vector<Polygon> filtered;
+          auto is_odd = std::bind(std::not_equal_to<size_t>(),
+                                  std::bind(std::modulus<size_t>(), std::bind(detail::getVertexes, _1), 2),
+                                  0);
+          std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(filtered), is_odd);
+          std::vector<double> areas(filtered.size());
+          std::transform(filtered.begin(), filtered.end(), areas.begin(), detail::getArea);
+          double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
+          out << std::fixed << std::setprecision(1) << sum << '\n';
+        } else if (sub == "MEAN") {
+          if (polygons.empty()) {
+            out << "<INVALID COMMAND>\n";
+          } else {
+            std::vector<double> areas(polygons.size());
+            std::transform(polygons.begin(), polygons.end(), areas.begin(), detail::getArea);
+            double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
+            out << std::fixed << std::setprecision(1) << sum / polygons.size() << '\n';
+          }
+        } else {
+          try {
+            const size_t n = std::stoull(sub);
+            std::vector<Polygon> filtered;
+            auto has_n = std::bind(std::equal_to<size_t>(), std::bind(detail::getVertexes, _1), n);
+            std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(filtered), has_n);
+            std::vector<double> areas(filtered.size());
+            std::transform(filtered.begin(), filtered.end(), areas.begin(), detail::getArea);
+            double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
+            out << std::fixed << std::setprecision(1) << sum << '\n';
+          } catch (...) {
+            out << "<INVALID COMMAND>\n";
+          }
+        }
+      }
