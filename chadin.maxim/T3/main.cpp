@@ -41,3 +41,32 @@ namespace chadin {
 
   }
 }
+
+int main(int argc, char** argv)
+{
+  if (argc != 2) {
+    std::cerr << "Error: filename required\n";
+    return 1;
+  }
+
+  std::ifstream file(argv[1]);
+  if (!file.is_open()) {
+    std::cerr << "Error: cannot open file\n";
+    return 1;
+  }
+
+  std::vector<std::string> lines;
+  std::copy(std::istream_iterator<chadin::detail::LineReader>(file),
+            std::istream_iterator<chadin::detail::LineReader>(),
+            std::back_inserter(lines));
+
+  std::vector<chadin::Polygon> polygons(lines.size());
+  std::transform(lines.begin(), lines.end(), polygons.begin(), chadin::detail::parse_polygon());
+
+  auto it = std::remove_if(polygons.begin(), polygons.end(), chadin::detail::isEmptyPolygon);
+  polygons.erase(it, polygons.end());
+
+  chadin::processCommands(polygons, std::cin, std::cout);
+
+  return 0;
+}
