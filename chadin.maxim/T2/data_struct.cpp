@@ -20,3 +20,49 @@ namespace chadin {
     }
     return lhs.key3.length() < rhs.key3.length();
   }
+
+  std::istream& operator>>(std::istream& in, DataStruct& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+      return in;
+    }
+
+    DataStruct input;
+    in >> DelimiterIO{'('};
+
+    int readKeysMask = 0;
+    for (size_t i = 0; i < 3; ++i) {
+      in >> DelimiterIO{':'};
+      std::string label;
+      in >> label;
+
+      if (label == "key1" && !(readKeysMask & 1)) {
+        in >> DoubleLiteralIO{input.key1};
+        readKeysMask |= 1;
+      } else if (label == "key2" && !(readKeysMask & 2)) {
+        in >> UllLiteralIO{input.key2};
+        readKeysMask |= 2;
+      } else if (label == "key3" && !(readKeysMask & 4)) {
+        in >> StringLiteralIO{input.key3};
+        readKeysMask |= 4;
+      } else {
+        in.setstate(std::ios::failbit);
+      }
+    }
+
+    in >> DelimiterIO{':'} >> DelimiterIO{')'};
+
+    if (in) {
+      input.isValid = true;
+      dest = input;
+    } else {
+      in.clear();
+      char discard = '0';
+      while (in.get(discard) && discard != ')') {
+      }
+      dest.isValid = false;
+    }
+
+    return in;
+  }
