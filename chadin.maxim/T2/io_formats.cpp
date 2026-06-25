@@ -68,3 +68,18 @@ namespace chadin {
     }
     return in;
   }
+
+  std::istream& operator>>(std::istream& in, StringLiteralIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+      return in;
+    }
+    in >> DelimiterIO{'"'};
+    if (!in) {
+      return in;
+    }
+    std::getline(in, dest.value, '"');
+    return in;
+  }
+}
