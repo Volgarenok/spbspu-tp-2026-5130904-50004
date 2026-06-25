@@ -46,3 +46,25 @@ namespace chadin {
     }
     return in;
   }
+
+  std::istream& operator>>(std::istream& in, UllLiteralIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+      return in;
+    }
+    if (!(in >> dest.value)) {
+      return in;
+    }
+    char char1 = '0', char2 = '0', char3 = '0';
+    in >> char1 >> char2 >> char3;
+    if (in) {
+      bool isUll = (char1 == 'u' || char1 == 'U') &&
+                   (char2 == 'l' || char2 == 'L') &&
+                   (char3 == 'l' || char3 == 'L');
+      if (!isUll) {
+        in.setstate(std::ios::failbit);
+      }
+    }
+    return in;
+  }
