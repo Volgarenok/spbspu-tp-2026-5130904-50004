@@ -29,3 +29,20 @@ namespace chadin {
     }
     return in;
   }
+
+  std::istream& operator>>(std::istream& in, DoubleLiteralIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+      return in;
+    }
+    if (!(in >> dest.value)) {
+      return in;
+    }
+    char suffix = '0';
+    in >> suffix;
+    if (in && suffix != 'd' && suffix != 'D') {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
