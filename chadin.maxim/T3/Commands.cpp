@@ -119,4 +119,77 @@ namespace chadin {
             out << "<INVALID COMMAND>\n";
           }
         }
-      }
+      } else if (cmd == "MAX") {
+        std::string sub;
+        if (!(in >> sub)) break;
+        if (polygons.empty()) {
+          out << "<INVALID COMMAND>\n";
+        } else if (sub == "AREA") {
+          auto cmp = std::bind(std::less<double>(), std::bind(detail::getArea, _1), std::bind(detail::getArea, _2));
+          auto it = std::max_element(polygons.begin(), polygons.end(), cmp);
+          out << std::fixed << std::setprecision(1) << detail::getArea(*it) << '\n';
+        } else if (sub == "VERTEXES") {
+          auto cmp = std::bind(std::less<size_t>(), std::bind(detail::getVertexes, _1), std::bind(detail::getVertexes, _2));
+          auto it = std::max_element(polygons.begin(), polygons.end(), cmp);
+          out << detail::getVertexes(*it) << '\n';
+        } else {
+          out << "<INVALID COMMAND>\n";
+        }
+      } else if (cmd == "MIN") {
+        std::string sub;
+        if (!(in >> sub)) break;
+        if (polygons.empty()) {
+          out << "<INVALID COMMAND>\n";
+        } else if (sub == "AREA") {
+          auto cmp = std::bind(std::less<double>(), std::bind(detail::getArea, _1), std::bind(detail::getArea, _2));
+          auto it = std::min_element(polygons.begin(), polygons.end(), cmp);
+          out << std::fixed << std::setprecision(1) << detail::getArea(*it) << '\n';
+        } else if (sub == "VERTEXES") {
+          auto cmp = std::bind(std::less<size_t>(), std::bind(detail::getVertexes, _1), std::bind(detail::getVertexes, _2));
+          auto it = std::min_element(polygons.begin(), polygons.end(), cmp);
+          out << detail::getVertexes(*it) << '\n';
+        } else {
+          out << "<INVALID COMMAND>\n";
+        }
+      } else if (cmd == "COUNT") {
+        std::string sub;
+        if (!(in >> sub)) break;
+        if (sub == "EVEN") {
+          auto is_even = std::bind(std::equal_to<size_t>(),
+                                   std::bind(std::modulus<size_t>(), std::bind(detail::getVertexes, _1), 2),
+                                   0);
+          out << std::count_if(polygons.begin(), polygons.end(), is_even) << '\n';
+        } else if (sub == "ODD") {
+          auto is_odd = std::bind(std::not_equal_to<size_t>(),
+                                  std::bind(std::modulus<size_t>(), std::bind(detail::getVertexes, _1), 2),
+                                  0);
+          out << std::count_if(polygons.begin(), polygons.end(), is_odd) << '\n';
+        } else {
+          try {
+            const size_t n = std::stoull(sub);
+            auto has_n = std::bind(std::equal_to<size_t>(), std::bind(detail::getVertexes, _1), n);
+            out << std::count_if(polygons.begin(), polygons.end(), has_n) << '\n';
+          } catch (...) {
+            out << "<INVALID COMMAND>\n";
+          }
+        }
+      } else if (cmd == "RMECHO") {
+        Polygon target;
+        if (in >> target) {
+          auto is_echo = std::bind(std::logical_and<bool>(),
+                                   std::bind(std::equal_to<Polygon>(), _1, _2),
+                                   std::bind(std::equal_to<Polygon>(), _1, target));
+          const size_t initial_size = polygons.size();
+          auto it = std::unique(polygons.begin(), polygons.end(), is_echo);
+          polygons.erase(it, polygons.end());
+          out << initial_size - polygons.size() << '\n';
+        } else {
+          out << "<INVALID COMMAND>\n";
+          in.clear();
+        }
+      } else if (cmd == "INFRAME") {
+        Polygon target;
+        if (in >> target) {
+          if (polygons.empty()) {
+            out << "<FALSE>\n";
+          }
