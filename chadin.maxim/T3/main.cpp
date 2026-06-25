@@ -33,3 +33,11 @@ namespace chadin {
         return {};
       }
     };
+
+    bool isEmptyPolygon(const Polygon& p)
+    {
+      return p.points.empty();
+    }
+
+  }
+}
