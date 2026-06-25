@@ -63,6 +63,10 @@ namespace chadin {
     if (!(in >> count)) {
       return in;
     }
+    if (count < 3) {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
     std::vector<Point> temp;
     std::generate_n(std::back_inserter(temp), count, detail::read_point{in});
     if (in && temp.size() == count) {

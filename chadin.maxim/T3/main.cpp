@@ -28,6 +28,10 @@ namespace chadin {
         std::istringstream iss(str);
         Polygon p;
         if (iss >> p) {
+          std::string extra;
+          if (iss >> extra) {
+            return {};
+          }
           return p;
         }
         return {};
