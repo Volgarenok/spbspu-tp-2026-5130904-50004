@@ -44,3 +44,33 @@ namespace chadin {
     }
     return in;
   }
+
+  bool operator==(const Polygon& lhs, const Polygon& rhs)
+  {
+    if (lhs.points.size() != rhs.points.size()) {
+      return false;
+    }
+    return std::equal(lhs.points.begin(), lhs.points.end(), rhs.points.begin());
+  }
+
+  std::istream& operator>>(std::istream& in, Polygon& polygon)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+      return in;
+    }
+    size_t count = 0;
+    if (!(in >> count)) {
+      return in;
+    }
+    std::vector<Point> temp;
+    std::generate_n(std::back_inserter(temp), count, detail::read_point{in});
+    if (in && temp.size() == count) {
+      polygon.points = std::move(temp);
+    } else {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+}
