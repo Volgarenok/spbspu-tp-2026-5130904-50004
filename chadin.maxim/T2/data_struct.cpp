@@ -66,3 +66,18 @@ namespace chadin {
 
     return in;
   }
+
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry) {
+      return out;
+    }
+
+    FormatGuard guard(out);
+    out << "(:key1 " << std::fixed << std::setprecision(1) << src.key1 << "d"
+        << ":key2 " << src.key2 << "ull"
+        << ":key3 \"" << src.key3 << "\":)";
+    return out;
+  }
+}
