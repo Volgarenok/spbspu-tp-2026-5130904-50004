@@ -40,3 +40,30 @@ namespace chadin {
       double sum = std::accumulate(products.begin(), products.end(), 0.0);
       return std::abs(sum) / 2.0;
     }
+
+    size_t getVertexes(const Polygon& p)
+    {
+      return p.points.size();
+    }
+
+    int getMinX(const Polygon& p)
+    {
+      return std::min_element(p.points.begin(), p.points.end(), compare_x())->x;
+    }
+
+    int getMaxX(const Polygon& p)
+    {
+      return std::max_element(p.points.begin(), p.points.end(), compare_x())->x;
+    }
+
+    int getMinY(const Polygon& p)
+    {
+      return std::min_element(p.points.begin(), p.points.end(), compare_y())->y;
+    }
+
+    int getMaxY(const Polygon& p)
+    {
+      return std::max_element(p.points.begin(), p.points.end(), compare_y())->y;
+    }
+
+  }
