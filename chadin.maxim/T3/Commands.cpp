@@ -325,7 +325,7 @@ namespace chadin {
           int count = std::count(polygons.begin(), polygons.end(), target);
           new_poly.reserve(polygons.size() + count);
           detail::echo_inserter inserter{new_poly, target, 0};
-          std::any_of(polygons.begin(), polygons.end(), std::ref(inserter));
+          static_cast<void>(std::any_of(polygons.begin(), polygons.end(), std::ref(inserter)));
           polygons = std::move(new_poly);
           out << inserter.added << '\n';
         } else {
@@ -360,7 +360,7 @@ namespace chadin {
         Polygon target;
         if (iss >> target && !detail::has_extra_garbage(iss)) {
           detail::maxseq_counter cnt{target, 0, 0};
-          std::any_of(polygons.begin(), polygons.end(), std::ref(cnt));
+          static_cast<void>(std::any_of(polygons.begin(), polygons.end(), std::ref(cnt)));
           out << cnt.current_max << '\n';
         } else {
           out << "<INVALID COMMAND>\n";
