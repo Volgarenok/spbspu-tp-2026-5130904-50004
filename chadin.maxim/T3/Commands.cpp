@@ -192,4 +192,42 @@ namespace chadin {
         if (in >> target) {
           if (polygons.empty()) {
             out << "<FALSE>\n";
+          } else {
+            std::vector<int> minXs(polygons.size());
+            std::vector<int> maxXs(polygons.size());
+            std::vector<int> minYs(polygons.size());
+            std::vector<int> maxYs(polygons.size());
+
+            std::transform(polygons.begin(), polygons.end(), minXs.begin(), detail::getMinX);
+            std::transform(polygons.begin(), polygons.end(), maxXs.begin(), detail::getMaxX);
+            std::transform(polygons.begin(), polygons.end(), minYs.begin(), detail::getMinY);
+            std::transform(polygons.begin(), polygons.end(), maxYs.begin(), detail::getMaxY);
+
+            const int globalMinX = *std::min_element(minXs.begin(), minXs.end());
+            const int globalMaxX = *std::max_element(maxXs.begin(), maxXs.end());
+            const int globalMinY = *std::min_element(minYs.begin(), minYs.end());
+            const int globalMaxY = *std::max_element(maxYs.begin(), maxYs.end());
+
+            const int targetMinX = detail::getMinX(target);
+            const int targetMaxX = detail::getMaxX(target);
+            const int targetMinY = detail::getMinY(target);
+            const int targetMaxY = detail::getMaxY(target);
+
+            if (targetMinX >= globalMinX && targetMaxX <= globalMaxX &&
+                targetMinY >= globalMinY && targetMaxY <= globalMaxY) {
+              out << "<TRUE>\n";
+            } else {
+              out << "<FALSE>\n";
+            }
           }
+        } else {
+          out << "<INVALID COMMAND>\n";
+          in.clear();
+        }
+      } else {
+        out << "<INVALID COMMAND>\n";
+      }
+    }
+  }
+
+}
